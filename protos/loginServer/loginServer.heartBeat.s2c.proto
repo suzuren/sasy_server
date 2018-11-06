@@ -1,0 +1,4 @@
+package loginServer.heartBeat.s2c;
+
+message HeartBeat {				// 0x000000
+}

@@ -1,0 +1,34 @@
+package loginServer.login.c2s;
+
+message Login {			// 0x000100
+	required string session = 1;
+	required string	nickName = 2;
+	required string	machineID = 3;
+	repeated int32 kindID = 4;
+	optional bool scoreTag = 5;//首次注册时是否有默认分数
+	optional int32 appID = 6;//游戏ID
+	optional string appChannel = 7;//游戏渠道
+	optional string appVersion = 8;//游戏版本
+}
+
+message SimulatorLogin {	//0x000103 模拟器登陆
+	required string session = 1;
+	required string	nickName = 2;
+	required string	machineID = 3;
+	repeated int32 kindID = 4;
+	optional bool scoreTag = 5;//首次注册时是否有默认分数
+	optional int32 appID = 6;//游戏ID
+	optional string appChannel = 7;//游戏渠道
+	optional string appVersion = 8;//游戏版本
+}
+
+
+// 0x000104
+message VersionStatus {				
+	required bool isLowVersion = 1;		//是否是低版本
+}
+
+// 0x000105 版本更新奖励
+message DownlaodVersionReward {				
+	
+}
