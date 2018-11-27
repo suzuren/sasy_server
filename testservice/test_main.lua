@@ -4,7 +4,7 @@ local sprotoloader = require "sprotoloader"
 local max_client = 64
 
 skynet.start(function()
-	skynet.error("Server start")
+	--[[skynet.error("Server start")
 	skynet.uniqueservice("protoloader")
 	if not skynet.getenv "daemon" then
 		local console = skynet.newservice("console")
@@ -19,5 +19,8 @@ skynet.start(function()
 	})
 	skynet.error("Watchdog listen on", 8888)
 	-- skynet.newservice("test_simpleweb","agent")
+	]]
+	local testsocket = skynet.newservice("testsocket")
+	skynet.error("skynet.start function testsocket - ", testsocket)
 	skynet.exit()
 end)

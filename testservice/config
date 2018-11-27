@@ -1,7 +1,7 @@
 
 
 root = "./"
-luaservice = root.."service/?.lua;"..root.."test/?.lua;"..root.."examples/?.lua;"..root.."test/?/init.lua;".."../service/?.lua"
+luaservice = root.."service/?.lua;"..root.."test/?.lua;"..root.."examples/?.lua;"..root.."test/?/init.lua;".."../testservice/?.lua"
 lualoader = root .. "lualib/loader.lua"
 lua_path = root.."lualib/?.lua;"..root.."lualib/?/init.lua"
 lua_cpath = root .. "luaclib/?.so"
@@ -16,7 +16,7 @@ logpath = "."
 harbor = 1
 address = "127.0.0.1:2526"
 master = "127.0.0.1:2013"
-start = "main"	-- main script
+start = "test_main"	-- main script
 bootstrap = "snlua bootstrap"	-- The service for bootstrap
 standalone = "0.0.0.0:2013"
 -- snax_interface_g = "snax_g"

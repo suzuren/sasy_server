@@ -15,6 +15,8 @@ local request = host:attach(sproto.new(proto.c2s))
 local fd = assert(socket.connect("127.0.0.1", 8888))
 
 local function send_package(fd, pack)
+	local size = #pack
+	print(string.format("send_package - size:%d,fd:%d",size,fd))
 	local package = string.pack(">s2", pack)
 	socket.send(fd, package)
 end
