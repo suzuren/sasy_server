@@ -14,3 +14,7 @@ cd ./pbs
 rm -rf *.pb
 cd ${root_dir}
 
+
+cd ./testsocket
+make clean
+cd ${root_dir}

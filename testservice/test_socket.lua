@@ -1,16 +1,26 @@
 local skynet = require "skynet"
 local socket = require "skynet.socket"
 
+local parsedata = require "parsedata"
+
 local mode , id = ...
+local queue	= ""	-- message queue
 
 local function echo(id)
 	socket.start(id)
 
 	while true do
-		local str = socket.read(id)
+		local str = socket.read(id)		
+		--print("testsocket.lua - id, str - ",id, str)		
 		if str then
-			print("testsocket.lua - id, str - ",id, str)
-			socket.write(id, str)
+			--print("testsocket.lua - id, str - ",id, str)
+			queue = queue..str
+			local err, id, size, buffer, last, remain = parsedata.parsepacket(id, queue);
+			queue = remain
+			print("testsocket.lua - err, id, size, #buffer, last, #queue - ", err, id, size, #buffer, last, #queue)
+			if err==1 then
+				socket.write(id, buffer)
+			end
 		else
 			print("testsocket.lua - socket.close id, str - ",id, str)
 			socket.close(id)

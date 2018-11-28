@@ -20,7 +20,7 @@ skynet.start(function()
 	skynet.error("Watchdog listen on", 8888)
 	-- skynet.newservice("test_simpleweb","agent")
 	]]
-	local testsocket = skynet.newservice("testsocket")
+	local testsocket = skynet.newservice("test_socket")
 	skynet.error("skynet.start function testsocket - ", testsocket)
 	skynet.exit()
 end)

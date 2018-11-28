@@ -3,10 +3,13 @@
 CPPFLAGS = -O3
 LDFLAGS = -lrt -lpthread -lstdc++ -std=c++11
 
-all: server client
+LUA_INC := /usr/local/lua/include
 
-clean:
-	rm -f *.o *.pid server client
+
+all: server client parsedata.so
+
+parsedata.so : lua-parsedata.c
+	gcc -g -O2 -Wall -lrt -I$(LUA_INC) -fPIC --shared $^ -o $@
 
 server: server.o
 	g++ -o $@ $^ $(LDFLAGS)
@@ -14,3 +17,6 @@ server: server.o
 client: client.o
 	g++ -o $@ $^ $(LDFLAGS)
 
+
+clean:
+	rm -rf *.so *.o *.pid server client

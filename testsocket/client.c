@@ -1,6 +1,6 @@
 #include "select.h"
 
-
+#include "packetmacro.h"
 
 int main(int argc, char const *argv[])
 {
@@ -9,29 +9,32 @@ int main(int argc, char const *argv[])
 	printf("socket_connect client_fd:%d\n", client_fd);
 
 	int iCount = 0;
-	char write_buf[65535] = { 0 };	
-
+	PACKETDATA data;
 	while (1)
 	{
-		memset(write_buf, 0, sizeof(write_buf));
+		data.header.uin = data.header.cmd;
+		data.header.cmd++;
+		memset(data.buf, 0, sizeof(data.buf));
+		sprintf(data.buf, "%s %d\n", "hello world", iCount++);
 
-		sprintf(write_buf, "%s %d\n", "hello world", iCount++);
+		data.header.len = strlen(data.buf);
+		int size_pack = sizeof(PACKETHEADER) + data.header.len;
 
-		int len_buff = strlen(write_buf);
-		int len_send = write(client_fd, write_buf, len_buff);
-		if (len_buff != len_send)
+		int size_send = write(client_fd, &data, size_pack);
+		if (size_send != size_pack)
 		{
 			printf("send buf error\n");
 		}
 
-		printf("%s len_buff:%d,len_send:%d,buf:%s\n", getStrTime(), len_buff, len_send, write_buf);
+		printf("%s size_pack:%d,size_send:%d,uid:%d,cmd:%d,buf:%s\n", getStrTime(), size_pack, size_send, data.header.uin, data.header.cmd,data.buf);
 
 		char read_buf[65535] = { 0 };
-		int nread = read(client_fd, read_buf, 65535);
+		int nread = read(client_fd, read_buf, sizeof(read_buf));
 		//printf("read function - nread:%d, client_fd:%d, read_buf:%s",nread, client_fd, read_buf);
 		if (nread == 0)
 		{
 			close(client_fd);
+			printf("read buf error\n");
 			break;
 		}
 		else if (nread < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))// || errno == EINTR))
@@ -45,8 +48,8 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			printf("read function - nread:%d, client_fd:%d, read_buf:%s",nread, client_fd, read_buf);
-			//printf("recv - len:%d,buf:%s.\n", strlen(read_buf), read_buf);
+			PACKETDATA * pdata = (PACKETDATA *)read_buf;
+			printf("client_fd:%d,nread:%d,uin:%d,cmd:%d,len:%d,buf:%s\n", client_fd, nread, pdata->header.uin, pdata->header.cmd,pdata->header.len,pdata->buf);
 		}
 		ms_sleep(3000);
 	}
