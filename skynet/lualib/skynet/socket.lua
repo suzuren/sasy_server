@@ -41,6 +41,7 @@ end
 -- read skynet_socket.h for these macro
 -- SKYNET_SOCKET_TYPE_DATA = 1
 socket_message[1] = function(id, size, data)
+	print("lua.socket socket_message DATA 1 - id, size - ", id, size)
 	local s = socket_pool[id]
 	if s == nil then
 		skynet.error("socket: drop package from " .. id)
@@ -82,11 +83,13 @@ socket_message[2] = function(id, _ , addr)
 	end
 	-- log remote addr
 	s.connected = true
+	print("lua.socket socket_message CONNECT 2 - id, addr - ", id, addr)
 	wakeup(s)
 end
 
 -- SKYNET_SOCKET_TYPE_CLOSE = 3
 socket_message[3] = function(id)
+	print("lua.socket socket_message CLOSE 3 - id - ", id)
 	local s = socket_pool[id]
 	if s == nil then
 		return
@@ -98,16 +101,18 @@ end
 -- SKYNET_SOCKET_TYPE_ACCEPT = 4
 socket_message[4] = function(id, newid, addr)
 	local s = socket_pool[id]
+	print("lua.socket socket_message ACCEPT 4 - id, newid, addr, s - ", id, newid, addr, s)
 	if s == nil then
 		driver.close(newid)
 		return
-	end
+	end	
 	s.callback(newid, addr)
 end
 
 -- SKYNET_SOCKET_TYPE_ERROR = 5
 socket_message[5] = function(id, _, err)
 	local s = socket_pool[id]
+	print("lua.socket socket_message ERROR 5 - id, err, s - ", id, err, s)
 	if s == nil then
 		skynet.error("socket: error on unknown", id, err)
 		return
@@ -146,6 +151,7 @@ end
 
 -- SKYNET_SOCKET_TYPE_WARNING
 socket_message[7] = function(id, size)
+	print("lua.socket socket_message WARNING 7 - id, size - ", id, size)
 	local s = socket_pool[id]
 	if s then
 		local warning = s.on_warning or default_warning
@@ -158,6 +164,7 @@ skynet.register_protocol {
 	id = skynet.PTYPE_SOCKET,	-- PTYPE_SOCKET = 6
 	unpack = driver.unpack,
 	dispatch = function (_, _, t, ...)
+		print("socket.lua register_protocol function -- t,...",t, ...)
 		socket_message[t](...)
 	end
 }
@@ -254,6 +261,7 @@ function socket.read(id, sz)
 	if sz == nil then
 		-- read some bytes
 		local ret = driver.readall(s.buffer, buffer_pool)
+		--print("socket.lua read() function 1 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 		if ret ~= "" then
 			return ret
 		end
@@ -265,6 +273,7 @@ function socket.read(id, sz)
 		s.read_required = 0
 		suspend(s)
 		ret = driver.readall(s.buffer, buffer_pool)
+		--print("socket.lua read() function 4 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 		if ret ~= "" then
 			return ret
 		else
@@ -273,6 +282,7 @@ function socket.read(id, sz)
 	end
 
 	local ret = driver.pop(s.buffer, buffer_pool, sz)
+	--print("socket.lua read() function 2 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 	if ret then
 		return ret
 	end
@@ -284,6 +294,7 @@ function socket.read(id, sz)
 	s.read_required = sz
 	suspend(s)
 	ret = driver.pop(s.buffer, buffer_pool, sz)
+	--print("socket.lua read() function 3 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 	if ret then
 		return ret
 	else
@@ -296,12 +307,14 @@ function socket.readall(id)
 	assert(s)
 	if not s.connected then
 		local r = driver.readall(s.buffer, buffer_pool)
+		--print("socket.lua readall() function - id, r", id, r)
 		return r ~= "" and r
 	end
 	assert(not s.read_required)
 	s.read_required = true
 	suspend(s)
 	assert(s.connected == false)
+	--print("socket.lua readall() function - id, connected", id, s.connected)
 	return driver.readall(s.buffer, buffer_pool)
 end
 
