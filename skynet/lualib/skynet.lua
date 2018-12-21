@@ -597,7 +597,7 @@ local function raw_dispatch_message(prototype, msg, sz, session, source)
 end
 
 function skynet.dispatch_message(...)
-	print("skynet.lua dispatch_message - ...",...)
+	--print("skynet.lua dispatch_message - ...",...)
 	local succ, err = pcall(raw_dispatch_message,...)
 	while true do
 		local key,co = next(fork_queue)
