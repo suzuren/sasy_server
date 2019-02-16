@@ -12,11 +12,11 @@ all: exeClient ./lualib-src/parsedata.so
 
 
 exeClient : ./client/client.o
-	gcc ./client/client.o -o ./client/exeClient -Iclient
+	gcc -lpthread ./client/client.o -o ./client/exeClient -Iclient
 
 
 ./client/client.o : ./client/client.c
-	gcc -g -Wall -c ./client/client.c -o ./client/client.o -I./lualib-src
+	gcc  -g -Wall -c ./client/client.c -o ./client/client.o -I./lualib-src
 
 clean:
-	rm -rf ./lualib-src/*.so ./client/*.o *.pid ./client/exeClient
+	rm -rf ./lualib-src/*.so ./client/*.o *.pid ./client/exeClient ./client/core.* 

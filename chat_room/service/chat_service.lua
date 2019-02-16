@@ -1,5 +1,6 @@
 local skynet = require "skynet"
 local socket = require "chat_socket"
+local socketmanager = require "manager_socket"
 
 local parsedata = require "parsedata"
 
@@ -8,26 +9,43 @@ local queue	= ""	-- message queue
 
 local function echo(id)
 	socket.start(id)
-
 	while true do
-		local str = socket.read(id)		
-		--print("testsocket.lua - id, str - ",id, str)		
+		local str = socket.read(id)
+		--print("chat_service.lua - id, str - ",id, str)		
 		if str then
-			--print("testsocket.lua - id, str - ",id, str)
+			--print("chat_service.lua - id, str - ",id, str)
 			queue = queue..str
 			local err, id, size, buffer, last, remain = parsedata.parsepacket(id, queue);
 			queue = remain
-			print("testsocket.lua - err, id, size, #buffer, last, #queue - ", err, id, size, #buffer, last, #queue)
+			print("chat_service.lua - err, id, size, #buffer, last, #queue - ", err, id, size, #buffer, last, #queue)
 			if err==1 then
 				socket.write(id, buffer)
 			end
 		else
-			print("testsocket.lua - socket.close id, str - ",id, str)
+			print("chat_service.lua - socket.close id, str - ",id, str)
 			socket.close(id)
 			return
 		end
 	end
 end
+
+
+local function echo_chat(id)
+	socket.start(id)
+	while true do
+		local size, uin, cmd, len, msg = socket.read_chat(id)
+		--print("chat_service.lua echo_chat - id, size, uin, cmd, len, msg, #ret - ",id, size, uin, cmd, len, msg)
+		if size ~= 0 then
+			--socket.write_chat(id, uin, cmd, len, msg)
+			socketmanager.putclient(socket, id, uin, cmd, len, msg)
+		else
+			socket.close(id)
+			socketmanager.popclient(id)
+			return
+		end
+	end
+end
+
 
 if mode == "agent" then
 	id = tonumber(id)
@@ -54,12 +72,13 @@ else
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)
+			socketmanager.setclient(id)
 			-- you have choices :
-			-- 1. skynet.newservice("testsocket", "agent", id)
+			-- 1. skynet.newservice("chat_service", "agent", id)
 			-- 2. skynet.fork(echo, id)
 			-- 3. accept(id)
 			--accept(id)
-			skynet.fork(echo, id)
+			skynet.fork(echo_chat, id)
 		end)
 	end)
 end

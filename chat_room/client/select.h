@@ -154,40 +154,6 @@ int socket_connect(const char *ip, int port)
 	return -1;
 }
 
-
-int socket_bind(const char *ip, int port)
-{
-	int listen_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (listen_fd == -1)
-	{
-		perror("create socket error");
-		exit(1);
-	}
-
-	SetSocketNonblock(listen_fd);
-
-	struct sockaddr_in addr;
-	memset(&addr, 0, sizeof(struct sockaddr_in));
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(PORT);
-	addr.sin_addr.s_addr = inet_addr(ip);
-
-	if (bind(listen_fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) == -1)
-	{
-		perror("bind socket error");
-		exit(1);
-	}
-
-	if (listen(listen_fd, 5) == -1)
-	{
-		perror("listen socket error");
-		exit(1);
-	}
-	printf("listen success\n");
-	return listen_fd;
-}
-
-
 const char* getStrTime()
 {
 	time_t now = time(0);

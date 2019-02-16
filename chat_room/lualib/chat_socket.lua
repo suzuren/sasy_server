@@ -258,6 +258,7 @@ end
 function socket.read(id, sz)
 	local s = socket_pool[id]
 	assert(s)
+	print("chat_socket.lua read() function 1 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 	if sz == nil then
 		-- read some bytes
 		local ret = driver.readall(s.buffer, buffer_pool)
@@ -280,7 +281,7 @@ function socket.read(id, sz)
 			return false, ret
 		end
 	end
-
+	print("chat_socket.lua read() function 2 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 	local ret = driver.pop(s.buffer, buffer_pool, sz)
 	--print("socket.lua read() function 2 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
 	if ret then
@@ -301,6 +302,31 @@ function socket.read(id, sz)
 		return false, driver.readall(s.buffer, buffer_pool)
 	end
 end
+
+
+function socket.read_chat(id, sz)
+	local s = socket_pool[id]
+	assert(s)
+	-- read some bytes
+	local size, uin, cmd, len, msg = driver.readall_chat(s.buffer, buffer_pool)
+	--print("chat_socket.lua read_chat 1 - id, size, uin, cmd, len, #msg, msg - ",id, size, uin, cmd, len, #msg, msg)
+	assert(len==#msg)
+	if size ~= 0 then
+		return size, uin, cmd, len, msg
+	end
+	if not s.connected then
+		return size, uin, cmd, len, msg
+	end
+	assert(not s.read_required)
+	s.read_required = 0
+	suspend(s)
+	local size, uin, cmd, len, msg = driver.readall_chat(s.buffer, buffer_pool)
+	--print("chat_socket.lua read_chat 2 - id, size, uin, cmd, len, #msg, msg - ",id, size, uin, cmd, len, #msg, msg)
+	--print("chat_socket.lua read_chat() function 2 - id, buffer, connected, ret - ", id, s.buffer, s.connected, ret)
+	assert(len==#msg)
+	return size, uin, cmd, len, msg
+end
+
 
 function socket.readall(id)
 	local s = socket_pool[id]
@@ -351,6 +377,7 @@ function socket.block(id)
 end
 
 socket.write = assert(driver.send)
+socket.write_chat = assert(driver.send_chat)
 socket.lwrite = assert(driver.lsend)
 socket.header = assert(driver.header)
 
