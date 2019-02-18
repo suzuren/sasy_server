@@ -4,19 +4,19 @@
 
 #pragma  pack(1)
 
-typedef struct packet_header
+struct packet_header
 {
     int       uin;
 	int       cmd;
 	int       len;   //消息数据长度(不包括包头)
-}PACKETHEADER;
+};
 
 
-typedef struct packet_data
+struct packet_data
 {
-	PACKETHEADER header;
+	struct packet_header header;
 	char      buf[2048];
-}PACKETDATA;
+};
 
 #pragma pack()
 

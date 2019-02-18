@@ -340,9 +340,9 @@ lreadall_chat(lua_State *L) {
 			}
 			else if(pack_size < size)
 			{
-				memset(buffer + pack_size + 1, 0, sizeof(buffer) - pack_size);
+				memset(buffer + pack_size, 0, sizeof(buffer) - pack_size);
 				size = pack_size;
-				sb->offset += (pack_size - oldsize + 1);
+				sb->offset += (pack_size - oldsize);
 				break;
 			}
 		}

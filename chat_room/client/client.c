@@ -39,12 +39,14 @@ static void * thread_socket(void *p)
 {
 	struct sockarg * s = p;	
 	int client_fd = s->fd;
-	char * pdata = NULL;
-	int ldata = 0;
+	//char * pdata = NULL;
+	//int ldata = 0;
+	char rbuffer[16384 * 5] = { 0 };
+	int  rlenght = 0;
 	for (;;)
 	{
-		char rbuffer[65535] = { 0 };
-		int rsize = read(client_fd, rbuffer, sizeof(rbuffer));
+		ms_sleep(3);
+		int rsize = read(client_fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
 		if (rsize<0)
 		{
 			if (errno == EINTR)
@@ -61,46 +63,19 @@ static void * thread_socket(void *p)
 			printf("read socket close.\n");
 			break;
 		}
-		char * ptemp = pdata;
-		pdata = malloc(sizeof(char) * rsize + ldata);
-		
-		if(ldata>0)
+		rlenght += rsize;
+		struct packet_data * phead = (struct packet_data *)rbuffer;
+		while(rlenght >= sizeof(struct packet_header))
 		{
-			memcpy(pdata, ptemp, ldata);
-			memcpy(pdata + ldata, rbuffer, rsize);
-		}
-		else
-		{
-			memcpy(pdata, rbuffer, rsize);
-		}
-		ldata += rsize;
-		struct packet_data * ppack = (struct packet_data *)pdata;
-		if(ptemp)
-		{
-			free(ptemp);
-			ptemp = NULL;
-		}
-		if(ldata >= sizeof(struct packet_header) )
-		{
-			
-			if(ldata - sizeof(struct packet_header) >= ppack->header.len)
+			if(rlenght - sizeof(struct packet_header) >= phead->header.len)
 			{
-				printf("client_fd:%d,rsize:%d,uin:%d,cmd:%d,len:%d,buf:%s\n", client_fd, rsize, ppack->header.uin, ppack->header.cmd, ppack->header.len, ppack->buf);
-				int pack_size = sizeof(struct packet_header) + ppack->header.len;
-				ldata -= pack_size;
-				if(ldata == 0)
-				{
-					free(pdata);
-					pdata = NULL;
-				}
-				else
-				{
-					ptemp = pdata;
-					pdata = malloc(ldata);
-					memcpy(pdata, ptemp+pack_size, ldata);
-					free(ptemp);
-					ptemp = NULL;
-				}
+				int pack_size = sizeof(struct packet_header) + phead->header.len;
+				char tbuffer[16384] = { 0 };
+				memcpy(tbuffer, rbuffer, pack_size);
+				struct packet_data * pdata = (struct packet_data *)tbuffer;
+				printf("client_fd:%d,rlenght:%d,pack_size:%d,uin:%d,cmd:%d,len:%d,buf:%s\n", client_fd,rlenght, pack_size, pdata->header.uin, pdata->header.cmd, pdata->header.len, pdata->buf);
+				rlenght -= pack_size;
+				memmove(rbuffer, rbuffer + pack_size, rlenght);
 			}
 		}
 	}
@@ -130,12 +105,17 @@ int main(int argc, char const *argv[])
 			break;
 		}
 		data.header.uin = main_pid;
+		if(data.header.cmd == 0x7FFFFFFF)
+		{
+			data.header.cmd = 0;
+		}
 		data.header.cmd++;
+
 		memset(data.buf, 0, sizeof(data.buf));
 		sprintf(data.buf, "%s %d\n", "hello world", iCount++);
 
 		data.header.len = strlen(data.buf);
-		int size_pack = sizeof(PACKETHEADER) + data.header.len;
+		int size_pack = sizeof(struct packet_header) + data.header.len;
 
 		int size_send = write(client_fd, &data, size_pack);
 		if (size_send != size_pack)

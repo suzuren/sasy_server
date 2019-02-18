@@ -88,10 +88,10 @@ l_parsepacket(lua_State *L) {
 	sz = (int)size;
 	int err = 0;
 	int len = 0;
-	if(sz >= sizeof(PACKETHEADER))
+	if(sz >= sizeof(struct packet_header))
 	{
-		PACKETDATA * pdata = (PACKETDATA *)buffer;
-		len = sizeof(PACKETHEADER) + pdata->header.len;
+		struct packet_data * pdata = (struct packet_data *)buffer;
+		len = sizeof(struct packet_header) + pdata->header.len;
 		if(sz >= len)
 		{
 			err = 1;
