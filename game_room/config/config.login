@@ -1,19 +1,19 @@
-root_dir = "."
+root_dir = ".."
 
 thread = 4
-logger = "./program_log/loginserver.log"
-daemon = "./program_log/loginserver.pid"
+--logger = "./program_log/loginserver.log"
+--daemon = "./program_log/loginserver.pid"
 harbor = 0
 start = "mainLoginServer"
 bootstrap = "snlua bootstrap"
 
-cluster = root_dir.."/config/clustername.lua"
-pbs_dir = root_dir.."/pbs"
+cluster = "./config/clustername.lua"
+pbs_dir = "./pbs"
 lualoader = root_dir.."/skynet/lualib/loader.lua"
-cpath =  root_dir.."/cservice/?.so;"..root_dir.."/skynet/cservice/?.so"
-lua_cpath = root_dir.."/luaclib-src/?.so;"..root_dir.."/skynet/luaclib/?.so"
-luaservice = root_dir.."/service/loginServer/?.lua;"..root_dir.."/skynet/service/?.lua;"..root_dir.."/service/?.lua;"..root_dir.."/lualib/?.lua;"..root_dir.."/skynet/lualib/http/?.lua;"
-lua_path = root_dir.."/lualib/?.lua;"..root_dir.."/skynet/lualib/?.lua;"..root_dir.."/service/?.lua;"..root_dir.."/skynet/lualib/skynet/?.lua;"..root_dir.."/skynet/lualib/http/?.lua;"..root_dir.."/config/?.lua;"
+cpath =  "./cservice/?.so;"..root_dir.."/skynet/cservice/?.so"
+lua_cpath = "./luaclib-src/?.so;"..root_dir.."/skynet/luaclib/?.so"
+luaservice = "./service/?.lua;".."./service/loginServer/?.lua;".."./lualib/?.lua;"..root_dir.."/skynet/service/?.lua;"..root_dir.."/skynet/lualib/http/?.lua;"
+lua_path = "./config/?.lua;".."./service/?.lua;".."./lualib/?.lua;"..root_dir.."/skynet/lualib/?.lua;"..root_dir.."/skynet/lualib/skynet/?.lua;"..root_dir.."/skynet/lualib/http/?.lua;"
 
 resManager_pbParserPoolSize = 3
 resManager_wordFilterPoolSize = 1

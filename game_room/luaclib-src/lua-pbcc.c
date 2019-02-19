@@ -10,12 +10,12 @@
 static int l_unpackNetPayload(lua_State *L) {
 	char *ptr;
 	int size;
-	int test = 0;
+	//int test = 0;
 	if (lua_type(L,1) == LUA_TSTRING) {
-		test=1;
+		//test=1;
 		ptr = (char *)luaL_checklstring(L,1,(size_t *)&size);
 	} else {
-		test=2;
+		//test=2;
 		ptr = (char *)lua_touserdata(L, 1);
 		size = luaL_checkinteger(L, 2);
 	}
@@ -24,7 +24,7 @@ static int l_unpackNetPayload(lua_State *L) {
 	{
 		return luaL_error(L, "parse protobuf packet failed, invalid format");
 	}
-	int i=1;
+	//int i=1;
 	int k = 0;
 	
 	int pbNo = ( (unsigned char)ptr[1] << 16 ) | ( (unsigned char)ptr[2] << 8 ) | (unsigned char)ptr[3];
@@ -90,7 +90,7 @@ static int l_packNetPBPacket(lua_State *L) {
 	}
 	else
 	{
-		lua_pushlstring(L, buffer, size + 2);
+		lua_pushlstring(L, (char *)buffer, size + 2);
 		lua_pushinteger(L, size + 2);
 		skynet_free(buffer);
 	}

@@ -2,15 +2,14 @@
 
 root_dir=$(cd `dirname $0`; pwd)
 
-rm -rf logs program_log/*.log logs program_log/*.pid
+rm -rf ./game_room/logs ./game_room/program_log/*.log ./game_room/program_log/*.pid
 
-
-cd ./luaclib-src
+cd ./game_room/luaclib-src
 make clean
 cd ${root_dir}
 
 
-cd ./pbs
+cd ./game_room/pbs
 rm -rf *.pb
 cd ${root_dir}
 

@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -O2 -fPIC -Wall
-LUA_INC = ../skynet/3rd/lua/
-SKYNET_DIR = ../skynet/
-SKYNET_INC = ../skynet/skynet-src/
-SKYNET_SIC = ../skynet/service-src/
+LUA_INC = ../../skynet/3rd/lua/
+SKYNET_DIR = ../../skynet/
+SKYNET_INC = ../../skynet/skynet-src/
+SKYNET_SIC = ../../skynet/service-src/
 SKYNET_LUA_CLIB_PATH = ../skynet/luaclib/
 
 .PHONY : all clean
