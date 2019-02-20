@@ -1,4 +1,4 @@
-local driver = require "skynet.socketdriver"
+local driver = require "skynet_socketdriver"
 local skynet = require "skynet"
 local skynet_core = require "skynet.core"
 local assert = assert

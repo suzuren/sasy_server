@@ -185,7 +185,6 @@ int
 skynet_context_newsession(struct skynet_context *ctx) {
 	// session always be a positive number
 	int session = ++ctx->session_id;
-	//printf("skynet_context_newsession function - ctx:%p, session:%d, session_id:%d\n",ctx, session, ctx->session_id);
 	if (session <= 0) {
 		ctx->session_id = 1;
 		return 1;
@@ -706,9 +705,8 @@ skynet_send(struct skynet_context * context, uint32_t source, uint32_t destinati
 		}
 		return -2;
 	}
-	//printf("skynet_send function 1 - context:%p, source:%d, destination:%d, type:%d, session:%d\n", context, source, destination, type, session);
 	_filter_args(context, type, &session, (void **)&data, &sz);
-	//printf("skynet_send function 2 - context:%p, source:%d, destination:%d, type:%d, session:%d\n", context, source, destination, type, session);
+
 	if (source == 0) {
 		source = context->handle;
 	}
@@ -741,13 +739,11 @@ skynet_send(struct skynet_context * context, uint32_t source, uint32_t destinati
 			return -1;
 		}
 	}
-	//printf("skynet_send function 3 - context:%p, source:%d, destination:%d, type:%d, session:%d\n", context, source, destination, type, session);
 	return session;
 }
 
 int
 skynet_sendname(struct skynet_context * context, uint32_t source, const char * addr , int type, int session, void * data, size_t sz) {
-	//printf("skynet_sendname function 1 - context:%p, source:%d, addr:%s, type:%d, session:%d\n", context, source, addr, type, session);
 	if (source == 0) {
 		source = context->handle;
 	}
@@ -782,7 +778,7 @@ skynet_sendname(struct skynet_context * context, uint32_t source, const char * a
 		skynet_harbor_send(rmsg, source, session);
 		return session;
 	}
-	//printf("skynet_sendname function 2 - context:%p, source:%d, addr:%s, des:%d, type:%d, session:%d\n", context, source, addr, des, type, session);
+
 	return skynet_send(context, source, des, type, session, data, sz);
 }
 

@@ -52,8 +52,6 @@ traceback (lua_State *L) {
 	return 1;
 }
 
-// skynet_server.c
-// reserve_msg = ctx->cb(ctx, ctx->cb_ud, type, msg->session, msg->source, msg->data, sz);
 static int
 _cb(struct skynet_context * context, void * ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
 	lua_State *L = ud;
@@ -75,8 +73,6 @@ _cb(struct skynet_context * context, void * ud, int type, int session, uint32_t 
 	lua_pushinteger(L, source);
 
 	r = lua_pcall(L, 5, 0 , trace);
-	
-// local function raw_dispatch_message(prototype, msg, sz, session, source)
 
 	if (r == LUA_OK) {
 		return 0;
@@ -155,9 +151,8 @@ laddresscommand(lua_State *L) {
 	const char * parm = NULL;
 	if (lua_gettop(L) == 2) {
 		parm = luaL_checkstring(L,2);
-	}	
+	}
 	result = skynet_command(context, cmd, parm);
-	//printf("laddresscommand function - context:%p, cmd:%s, result:%s, parm:%s, result:%s\n",context, cmd, result, parm, result);
 	if (result && result[0] == ':') {
 		int i;
 		uint32_t addr = 0;
@@ -255,7 +250,6 @@ send_message(lua_State *L, int source, int idx_type) {
 	}
 
 	int mtype = lua_type(L,idx_type+2);
-	//printf("send_message function 1 - source:%d, idx_type:%d, context:%p, dest:%d, dest_string:%s, type:%d, session:%d, mtype:%d\n",source, idx_type, context, dest, dest_string, type, session, mtype);
 	switch (mtype) {
 	case LUA_TSTRING: {
 		size_t len = 0;
@@ -283,7 +277,6 @@ send_message(lua_State *L, int source, int idx_type) {
 	default:
 		luaL_error(L, "invalid param %s", lua_typename(L, lua_type(L,idx_type+2)));
 	}
-	//printf("send_message function 2 - source:%d, idx_type:%d, context:%p, dest:%d, dest_string:%s, type:%d, session:%d, mtype:%d\n",source, idx_type, context, dest, dest_string, type, session, mtype);
 	if (session < 0) {
 		if (session == -2) {
 			// package is too large

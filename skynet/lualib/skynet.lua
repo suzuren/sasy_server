@@ -48,7 +48,6 @@ function skynet.register_protocol(class)
 	assert(type(name) == "string" and type(id) == "number" and id >=0 and id <=255)
 	proto[name] = class
 	proto[id] = class
-	--skynet.error("skynet.register_protocol func - ",class,class.name, class.id, class.unpack,class.dispatch)
 end
 
 local session_id_coroutine = {}
@@ -128,6 +127,7 @@ local function co_create(f)
 				local address = session_coroutine_address[co]
 				if address then
 					session_coroutine_id[co] = nil
+					session_coroutine_address[co] = nil
 				end
 
 				-- recycle co into pool
@@ -359,16 +359,14 @@ local function yield_call(service, session)
 end
 
 function skynet.call(addr, typename, ...)
-	--skynet.error("skynet.call function addr, typename, running_thread, - ", addr, typename, running_thread, ...)
-	local tag = session_coroutine_tracetag[running_thread]	
+	local tag = session_coroutine_tracetag[running_thread]
 	if tag then
 		c.trace(tag, "call", 2)
 		c.send(addr, skynet.PTYPE_TRACE, 0, tag)
 	end
 
-	local p = proto[typename]	
+	local p = proto[typename]
 	local session = c.send(addr, p.id , nil , p.pack(...))
-	--skynet.error("skynet.call function - tag proto session - ", tag, p, addr, session,...)
 	if session == nil then
 		error("call to invalid address " .. skynet.address(addr))
 	end
@@ -597,7 +595,6 @@ local function raw_dispatch_message(prototype, msg, sz, session, source)
 end
 
 function skynet.dispatch_message(...)
-	--print("skynet.lua dispatch_message - ...",...)
 	local succ, err = pcall(raw_dispatch_message,...)
 	while true do
 		local key,co = next(fork_queue)
@@ -619,7 +616,6 @@ function skynet.dispatch_message(...)
 end
 
 function skynet.newservice(name, ...)
-	--skynet.error("skynet.newservice function - ", name, ...)
 	return skynet.call(".launcher", "lua" , "LAUNCH", "snlua", name, ...)
 end
 

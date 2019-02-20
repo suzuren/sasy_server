@@ -45,10 +45,4 @@ if LUA_PRELOAD then
 	LUA_PRELOAD = nil
 end
 
-local ret_sub = select(2, table.unpack(args))
-
---print("loader.lua select ret_sub - SERVICE_NAME - ",ret_sub,SERVICE_NAME)
-
-main(ret_sub)
-
---main(select(2, table.unpack(args)))
+main(select(2, table.unpack(args)))

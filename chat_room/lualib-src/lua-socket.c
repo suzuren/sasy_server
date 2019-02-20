@@ -95,6 +95,9 @@ lnewbuffer(lua_State *L) {
 	lpushbbuffer will get a free struct buffer_node from table pool, and then put the msg/size in it.
 	lpopbuffer return the struct buffer_node back to table pool (By calling return_free_node).
  */
+
+ // local sz = driver.push(s.buffer, buffer_pool, data, size)
+ 
 static int
 lpushbuffer(lua_State *L) {
 	struct socket_buffer *sb = lua_touserdata(L,1);
@@ -109,7 +112,7 @@ lpushbuffer(lua_State *L) {
 	luaL_checktype(L,pool_index,LUA_TTABLE);
 	int sz = luaL_checkinteger(L,4);
 	lua_rawgeti(L,pool_index,1);
-	struct buffer_node * free_node = lua_touserdata(L,-1);	// sb poolt msg size free_node
+	struct buffer_node * free_node = lua_touserdata(L,-1);
 	lua_pop(L,1);
 	if (free_node == NULL) {
 		int tsz = lua_rawlen(L,pool_index);
@@ -289,6 +292,73 @@ lreadall(lua_State *L) {
 	return 1;
 }
 
+
+#pragma  pack(1)
+struct packet_header{
+    int       uin;
+	int       cmd;
+	int       len;
+};
+struct packet_data{
+	struct packet_header header;
+	char      buf[2048];
+};
+#pragma pack()
+
+static int
+lreadall_chat(lua_State *L) {
+	struct socket_buffer * sb = lua_touserdata(L, 1);
+	if (sb == NULL) {
+		return luaL_error(L, "Need buffer object at param 1");
+	}
+	luaL_checktype(L,2,LUA_TTABLE);
+
+	int size = 0;
+	char buffer[2048 + 12];	
+	memset(buffer, 0, sizeof(buffer));
+	
+	//printf("lua-socket.c - head:%p\n",sb->head);
+
+	while(sb->head)
+	{
+		struct buffer_node *current = sb->head;
+		memcpy(buffer + size, current->msg + sb->offset, current->sz - sb->offset);
+		int oldsize = size;
+		size += current->sz - sb->offset;
+		if(size >= sizeof(struct packet_header))
+		{
+			struct packet_data * pdata = (struct packet_data *)buffer;
+			int pack_size = sizeof(struct packet_header) + pdata->header.len;
+			if(pack_size > size)
+			{
+				return_free_node(L,2,sb);
+			}
+			else if(pack_size == size)
+			{
+				return_free_node(L,2,sb);
+				break;
+			}
+			else if(pack_size < size)
+			{
+				memset(buffer + pack_size, 0, sizeof(buffer) - pack_size);
+				size = pack_size;
+				sb->offset += (pack_size - oldsize);
+				break;
+			}
+		}
+	}
+	sb->size -= size;
+	struct packet_data * pdata = (struct packet_data *)buffer;
+	//printf("lua-socket.c - size:%d,uin:%d,cmd:%d,len:%d,buf:%s-\n",size, pdata->header.uin, pdata->header.cmd, pdata->header.len, pdata->buf);
+	lua_pushinteger(L, size);
+	//lua_pushlstring(L, buffer, size);
+	lua_pushinteger(L, pdata->header.uin);
+	lua_pushinteger(L, pdata->header.cmd);
+	lua_pushinteger(L, pdata->header.len);
+    lua_pushlstring(L, pdata->buf, pdata->header.len);
+	return 5;
+}
+
 static int
 ldrop(lua_State *L) {
 	void * msg = lua_touserdata(L,1);
@@ -387,6 +457,7 @@ lunpack(lua_State *L) {
 	lua_pushinteger(L, message->type);
 	lua_pushinteger(L, message->id);
 	lua_pushinteger(L, message->ud);
+	//printf("lua-socket.c lunpack func - type:%d,id:%d,ud:%d,buffer:%p -%s-\n",message->type, message->id,message->ud, message->buffer,message->buffer);
 	if (message->buffer == NULL) {
 		lua_pushlstring(L, (char *)(message+1),size - sizeof(*message));
 	} else {
@@ -402,6 +473,66 @@ lunpack(lua_State *L) {
 	}
 	return 4;
 }
+
+
+
+/*
+
+#include "../../testsocket/packetmacro.h"
+
+static char * _pbuffer = NULL;
+static int _size = 0;
+
+static int
+lunpack_2(lua_State *L) {
+	struct skynet_socket_message *message = lua_touserdata(L,1);
+	int size = luaL_checkinteger(L,2);
+
+	lua_pushinteger(L, message->type);
+	lua_pushinteger(L, message->id);
+	lua_pushinteger(L, message->ud);
+	//printf("lua-socket.c lunpack func - type:%d,id:%d,ud:%d,buffer:%p -%s-\n",message->type, message->id,message->ud, message->buffer,message->buffer);
+	if (message->buffer == NULL) {
+		lua_pushlstring(L, (char *)(message+1),size - sizeof(*message));
+	} else {
+		
+		int sz = message->ud;
+		int err = 0;
+		int len = 0;
+		_pbuffer = malloc(sz);
+		memcpy(_buffer,message->buffer,sz);
+		_size += sz;
+		if(_size >= sizeof(PACKETHEADER))
+		{
+			PACKETDATA * pdata = (PACKETDATA *)_buffer;
+			len = sizeof(PACKETHEADER) + pdata->header.len;
+			if(sz >= len)
+			{
+				err = 1;
+			}
+		}
+		if(err==1)
+		{
+			lua_pushlightuserdata(L, message->buffer);
+			_size -= sz;
+		}
+		else
+		{
+			lua_pushlightuserdata(L, "");
+		}
+	}
+	if (message->type == SKYNET_SOCKET_TYPE_UDP) {
+		int addrsz = 0;
+		const char * addrstring = skynet_socket_udp_address(message, &addrsz);
+		if (addrstring) {
+			lua_pushlstring(L, addrstring, addrsz);
+			return 5;
+		}
+	}
+	return 4;
+}
+
+*/
 
 static const char *
 address_port(lua_State *L, char *tmp, const char * addr, int port_index, int *port) {
@@ -558,7 +689,30 @@ lsend(lua_State *L) {
 	struct skynet_context * ctx = lua_touserdata(L, lua_upvalueindex(1));
 	int id = luaL_checkinteger(L, 1);
 	int sz = 0;
+	//printf("lua-socket.c lsend func - index:%d,%d,%d,%d,%d,%d",lua_type(L, 0),lua_type(L, 1),lua_type(L, 2),lua_type(L, 3),lua_type(L, 4),lua_type(L, 5));
 	void *buffer = get_buffer(L, 2, &sz);
+	int err = skynet_socket_send(ctx, id, buffer, sz);
+	lua_pushboolean(L, !err);
+	return 1;
+}
+
+
+static int
+lsend_chat(lua_State *L) {
+	//printf("lua-socket.c lsend_chat func - index:%d,%d,%d,%d,%d,%d\n",lua_type(L, 0),lua_type(L, 1),lua_type(L, 2),lua_type(L, 3),lua_type(L, 4),lua_type(L, 5));
+	struct skynet_context * ctx = lua_touserdata(L, lua_upvalueindex(1));	
+	int id = luaL_checkinteger(L, 1);
+	struct packet_data data;
+	data.header.uin = luaL_checkinteger(L, 2);
+	data.header.cmd = luaL_checkinteger(L, 3);
+	data.header.len = luaL_checkinteger(L, 4);
+	size_t msg_len;
+	const char * str = luaL_checklstring(L, 5, &msg_len);
+	memcpy(data.buf, str, msg_len);
+	assert(data.header.len == msg_len);
+	int sz = sizeof(struct packet_header) + msg_len;
+	void * buffer = skynet_malloc(sz);
+	memcpy(buffer, &data, sz);	
 	int err = skynet_socket_send(ctx, id, buffer, sz);
 	lua_pushboolean(L, !err);
 	return 1;
@@ -755,6 +909,7 @@ luaopen_skynet_socketdriver(lua_State *L) {
 		{ "pop", lpopbuffer },
 		{ "drop", ldrop },
 		{ "readall", lreadall },
+		{ "readall_chat", lreadall_chat },
 		{ "clear", lclearbuffer },
 		{ "readline", lreadline },
 		{ "str2p", lstr2p },
@@ -762,6 +917,7 @@ luaopen_skynet_socketdriver(lua_State *L) {
 		{ "info", linfo },
 
 		{ "unpack", lunpack },
+		//{ "unpack2", lunpack_2 },		
 		{ NULL, NULL },
 	};
 	luaL_newlib(L,l);
@@ -771,6 +927,7 @@ luaopen_skynet_socketdriver(lua_State *L) {
 		{ "shutdown", lshutdown },
 		{ "listen", llisten },
 		{ "send", lsend },
+		{ "send_chat", lsend_chat },
 		{ "lsend", lsendlow },
 		{ "bind", lbind },
 		{ "start", lstart },

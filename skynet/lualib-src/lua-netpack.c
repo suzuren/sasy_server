@@ -149,9 +149,6 @@ expand_queue(lua_State *L, struct queue *q) {
 
 static void
 push_data(lua_State *L, int fd, void *buffer, int size, int clone) {
-	
-	printf("lua-netpack.c push_data func - fd:%d,size:%d,clone:%d\n",fd, size,clone);
-
 	if (clone) {
 		void * tmp = skynet_malloc(size);
 		memcpy(tmp, buffer, size);
@@ -190,9 +187,6 @@ read_size(uint8_t * buffer) {
 
 static void
 push_more(lua_State *L, int fd, uint8_t *buffer, int size) {
-
-	printf("lua-netpack.c push_more func 1 - fd:%d,size:%d\n",fd, size);
-
 	if (size == 1) {
 		struct uncomplete * uc = save_uncomplete(L, fd);
 		uc->read = -1;
@@ -202,8 +196,6 @@ push_more(lua_State *L, int fd, uint8_t *buffer, int size) {
 	int pack_size = read_size(buffer);
 	buffer += 2;
 	size -= 2;
-
-	printf("lua-netpack.c push_more func 2 - fd:%d,size:%d,pack_size:%d\n",fd, size,pack_size);
 
 	if (size < pack_size) {
 		struct uncomplete * uc = save_uncomplete(L, fd);
@@ -236,9 +228,6 @@ static int
 filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 	struct queue *q = lua_touserdata(L,1);
 	struct uncomplete * uc = find_uncomplete(q, fd);
-
-	printf("lua-netpack.c filter_data_ func - q:%p,uc:%p,fd:%d,size:%d\n",q, uc, fd, size);
-
 	if (uc) {
 		// fill uncomplete
 		if (uc->read < 0) {
@@ -288,8 +277,6 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 		int pack_size = read_size(buffer);
 		buffer+=2;
 		size-=2;
-
-		printf("lua-netpack.c filter_data_ func - q:%p,uc:%p,fd:%d,size:%d,pack_size:%d\n",q, uc, fd, size,pack_size);
 
 		if (size < pack_size) {
 			struct uncomplete * uc = save_uncomplete(L, fd);
@@ -360,8 +347,6 @@ lfilter(lua_State *L) {
 	}
 
 	lua_settop(L, 1);
-
-	printf("lua-netpack.c lfilter func - type:%d,id:%d,ud:%d\n",message->type,message->id,message->ud);
 
 	switch(message->type) {
 	case SKYNET_SOCKET_TYPE_DATA:

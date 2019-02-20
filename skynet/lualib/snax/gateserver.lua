@@ -36,10 +36,10 @@ function gateserver.start(handler)
 		local address = conf.address or "0.0.0.0"
 		local port = assert(conf.port)
 		maxclient = conf.maxclient or 1024
-		nodelay = conf.nodelay		
+		nodelay = conf.nodelay
+		skynet.error(string.format("Listen on %s:%d", address, port))
 		socket = socketdriver.listen(address, port)
 		socketdriver.start(socket)
-		skynet.error(string.format("Listen on %s:%d,%d", address, port,socket))
 		if handler.open then
 			return handler.open(source, conf)
 		end
@@ -132,13 +132,11 @@ function gateserver.start(handler)
 		name = "socket",
 		id = skynet.PTYPE_SOCKET,	-- PTYPE_SOCKET = 6
 		unpack = function ( msg, sz )
-			skynet.error("unpack = function netpack - ",queue,sz, msg)
 			return netpack.filter( queue, msg, sz)
 		end,
 		dispatch = function (_, _, q, type, ...)
 			queue = q
 			if type then
-				skynet.error("dispatch = function netpack - ",queue,type)
 				MSG[type](...)
 			end
 		end

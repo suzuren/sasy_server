@@ -54,6 +54,7 @@ static void * thread_socket(void *p)
 				continue;
 			}
 			fprintf(stderr, "socket : read socket error:%s.\n", strerror(errno));
+			close(client_fd);
 			break;
 		}
 		if (rsize == 0)
@@ -121,6 +122,7 @@ int main(int argc, char const *argv[])
 		if (size_send != size_pack)
 		{
 			printf("send buf error\n");
+			break;
 		}
 
 		printf("%s size_pack:%d,size_send:%d,uid:%d,cmd:%d,buf:%s\n", getStrTime(), size_pack, size_send, data.header.uin, data.header.cmd,data.buf);

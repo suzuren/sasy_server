@@ -9,10 +9,8 @@ local function echo(id)
 	while true do
 		local str = socket.read(id)
 		if str then
-			print("testsocket.lua - id, str - ",id, str)
 			socket.write(id, str)
 		else
-			print("testsocket.lua - socket.close id, str - ",id, str)
 			socket.close(id)
 			return
 		end
@@ -40,7 +38,7 @@ else
 
 	skynet.start(function()
 		local id = socket.listen("127.0.0.1", 8001)
-		print(SERVICE_NAME.. " service Listen socket :", "127.0.0.1", 8001)
+		print("Listen socket :", "127.0.0.1", 8001)
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)
@@ -48,8 +46,7 @@ else
 			-- 1. skynet.newservice("testsocket", "agent", id)
 			-- 2. skynet.fork(echo, id)
 			-- 3. accept(id)
-			--accept(id)
-			skynet.fork(echo, id)
+			accept(id)
 		end)
 	end)
 end
