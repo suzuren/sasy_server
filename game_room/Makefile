@@ -1,18 +1,20 @@
 
 
-root_dir=$(cd `dirname $0`; pwd)
 
-.PHONY : all clean
+.PHONY : httpClient clean
 
-all : 
+httpClient : ./client/httpclient.o
+	gcc -lpthread ./client/httpclient.o -o ./client/httpClient -Iclient
+
+./client/httpclient.o : ./client/httpclient.c
+	gcc  -g -Wall -c ./client/httpclient.c -o ./client/httpclient.o
+
 	cd pbs && make
-	cd ${root_dir}
 	cd luaclib-src && make
-	cd ${root_dir}
+
 clean :
 	cd pbs && make clean
-	cd ${root_dir}
 	cd luaclib-src && make clean
-	cd ${root_dir}
 	rm -f *.so
 	rm -rf ./logs ./program_log/*.log ./program_log/*.pid
+	rm -f ./client/*.o ./client/httpClient ./client/core.*

@@ -4,11 +4,11 @@ LUA_INC = ../../skynet/3rd/lua/
 SKYNET_DIR = ../../skynet/
 SKYNET_INC = ../../skynet/skynet-src/
 SKYNET_SIC = ../../skynet/service-src/
-SKYNET_LUA_CLIB_PATH = ../skynet/luaclib/
+#SKYNET_LUA_CLIB_PATH = ../skynet/luaclib/
 
 .PHONY : all clean
 
-all : protobuf.so pbcc.so skynetHelper.so socketdriver.so
+all : protobuf.so pbcc.so skynetHelper.so #socketdriver.so
 
 protobuf.so : pbc-lua53.c
 	cd pbc && make
@@ -20,8 +20,8 @@ pbcc.so : lua-pbcc.c
 skynetHelper.so : lua-skynetHelper.c
 	gcc -g -O2 -Wall -I$(LUA_INC)  -fPIC --shared $^ -o $@
 
-socketdriver.so : $(SKYNET_DIR)lualib-src/lua-socket.c | $(SKYNET_LUA_CLIB_PATH)
-	gcc -g -O2 -Wall -fPIC --shared $^ -o $@ -I$(SKYNET_INC) -I$(SKYNET_SIC) -I$(LUA_INC)
+#socketdriver.so : $(SKYNET_DIR)lualib-src/lua-socket.c | $(SKYNET_LUA_CLIB_PATH)
+	#gcc -g -O2 -Wall -fPIC --shared $^ -o $@ -I$(SKYNET_INC) -I$(SKYNET_SIC) -I$(LUA_INC)
 	#mkdir skynet && mv socketdriver.so skynet/socketdriver.so
 
 clean :
