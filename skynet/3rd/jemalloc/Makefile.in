@@ -379,7 +379,8 @@ endif
 ifneq ($(SOREV),$(SO))
 %.$(SO) : %.$(SOREV)
 	@mkdir -p $(@D)
-	ln -sf $(<F) $@
+    #删除软连接 这样子就可以直接编译了
+	#ln -sf $(<F) $@
 endif
 
 $(objroot)lib/$(LIBJEMALLOC).$(SOREV) : $(if $(PIC_CFLAGS),$(C_PIC_OBJS),$(C_OBJS)) $(if $(PIC_CFLAGS),$(CPP_PIC_OBJS),$(CPP_OBJS))
