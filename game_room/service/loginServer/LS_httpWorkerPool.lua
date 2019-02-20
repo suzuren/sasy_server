@@ -23,7 +23,7 @@ skynet.start(function()
 	end
 
 	for i=1,_poolSize do
-		--table.insert(_pool, skynet.newservice("LS_httpWorker"))
+		table.insert(_pool, skynet.newservice("LS_httpWorker"))
 	end
 
 	local socketId = socket.listen(address, port)
