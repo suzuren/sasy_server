@@ -100,6 +100,59 @@ static void * thread_socket(void *p)
 	return NULL;
 }
 
+char* itoa_parser(int num, int radix)
+{
+	static char str[32];
+	memset(str, 0, sizeof(str));
+	static char index[17] = "0123456789ABCDEF";
+	unsigned unum;
+	int i = 0, j, k;
+	if (radix == 10 && num < 0)
+	{
+		unum = (unsigned)-num;
+		str[i++] = '-';
+	}
+	else
+	{
+		unum = (unsigned)num;
+	}
+	do
+	{
+		str[i++] = index[unum % (unsigned)radix];
+		unum /= radix;
+	} while (unum);
+	str[i] = '\0';
+	if (str[0] == '-')
+	{
+		k = 1;
+	}
+	else
+	{
+		k = 0;
+	}
+	char temp;
+	for (j = k; j <= (i - 1) / 2; j++)
+	{
+		temp = str[j];
+		str[j] = str[i - 1 + k - j];
+		str[i - 1 + k - j] = temp;
+	}
+	return str;
+}
+
+
+char * http_build_post_head(const char * api,const char * body)
+{
+	static char buffer[1024];
+	memset(buffer, 0, sizeof(buffer));
+	strcat(buffer, "POST /pokebot/");strcat(buffer, api);strcat(buffer, " HTTP/1.1\r\n");
+	strcat(buffer, "Host: 127.0.0.1:3002\r\n");
+	strcat(buffer, "Content-Type: application/x-www-form-urlencoded\r\n");
+	strcat(buffer, "Content-Length: ");	strcat(buffer, itoa_parser(strlen(body), 10));	strcat(buffer, "\r\n");
+	strcat(buffer, "Connection: Keep-Alive\r\n\r\n");
+	strcat(buffer, body);
+	return buffer;
+}
 
 #define IPADDRESS "127.0.0.1"
 #define PORT 3002
@@ -117,37 +170,31 @@ int main(int argc, char const *argv[])
 	create_thread(&pid, thread_socket, &arg);
 
 	int iCount = 0;
-	struct packet_data data;
-	memset(&data, 0, sizeof(data));
+	char wbuffer[10846];
+	memset(wbuffer, 0, sizeof(wbuffer));
 	while (1)
 	{
 		if(!_runflag)
 		{
 			break;
 		}
-		data.header.uin = main_pid;
-		if(data.header.cmd == 0x7FFFFFFF)
-		{
-			data.header.cmd = 0;
-		}
-		data.header.cmd++;
+		memset(wbuffer, 0, sizeof(wbuffer));
+		const char * papi = "register";
+		const char * pbody = "mac_address=FC-AA-14-D3-A4-E7";
+		char * phead = http_build_post_head(papi, pbody);
+		int size_pack = strlen(phead);
+		memcpy(wbuffer, phead, size_pack);
 
-		memset(data.buf, 0, sizeof(data.buf));
-		sprintf(data.buf, "%s %d\n", "hello world", iCount++);
-
-		data.header.len = strlen(data.buf);
-		int size_pack = sizeof(struct packet_header) + data.header.len;
-
-		int size_send = write(client_fd, &data, size_pack);
+		int size_send = write(client_fd, wbuffer, size_pack);
 		if (size_send != size_pack)
 		{
 			printf("send buf error\n");
 			break;
 		}
 
-		printf("%s size_pack:%d,size_send:%d,uid:%d,cmd:%d,buf:%s\n", getStrTime(), size_pack, size_send, data.header.uin, data.header.cmd,data.buf);
+		printf("%s iCount:%d,size_pack:%d,size_send:%d,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), iCount++, size_pack, size_send, size_pack, wbuffer);
 
-		ms_sleep(300);
+		ms_sleep(3000);
 	}
 	printf("main thread exit!\n");
 }

@@ -16,6 +16,8 @@ skynet.start(function()
 	skynet.uniqueservice("simpleProtocalBuffer")
     skynet.uniqueservice("LS_httpWorkerPool")
 
+    skynet.uniqueservice("LS_webController_interface")
+    
     --local tempTable = {1,2,3,4,5,6,7,8,9}
     --xLog(inspect(tempTable))
     
