@@ -15,13 +15,18 @@ LUA_VERSION =       5.1
 TARGET =            cjson.so
 PREFIX =            /usr/local
 #CFLAGS =            -g -Wall -pedantic -fno-inline
-CFLAGS =            -O3 -Wall -pedantic -DNDEBUG
+CFLAGS =            -O3 -Wall -pedantic -DNDEBUG -fgnu89-inline
 CJSON_CFLAGS =      -fpic
 CJSON_LDFLAGS =     -shared
 LUA_INCLUDE_DIR =   $(PREFIX)/include
 LUA_CMODULE_DIR =   $(PREFIX)/lib/lua/$(LUA_VERSION)
 LUA_MODULE_DIR =    $(PREFIX)/share/lua/$(LUA_VERSION)
 LUA_BIN_DIR =       $(PREFIX)/bin
+
+LUA_INCLUDE_DIR =   ../../../skynet/3rd/lua
+LUA_CMODULE_DIR =   ../../../skynet/3rd/lua
+LUA_MODULE_DIR =    ../../../skynet/3rd/lua
+LUA_BIN_DIR =       ../../../skynet/3rd/lua
 
 ##### Platform overrides #####
 ##

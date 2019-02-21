@@ -11,6 +11,8 @@ SKYNET_SIC = ../../skynet/service-src/
 all : protobuf.so pbcc.so skynetHelper.so #socketdriver.so
 
 protobuf.so : pbc-lua53.c
+	cd lua-cjson && make
+	cp lua-cjson/cjson.so cjson.so
 	cd pbc && make
 	$(CC) $(CFLAGS) -shared -o $@ -I./pbc -I$(LUA_INC) -L./pbc/build $^ -lpbc
 
@@ -25,5 +27,6 @@ skynetHelper.so : lua-skynetHelper.c
 	#mkdir skynet && mv socketdriver.so skynet/socketdriver.so
 
 clean :
+	cd lua-cjson && make clean
 	cd pbc && make clean
 	rm -f *.so
