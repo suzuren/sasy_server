@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include <sys/file.h>
 #include <sys/resource.h>
-
+#include <unistd.h>
+#include <signal.h>
 #include "select.h"
 
 
@@ -62,6 +63,7 @@ static void * thread_socket(void *p)
 	for (;;)
 	{
 		ms_sleep(3);
+		memset(rbuffer, 0, sizeof(rbuffer));
 		int rsize = read(client_fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
 		if (rsize<0)
 		{
@@ -81,20 +83,7 @@ static void * thread_socket(void *p)
 			break;
 		}
 		rlenght += rsize;
-		struct packet_data * phead = (struct packet_data *)rbuffer;
-		while(rlenght >= sizeof(struct packet_header))
-		{
-			if(rlenght - sizeof(struct packet_header) >= phead->header.len)
-			{
-				int pack_size = sizeof(struct packet_header) + phead->header.len;
-				char tbuffer[16384] = { 0 };
-				memcpy(tbuffer, rbuffer, pack_size);
-				struct packet_data * pdata = (struct packet_data *)tbuffer;
-				printf("client_fd:%d,rlenght:%d,pack_size:%d,uin:%d,cmd:%d,len:%d,buf:%s\n", client_fd,rlenght, pack_size, pdata->header.uin, pdata->header.cmd, pdata->header.len, pdata->buf);
-				rlenght -= pack_size;
-				memmove(rbuffer, rbuffer + pack_size, rlenght);
-			}
-		}
+		printf("client_fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n-%s-\n", client_fd, rlenght, rsize, rbuffer);
 	}
 	printf("socket thread exit!\n");
 	return NULL;
@@ -145,7 +134,7 @@ char * http_build_post_head(const char * api,const char * body)
 {
 	static char buffer[1024];
 	memset(buffer, 0, sizeof(buffer));
-	strcat(buffer, "POST /pokebot/");strcat(buffer, api);strcat(buffer, " HTTP/1.1\r\n");
+	strcat(buffer, "POST /");strcat(buffer, api);strcat(buffer, " HTTP/1.1\r\n");
 	strcat(buffer, "Host: 127.0.0.1:3002\r\n");
 	strcat(buffer, "Content-Type: application/x-www-form-urlencoded\r\n");
 	strcat(buffer, "Content-Length: ");	strcat(buffer, itoa_parser(strlen(body), 10));	strcat(buffer, "\r\n");
@@ -159,6 +148,10 @@ char * http_build_post_head(const char * api,const char * body)
 
 int main(int argc, char const *argv[])
 {
+	struct sigaction sa;
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGPIPE, &sa, 0);
+
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
 	int client_fd = socket_connect(IPADDRESS, PORT);
 	pid_t main_pid = getpid();
@@ -172,15 +165,29 @@ int main(int argc, char const *argv[])
 	int iCount = 0;
 	char wbuffer[10846];
 	memset(wbuffer, 0, sizeof(wbuffer));
+
+	const char * papi = "interface";
+	const char * pbody = "type=ping";
+	char * phead = http_build_post_head(papi, pbody);
+	int size_pack = strlen(phead);
+	memcpy(wbuffer, phead, size_pack);
+	int size_send = write(client_fd, wbuffer, size_pack);
+	if (size_send != size_pack)
+	{
+		printf("send buf error\n");
+	}
+	printf("%s iCount:%d,size_pack:%d,size_send:%d,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), iCount++, size_pack, size_send, size_pack, wbuffer);
+
 	while (1)
 	{
 		if(!_runflag)
 		{
 			break;
 		}
+		/*
 		memset(wbuffer, 0, sizeof(wbuffer));
-		const char * papi = "register";
-		const char * pbody = "mac_address=FC-AA-14-D3-A4-E7";
+		const char * papi = "interface";
+		const char * pbody = "type=ping";
 		char * phead = http_build_post_head(papi, pbody);
 		int size_pack = strlen(phead);
 		memcpy(wbuffer, phead, size_pack);
@@ -191,8 +198,8 @@ int main(int argc, char const *argv[])
 			printf("send buf error\n");
 			break;
 		}
-
 		printf("%s iCount:%d,size_pack:%d,size_send:%d,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), iCount++, size_pack, size_send, size_pack, wbuffer);
+		*/
 
 		ms_sleep(3000);
 	}

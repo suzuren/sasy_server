@@ -4,6 +4,8 @@ local addressResolver = require "addressResolver"
 local jsonHttpResponseUtility = require "utility.jsonHttpResponse"
 require "utility.string"
 
+local inspect = require "inspect"
+
 local _allowIPHash = {}
 
 local function onlineView()
@@ -45,6 +47,7 @@ function CMD.GetServerListStatus()
 end
 
 function CMD.interface(param)
+	skynet.error("param-\n",inspect(param),"\n-")
 	if string.lower(param.method) ~= "post" then
 		return jsonHttpResponseUtility.getSimpleResponse(false, "request method not support")
 	end	
@@ -54,6 +57,7 @@ function CMD.interface(param)
 	end
 	
 	local requestType = param.post.type
+	--skynet.error(string.format("requestType-%s", requestType))
 	if requestType=="onlineQuery" then
 		return onlineQuery(param.post)
 	elseif requestType=="ping" then
