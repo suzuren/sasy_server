@@ -11,7 +11,7 @@ local inspect = require "inspect"
 addressResolver.configKey(controllerResolveConfig.getConfig("web"))
 
 local function response(id, ...)
-	skynet.error(id,...)
+	--skynet.error(id,...)
 	local ok, err = httpd.write_response(sockethelper.writefunc(id), ...)
 	if not ok then
 		-- if err == sockethelper.socket_error , that means socket closed.

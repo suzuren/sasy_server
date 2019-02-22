@@ -94,11 +94,15 @@ static void * thread_socket(void *p)
 		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d\n",pthread_self(),rsize,errno,EINTR);
 		if (rsize<0)
 		{
-			if (errno == EINTR)
+			if (errno == EINTR) // 指操作被中断唤醒，需要重新读 / 写
 			{
 				continue;
 			}
-			fprintf(stderr, "socket : read socket error:%s.\n", strerror(errno));
+			if (errno == EAGAIN) // 现在没有数据可读请稍后再试
+			{
+				continue;
+			}
+			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno,strerror(errno));
 			close(fd);
 			break;
 		}
@@ -109,7 +113,7 @@ static void * thread_socket(void *p)
 			break;
 		}
 		rlenght += rsize;
-		printf("pthread_self:%ld,fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n--------------------------\n%s\n--------------------------\n",\
+		printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n--------------------------\n%s\n--------------------------\n",\
 			pthread_self(), fd, rlenght, rsize, rbuffer);
 	}
 	_runflag[id] = false;
@@ -141,9 +145,14 @@ int main(int argc, char const *argv[])
 	param[count++] = "interface";
 	param[count++] = "type=onlineView";
 
+	param[count++] = "interface";
+	param[count++] = "type=presentToItem";
+
+	static int postcount = 3;
+
 	int index = 0;
-	struct tagparam arg[2];
-	for(int i=0; i<2; i ++)
+	struct tagparam arg[postcount];
+	for(int i=0; i<postcount; i ++)
 	{
 		if(_runflag[i])
 		{
