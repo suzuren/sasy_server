@@ -1,0 +1,10 @@
+package common.misc.s2c;
+
+//系统消息
+message SystemMessage								// 0xff0000
+{
+	required uint32 type=1;						//消息类型
+	required string msg=2;						//消息内容
+}
+
+

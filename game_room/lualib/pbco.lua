@@ -2,6 +2,8 @@ local protobuf = require "protobuf"
 local _loadedFileHash = {}
 local pbcc = require "pbcc"
 
+local skynet = require "skynet"
+local inspect = require "inspect"
 
 local prototype = {
 	pbFileDir = "",
@@ -40,7 +42,9 @@ function prototype:encode(protoNo,obj)
 end
 
 function prototype:encode2netPacket(protoNo, obj, returnString)
+	--skynet.error(string.format("protoNo-0x%06X", protoNo))
 	local typeName = self.protoNoHash.encode[protoNo]
+	--print("typeName - ",typeName)
 	if not typeName then
 		error(string.format("protocal 0x%06X not found", protoNo))
 	end
@@ -50,6 +54,7 @@ function prototype:encode2netPacket(protoNo, obj, returnString)
 	print(msg, size)
 	return msg, size;
 --]]
+	--print("encode2netPacket - ",typeName, obj, pbcc.packNetPacket, protoNo, returnString)
 	return protobuf.encode(typeName, obj, pbcc.packNetPacket, protoNo, returnString)
 end
 
@@ -59,6 +64,7 @@ function prototype:config(protoDecodeHash, protoEncodeHash, pbFileArray)
 	end	
 	
 	for protoNo, typeName in pairs(protoEncodeHash) do
+		--skynet.error(string.format("protoNo-0x%06X, typeName-%s", protoNo, typeName))
 		self.protoNoHash.encode[protoNo] = typeName
 	end
 

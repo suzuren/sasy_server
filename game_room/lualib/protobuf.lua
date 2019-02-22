@@ -318,6 +318,7 @@ setmetatable(encode_type_cache , {
 })
 
 function M.encode( message, t , func , ...)
+	--print("encode-",message, t , func , ...)
 	local encoder = c._wmessage_new(P, message)
 	assert(encoder ,  message)
 	encode_message(encoder, message, t)

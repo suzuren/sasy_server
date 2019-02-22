@@ -25,20 +25,12 @@ struct packet_data
 
 #pragma pack()
 
+#define threadcount 1024
+static bool _runflag[threadcount];
 
-int GenCoreDumpFile(size_t size)
-{
-	struct rlimit flimit;
-	flimit.rlim_cur = size;
-	flimit.rlim_max = size;
-	if (setrlimit(RLIMIT_CORE, &flimit) != 0)
-	{
-		return errno;
-	}
-	return 0;
-}
 
-static bool _runflag = true;
+#define IPADDRESS "127.0.0.1"
+#define PORT 3002
 
 static void create_thread(pthread_t *thread, void *(*start_routine) (void *), void *arg)
 {
@@ -49,22 +41,57 @@ static void create_thread(pthread_t *thread, void *(*start_routine) (void *), vo
 	}
 }
 
-struct sockarg
+struct tagparam
 {
-	int fd;
+	int id;
+	char * api;
+	char * body; 
 };
 
 static void * thread_socket(void *p)
 {
-	struct sockarg * s = p;	
-	int client_fd = s->fd;
+	struct tagparam * s = p;
+	int fd = socket_connect(IPADDRESS, PORT);
+	char wbuffer[10846];
+	memset(wbuffer, 0, sizeof(wbuffer));
+	int id = s->id;
+	char * api = s->api;
+	char * body = s->body;
+	
+	char * ppack = http_build_post_head(api, body);
+	int size_pack = strlen(ppack);
+	memcpy(wbuffer, ppack, size_pack);
+	free(ppack);
+
+	//printf("pthread_self:%ld,api:%s,body:%s\n",pthread_self(),api, body);
+
+	//printf("%s fd:%d,pthread_self:%ld,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(),size_pack, wbuffer);
+
+	while(true)
+	{
+		int size_send = write(fd, wbuffer, size_pack);
+
+		if (size_send != size_pack)
+		{
+			printf("send buf error\n");
+			break;
+		}
+
+		size_pack-=size_send;
+		if(size_pack==0)
+		{
+			break;
+		}
+	}
+	
 	char rbuffer[16384 * 5] = { 0 };
 	int  rlenght = 0;
 	for (;;)
 	{
 		ms_sleep(3);
 		memset(rbuffer, 0, sizeof(rbuffer));
-		int rsize = read(client_fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d\n",pthread_self(),rsize,errno,EINTR);
 		if (rsize<0)
 		{
 			if (errno == EINTR)
@@ -72,136 +99,86 @@ static void * thread_socket(void *p)
 				continue;
 			}
 			fprintf(stderr, "socket : read socket error:%s.\n", strerror(errno));
-			close(client_fd);
+			close(fd);
 			break;
 		}
 		if (rsize == 0)
 		{
-			_runflag = false;
-			close(client_fd);
+			close(fd);
 			printf("read socket close.\n");
 			break;
 		}
 		rlenght += rsize;
-		printf("client_fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n-%s-\n", client_fd, rlenght, rsize, rbuffer);
+		printf("pthread_self:%ld,fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n--------------------------\n%s\n--------------------------\n",\
+			pthread_self(), fd, rlenght, rsize, rbuffer);
 	}
-	printf("socket thread exit!\n");
+	_runflag[id] = false;
+	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
 	return NULL;
 }
 
-char* itoa_parser(int num, int radix)
-{
-	static char str[32];
-	memset(str, 0, sizeof(str));
-	static char index[17] = "0123456789ABCDEF";
-	unsigned unum;
-	int i = 0, j, k;
-	if (radix == 10 && num < 0)
-	{
-		unum = (unsigned)-num;
-		str[i++] = '-';
-	}
-	else
-	{
-		unum = (unsigned)num;
-	}
-	do
-	{
-		str[i++] = index[unum % (unsigned)radix];
-		unum /= radix;
-	} while (unum);
-	str[i] = '\0';
-	if (str[0] == '-')
-	{
-		k = 1;
-	}
-	else
-	{
-		k = 0;
-	}
-	char temp;
-	for (j = k; j <= (i - 1) / 2; j++)
-	{
-		temp = str[j];
-		str[j] = str[i - 1 + k - j];
-		str[i - 1 + k - j] = temp;
-	}
-	return str;
-}
-
-
-char * http_build_post_head(const char * api,const char * body)
-{
-	static char buffer[1024];
-	memset(buffer, 0, sizeof(buffer));
-	strcat(buffer, "POST /");strcat(buffer, api);strcat(buffer, " HTTP/1.1\r\n");
-	strcat(buffer, "Host: 127.0.0.1:3002\r\n");
-	strcat(buffer, "Content-Type: application/x-www-form-urlencoded\r\n");
-	strcat(buffer, "Content-Length: ");	strcat(buffer, itoa_parser(strlen(body), 10));	strcat(buffer, "\r\n");
-	strcat(buffer, "Connection: Keep-Alive\r\n\r\n");
-	strcat(buffer, body);
-	return buffer;
-}
-
-#define IPADDRESS "127.0.0.1"
-#define PORT 3002
-
 int main(int argc, char const *argv[])
 {
+	for(int i=0; i<threadcount; i++)
+	{
+		_runflag[i] = false;
+	}
 	struct sigaction sa;
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGPIPE, &sa, 0);
 
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
-	int client_fd = socket_connect(IPADDRESS, PORT);
 	pid_t main_pid = getpid();
-	_runflag = true;
-	printf("socket_connect pid:%d,client_fd:%d\n", main_pid, client_fd);
-	pthread_t pid;
-	struct sockarg arg;
-	arg.fd = client_fd;
-	create_thread(&pid, thread_socket, &arg);
+	
+	printf("pid:%d\n", main_pid);
 
-	int iCount = 0;
-	char wbuffer[10846];
-	memset(wbuffer, 0, sizeof(wbuffer));
+	int count = 0;	
+	char * param[1024] = { 0 };
 
-	const char * papi = "interface";
-	const char * pbody = "type=ping";
-	char * phead = http_build_post_head(papi, pbody);
-	int size_pack = strlen(phead);
-	memcpy(wbuffer, phead, size_pack);
-	int size_send = write(client_fd, wbuffer, size_pack);
-	if (size_send != size_pack)
+	param[count++] = "interface";
+	param[count++] = "type=ping";
+	
+	param[count++] = "interface";
+	param[count++] = "type=onlineView";
+
+	int index = 0;
+	struct tagparam arg[2];
+	for(int i=0; i<2; i ++)
 	{
-		printf("send buf error\n");
+		if(_runflag[i])
+		{
+			continue;
+		}
+		_runflag[i] = true;
+		pthread_t pid;
+		arg[i].id = i;
+		arg[i].api = param[index++];
+		arg[i].body = param[index++];
+		create_thread(&pid, thread_socket, &arg[i]);
+		//printf("i:%d, main_pid:%d, pid:%ld,api:%s,body:%s\n", i, main_pid, pid,arg[i].api, arg[i].body);
 	}
-	printf("%s iCount:%d,size_pack:%d,size_send:%d,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), iCount++, size_pack, size_send, size_pack, wbuffer);
 
-	while (1)
+	while (true)
 	{
-		if(!_runflag)
+		bool brun = false;
+		for(int i=0; i<threadcount; i++)
 		{
+			if(_runflag[i])
+			{
+				//printf("threadcount - i:%d\n",i);
+				brun = true;
+				break;
+			}
+		}
+		if(brun)
+		{
+			ms_sleep(300);
+		}
+		else
+		{
+			printf("all thread is exit!\n");
 			break;
 		}
-		/*
-		memset(wbuffer, 0, sizeof(wbuffer));
-		const char * papi = "interface";
-		const char * pbody = "type=ping";
-		char * phead = http_build_post_head(papi, pbody);
-		int size_pack = strlen(phead);
-		memcpy(wbuffer, phead, size_pack);
-
-		int size_send = write(client_fd, wbuffer, size_pack);
-		if (size_send != size_pack)
-		{
-			printf("send buf error\n");
-			break;
-		}
-		printf("%s iCount:%d,size_pack:%d,size_send:%d,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), iCount++, size_pack, size_send, size_pack, wbuffer);
-		*/
-
-		ms_sleep(3000);
 	}
 	printf("main thread exit!\n");
 }

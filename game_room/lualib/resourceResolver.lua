@@ -1,4 +1,5 @@
 local skynet = require "skynet"
+local inspect = require "inspect"
 
 local _resourceManagerAddress
 local _data = {}
@@ -24,6 +25,9 @@ local function get(kind)
 	end
 	
 	dataItem.pacer = dataItem.pacer + 1
+	--skynet.error("_data-\n",inspect(_data),"\n-",kind,"\n-")
+	--skynet.error("_resourceKindHash-\n",inspect(_resourceKindHash),"\n-",kind,"\n-")
+
 	if not dataItem.isCollected then
 		local res = skynet.call(_resourceManagerAddress, "lua", "get", kind, dataItem.pacer)
 		for _, r in ipairs(dataItem.pool) do
@@ -42,7 +46,7 @@ local function get(kind)
 	if dataItem.pacer > dataItem.poolSize then
 		dataItem.pacer = 1
 	end
-	
+	--skynet.error("dataItem-\n",inspect(dataItem),"\n-")
 	return dataItem.pool[dataItem.pacer]
 end
 

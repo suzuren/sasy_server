@@ -8,7 +8,7 @@ message Login {				// 0x000100
 		RC_LOGIN_CLOSED=3;
 		RC_IP_BANNED=4;
 		RC_MACHINE_BANNED=5;
-		RC_ACCOUNT_NULLITY=6;					//您的帐号处于冻结状态，请与客服联系";
+		RC_ACCOUNT_NULLITY=6;					//您的帐号处于冻结状态，请与客服联系
 		RC_ACCOUNT_STUNDOWN=7;					//您的帐号使用了安全关闭功能，必须重新开通后才能继续使用
 		RC_ALREADY_LOGIN=8;						//已经登入，换帐号需要先断开连接
 	}

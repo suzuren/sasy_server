@@ -1,9 +1,19 @@
 --机器人专用协议不需要配置到这里
 local _data = {
+	common = {
+		s2c = {
+			[0xff0000] = "common.misc.s2c.SystemMessage",
+		},
+		c2s = {},
+		files = {
+			"common.misc.s2c.pb",
+		},		
+	},
 	loginServer = {
 		s2c = {
 			[0x000000] = "loginServer.heartBeat.s2c.HeartBeat",
 			[0x000100] = "loginServer.login.s2c.Login",
+			[0x000101] = "loginServer.login.s2c.Logout",
 		},
 		c2s = {
 			[0x000000] = "loginServer.heartBeat.c2s.HeartBeat",
@@ -12,6 +22,8 @@ local _data = {
 		files = {
 			"loginServer.heartBeat.c2s.pb",
 			"loginServer.heartBeat.s2c.pb",
+			"loginServer.login.c2s.pb",
+			"loginServer.login.s2c.pb",
 		},
 	},
 }

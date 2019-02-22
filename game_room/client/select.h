@@ -136,16 +136,16 @@ int socket_connect(const char *ip, int port)
 			}
 			//到这里说明connect()正确返回 
 			//下面恢复套接字阻塞状态 
-			int flags = 1;
-			if (fcntl(client_fd, F_SETFL, flags) < 0)
-			{
+			//int flags = 1;
+			//if (fcntl(client_fd, F_SETFL, flags) < 0)
+			//{
 				//错误处理
-				printf("4 connect failed\n");
+			//	printf("4 connect failed\n");
 
-				return -1;
-			}
+			//	return -1;
+			//}
 			//下面是连接成功后要执行的代码
-			printf("connect success 2\n");
+			//printf("connect success 2\n");
 			return client_fd;
 		}
 	}
@@ -174,6 +174,75 @@ void ms_sleep(unsigned int msec)
 	nanosleep(&tm, 0);
 }
 
+
+int GenCoreDumpFile(size_t size)
+{
+	struct rlimit flimit;
+	flimit.rlim_cur = size;
+	flimit.rlim_max = size;
+	if (setrlimit(RLIMIT_CORE, &flimit) != 0)
+	{
+		return errno;
+	}
+	return 0;
+}
+
+
+char* itoa_parser(int num, int radix)
+{
+	static char str[32];
+	memset(str, 0, sizeof(str));
+	static char index[17] = "0123456789ABCDEF";
+	unsigned unum;
+	int i = 0, j, k;
+	if (radix == 10 && num < 0)
+	{
+		unum = (unsigned)-num;
+		str[i++] = '-';
+	}
+	else
+	{
+		unum = (unsigned)num;
+	}
+	do
+	{
+		str[i++] = index[unum % (unsigned)radix];
+		unum /= radix;
+	} while (unum);
+	str[i] = '\0';
+	if (str[0] == '-')
+	{
+		k = 1;
+	}
+	else
+	{
+		k = 0;
+	}
+	char temp;
+	for (j = k; j <= (i - 1) / 2; j++)
+	{
+		temp = str[j];
+		str[j] = str[i - 1 + k - j];
+		str[i - 1 + k - j] = temp;
+	}
+	return str;
+}
+
+
+char * http_build_post_head(const char * api,const char * body)
+{
+	//static char buffer[1024];
+	int size = 512 + 8192;
+	char * buffer = malloc(size);
+	memset(buffer, 0, size);
+	strcat(buffer, "POST /");strcat(buffer, api);strcat(buffer, " HTTP/1.1\r\n");
+	strcat(buffer, "Host: 127.0.0.1:3002\r\n");
+	strcat(buffer, "Content-Type: application/x-www-form-urlencoded\r\n");
+	strcat(buffer, "Content-Length: ");	strcat(buffer, itoa_parser(strlen(body), 10));	strcat(buffer, "\r\n");
+	strcat(buffer, "Connection: Keep-Alive\r\n\r\n");
+	strcat(buffer, body);
+	return buffer;
+}
 
 
 

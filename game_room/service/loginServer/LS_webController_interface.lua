@@ -10,6 +10,7 @@ local _allowIPHash = {}
 
 local function onlineView()
 	local ret = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "viewOnline")
+	skynet.error("onlineView-\n",inspect(ret),"\n-")
 	return jsonHttpResponseUtility.getResponse({isSuccess=true, data=ret})
 end
 
