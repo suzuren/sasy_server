@@ -91,7 +91,7 @@ static void * thread_socket(void *p)
 		ms_sleep(3);
 		memset(rbuffer, 0, sizeof(rbuffer));
 		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
-		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d\n",pthread_self(),rsize,errno,EINTR);
+		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
 		if (rsize<0)
 		{
 			if (errno == EINTR) // 指操作被中断唤醒，需要重新读 / 写
@@ -132,23 +132,26 @@ int main(int argc, char const *argv[])
 	sigaction(SIGPIPE, &sa, 0);
 
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
-	pid_t main_pid = getpid();
-	
-	printf("pid:%d\n", main_pid);
+	//pid_t main_pid = getpid();	
+	//printf("pid:%d\n", main_pid);
 
 	int count = 0;	
 	char * param[1024] = { 0 };
+/*
+	//http://127.0.0.1:3002/interface/type=onlineQuery&uidlist=12345,67890
+	param[count++] = "interface";
+	param[count++] = "type=onlineQuery&uidlist=12345,67890";
 
 	param[count++] = "interface";
 	param[count++] = "type=ping";
 	
 	param[count++] = "interface";
 	param[count++] = "type=onlineView";
+*/
+	param[count++] = "uniformpay";
+	param[count++] = "appid=355&serverid=954&ts=1550913857&sign=9710fe234bf0ad65ca9d38cd91a9fa86&event={\"test\":\"hello world\"}";
 
-	param[count++] = "interface";
-	param[count++] = "type=presentToItem";
-
-	static int postcount = 3;
+	static int postcount = 1;
 
 	int index = 0;
 	struct tagparam arg[postcount];

@@ -51,13 +51,17 @@ local function getUniformPlatformData(method, post)
 	end
 	
 	local serverkey = _serverKeyHash[appid][serverid]
+	--print("getUniformPlatformData -",serverkey)
+	print("getUniformPlatformData getSign-",getSign(post, serverkey))
 	if getSign(post, serverkey) ~= post.sign then
 		return false, "invalid sign"
 	end
 	local event = getEvent(post)
+	
 	if not event then
 		return false, "invalid message format"
 	end
+	print("getUniformPlatformData - return", true, appid, serverid, event)
 	return true, appid, serverid, event
 end
 

@@ -46,7 +46,8 @@ skynet.start(function()
 					if query then
 						get = urllib.parse_query(query)
 					end
-
+					--skynet.error(string.format("1 query-%s", query))
+					--skynet.error(string.format("1 body-%s", body))
 					local post = {}
 					if string.len(body) > 0 then
 						post = urllib.parse_query(body)

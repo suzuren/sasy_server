@@ -48,7 +48,7 @@ function CMD.GetServerListStatus()
 end
 
 function CMD.interface(param)
-	skynet.error("param-\n",inspect(param),"\n-")
+	skynet.error("interface - param-\n",inspect(param),"\n-")
 	if string.lower(param.method) ~= "post" then
 		return jsonHttpResponseUtility.getSimpleResponse(false, "request method not support")
 	end	
