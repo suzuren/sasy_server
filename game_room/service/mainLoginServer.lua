@@ -29,8 +29,16 @@ skynet.start(function()
 
     skynet.uniqueservice("LS_telnetServer", tonumber(skynet.getenv("telnetPort")))
 
-    --local tempTable = {1,2,3,4,5,6,7,8,9}
-    --xLog(inspect(tempTable))
+
+    local tcpGateway = skynet.uniqueservice("tcpGateway")
+	skynet.call(tcpGateway, "lua", "initialize", "loginServer", sysConfig.isTest)
+	skynet.call(tcpGateway, "lua", "open" , {
+		address = skynet.getenv("address"),
+		port = tonumber(skynet.getenv("port")),
+		nodelay = true,
+	})
+	
+    cluster.open "loginServer"
     
 	skynet.exit()
 end)

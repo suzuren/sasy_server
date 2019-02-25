@@ -10,14 +10,16 @@ MYSQL_INC = /usr/include/mysql/
 
 .PHONY : all clean
 
-all : protobuf.so pbcc.so skynetHelper.so sui.so memory.so # mysqlutil.so 
+all : depend protobuf.so pbcc.so skynetHelper.so sui.so memory.so # mysqlutil.so 
 
-protobuf.so : pbc-lua53.c
+depend :
 	cd lua-cjson && make
 	cp lua-cjson/cjson.so cjson.so
 	cd lua-arc4random && make
 	cp lua-arc4random/arc4random.so arc4random.so
 	cd pbc && make
+
+protobuf.so : pbc-lua53.c
 	$(CC) $(CFLAGS) -shared -o $@ -I./pbc -I$(LUA_INC) -L./pbc/build $^ -lpbc
 
 pbcc.so : lua-pbcc.c

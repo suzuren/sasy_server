@@ -87,7 +87,7 @@ local function console_main_loop(stdin, print)
 	print("欢迎登录管理后台")
 	while true do
 		local cmdline = socket.readline(stdin, "\n")
-		skynet.error("console_main_loop - ",cmdline)
+		skynet.error(string.format("%s - cmdline:%s", SERVICE_NAME, cmdline))
 		if not cmdline then
 			--print("管理客户端退出")
 			break
