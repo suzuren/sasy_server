@@ -10,7 +10,7 @@ local _allowIPHash = {}
 
 local function onlineView()
 	local ret = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "viewOnline")
-	skynet.error("onlineView-\n",inspect(ret),"\n-")
+	--skynet.error("onlineView-\n",inspect(ret),"\n-")
 	return jsonHttpResponseUtility.getResponse({isSuccess=true, data=ret})
 end
 
@@ -48,7 +48,7 @@ function CMD.GetServerListStatus()
 end
 
 function CMD.interface(param)
-	skynet.error("interface - param-\n",inspect(param),"\n-")
+	--skynet.error("interface - param-\n",inspect(param),"\n-")
 	if string.lower(param.method) ~= "post" then
 		return jsonHttpResponseUtility.getSimpleResponse(false, "request method not support")
 	end	

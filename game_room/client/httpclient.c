@@ -6,54 +6,33 @@
 #include <signal.h>
 #include "select.h"
 
-
-#pragma  pack(1)
-
-struct packet_header
-{
-    int       uin;
-	int       cmd;
-	int       len;   //消息数据长度(不包括包头)
-};
-
-
-struct packet_data
-{
-	struct packet_header header;
-	char      buf[2048];
-};
-
-#pragma pack()
-
 #define threadcount 1024
 static bool _runflag[threadcount];
-
 
 #define IPADDRESS "127.0.0.1"
 #define PORT 3002
 
-static void create_thread(pthread_t *thread, void *(*start_routine) (void *), void *arg)
-{
-	if (pthread_create(thread, NULL, start_routine, arg))
-	{
-		fprintf(stderr, "Create thread failed");
-		exit(1);
-	}
-}
-
-struct tagparam
+struct tagparam_http
 {
 	int id;
 	char * api;
 	char * body; 
 };
 
-static void * thread_socket(void *p)
+struct tagparam_telnet
 {
-	struct tagparam * s = p;
+	int id;
+	char * data;
+};
+
+static void * thread_http_socket(void *p)
+{
+	struct tagparam_http * s = p;
 	int fd = socket_connect(IPADDRESS, PORT);
+
 	char wbuffer[10846];
 	memset(wbuffer, 0, sizeof(wbuffer));
+
 	int id = s->id;
 	char * api = s->api;
 	char * body = s->body;
@@ -74,7 +53,6 @@ static void * thread_socket(void *p)
 		if (size_send != size_pack)
 		{
 			printf("send buf error\n");
-			break;
 		}
 
 		size_pack-=size_send;
@@ -86,6 +64,7 @@ static void * thread_socket(void *p)
 	
 	char rbuffer[16384 * 5] = { 0 };
 	int  rlenght = 0;
+
 	for (;;)
 	{
 		ms_sleep(3);
@@ -113,9 +92,90 @@ static void * thread_socket(void *p)
 			break;
 		}
 		rlenght += rsize;
-		printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, rsize:%d, \nrbuffer:\n--------------------------\n%s\n--------------------------\n",\
-			pthread_self(), fd, rlenght, rsize, rbuffer);
+		printf("\n--------------------------\npid:%ld,fd:%d, rlenght:%d, rsize:%d,\nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s\n--------------------------\n",\
+			pthread_self(), fd, rlenght, rsize, wbuffer, rbuffer);
 	}
+	_runflag[id] = false;
+	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
+	return NULL;
+}
+
+static void * thread_telnet_socket(void *p)
+{
+	struct tagparam_telnet * s = p;
+
+	int id = s->id;
+	int fd = socket_connect(IPADDRESS, 3003);
+
+	char wbuffer[512];
+	memset(wbuffer, 0, sizeof(wbuffer));
+	strcat(wbuffer, s->data);
+	int size_pack = strlen(wbuffer);
+	//printf("%s fd:%d,pthread_self:%ld,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(),size_pack, wbuffer);
+
+	while(true)
+	{
+		int size_send = write(fd, wbuffer, size_pack);
+
+		if (size_send != size_pack)
+		{
+			printf("send buf error\n");
+		}
+		size_pack -= size_send;
+		if(size_pack == 0)
+		{
+			break;
+		}
+	}
+
+	char rbuffer[16384 * 5] = { 0 };
+	int  rlenght = 0;
+
+	const char * ptail = "TELNET_OK\n";
+
+	for (;;)
+	{
+		ms_sleep(3);
+		//memset(rbuffer, 0, sizeof(rbuffer));
+		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
+		if (rsize<0)
+		{
+			if (errno == EINTR) // 指操作被中断唤醒，需要重新读 / 写
+			{
+				continue;
+			}
+			if (errno == EAGAIN) // 现在没有数据可读请稍后再试
+			{
+				continue;
+			}
+			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno,strerror(errno));
+			close(fd);
+			break;
+		}
+		if (rsize == 0)
+		{
+			close(fd);
+			printf("read socket close.\n");
+			break;
+		}
+		rlenght += rsize;
+		
+		if(rlenght >= strlen(ptail))
+		{
+			char * ptemp = rbuffer + (rlenght - strlen(ptail));
+			int ret = strcmp(ptemp, ptail);
+			//printf("++++ret:%d, ptemp:%s, ptail:%s\n",ret,ptemp, ptail);
+			if(ret == 0)
+			{
+				break;
+			}
+		}
+	}
+	
+	printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",\
+	pthread_self(), fd, rlenght, wbuffer, rbuffer);
+
 	_runflag[id] = false;
 	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
 	return NULL;
@@ -137,7 +197,7 @@ int main(int argc, char const *argv[])
 
 	int count = 0;	
 	char * param[1024] = { 0 };
-/*
+
 	//http://127.0.0.1:3002/interface/type=onlineQuery&uidlist=12345,67890
 	param[count++] = "interface";
 	param[count++] = "type=onlineQuery&uidlist=12345,67890";
@@ -147,27 +207,74 @@ int main(int argc, char const *argv[])
 	
 	param[count++] = "interface";
 	param[count++] = "type=onlineView";
-*/
+
 	param[count++] = "uniformpay";
 	param[count++] = "appid=355&serverid=954&ts=1550913857&sign=9710fe234bf0ad65ca9d38cd91a9fa86&event={\"test\":\"hello world\"}";
 
-	static int postcount = 1;
+	param[count++] = "uniformother";
+	param[count++] = "appid=355&serverid=954&ts=1550913857&sign=9710fe234bf0ad65ca9d38cd91a9fa86&event={\"test\":\"hello world\"}";
+
+	int postcount = 5;
 
 	int index = 0;
-	struct tagparam arg[postcount];
-	for(int i=0; i<postcount; i ++)
+	struct tagparam_http arg_http[5];
+	int argindex = 0;
+	int ithread=0;
+	for(; ithread < postcount; ithread++)
 	{
-		if(_runflag[i])
+		if(_runflag[ithread])
 		{
 			continue;
 		}
-		_runflag[i] = true;
+		_runflag[ithread] = true;
 		pthread_t pid;
-		arg[i].id = i;
-		arg[i].api = param[index++];
-		arg[i].body = param[index++];
-		create_thread(&pid, thread_socket, &arg[i]);
-		//printf("i:%d, main_pid:%d, pid:%ld,api:%s,body:%s\n", i, main_pid, pid,arg[i].api, arg[i].body);
+		arg_http[argindex].id = ithread;
+		arg_http[argindex].api = param[index++];
+		arg_http[argindex].body = param[index++];
+		create_thread(&pid, thread_http_socket, &arg_http[argindex]);
+		//printf("i:%d, main_pid:%d, pid:%ld,api:%s,body:%s\n", ithread, getpid(), pid,arg_http[argindex].api, arg_http[argindex].body);
+		argindex++;
+	}
+
+	ms_sleep(1000);
+
+
+	//const char * ptail = "TELNET_OK";
+	//char * py = "0000001aTELNET_OK";
+	//printf("++++strlen(py):%d,strlen(ptail):%d,py:%s\n",strlen(py),strlen(ptail),py + (strlen(py) - strlen(ptail)));
+
+
+	param[count++] = "help\n";
+	
+	param[count++] = "list\n";
+	param[count++] = "stat\n";
+	param[count++] = "info :00000004\n";
+	param[count++] = "exit :0000000d\n";
+	param[count++] = "mem\n";
+	param[count++] = "gc\n";
+	param[count++] = "service\n";
+	param[count++] = "task :0000000e\n";
+	param[count++] = "cmem\n";
+	param[count++] = "shrtbl\n";
+	
+	//param[count++] = "shutdown\n";
+
+	postcount += 11;
+	struct tagparam_telnet arg_telnet[11];
+	argindex = 0;
+	for(; ithread < postcount; ithread++)
+	{
+		if(_runflag[ithread])
+		{
+			continue;
+		}
+		_runflag[ithread] = true;
+		pthread_t pid;
+		arg_telnet[argindex].id = ithread;
+		arg_telnet[argindex].data = param[index++];
+		create_thread(&pid, thread_telnet_socket, &arg_telnet[argindex]);
+		printf("i:%d, main_pid:%d, pid:%ld,data:%s\n", ithread, getpid(), pid,arg_telnet[argindex].data);
+		argindex++;
 	}
 
 	while (true)

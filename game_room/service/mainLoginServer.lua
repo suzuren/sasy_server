@@ -16,13 +16,19 @@ skynet.start(function()
 	skynet.uniqueservice("simpleProtocalBuffer")
     skynet.uniqueservice("LS_httpWorkerPool")
 
+    cluster.register("LS_model_serverManager", skynet.uniqueservice("LS_model_serverManager"))
     cluster.register("LS_model_sessionManager", skynet.uniqueservice("LS_model_sessionManager"))
     
+    skynet.uniqueservice("LS_model_telnet")
+
     --skynet.uniqueservice("LS_model_pay")
     
     skynet.uniqueservice("LS_webController_uniformPlatform")
     skynet.uniqueservice("LS_webController_interface")
     
+
+    skynet.uniqueservice("LS_telnetServer", tonumber(skynet.getenv("telnetPort")))
+
     --local tempTable = {1,2,3,4,5,6,7,8,9}
     --xLog(inspect(tempTable))
     

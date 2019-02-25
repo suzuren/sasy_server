@@ -10,7 +10,7 @@ local inspect = require "inspect"
 
 local CMD = {}
 function CMD.uniformpay(param)
-	skynet.error("uniformpay - param-\n",inspect(param),"\n-")
+	--skynet.error("uniformpay - param-\n",inspect(param),"\n-")
 	local isOK, appid, serverid, event = uniformPlatformHttpUtility.getUniformPlatformData(param.method, param.post)
 	if not isOK then
 		return jsonHttpResponseUtility.getSimpleResponse(isOK, appid)
@@ -30,9 +30,9 @@ function CMD.uniformpay(param)
 end
 
 function CMD.uniformother(param)
-	skynet.error("uniformother - param-\n",inspect(param),"\n-")
+	--skynet.error("uniformother - param-\n",inspect(param),"\n-")
 	local isOK, appid, serverid, event = uniformPlatformHttpUtility.getUniformPlatformData(param.method, param.post)
-	skynet.error("uniformother uniformPlatformHttpUtility - ", isOK, appid, serverid, event)
+	--skynet.error("uniformother uniformPlatformHttpUtility - ", isOK, appid, serverid, event)
 	if not isOK then
 		return jsonHttpResponseUtility.getSimpleResponse(isOK, appid)
 	end

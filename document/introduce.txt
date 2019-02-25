@@ -4,6 +4,10 @@ https://github.com/cloudwu/skynet
 
 chat_room 聊天室只改了 ./skynet/lualib-src/lua-socket.c 这个源代码
 
+game_room
+
+使用game_room 工程 需要现在 game_room 目录下执行 ./start.sh 脚本
+再进入client 目录下面 执行 ./httpclient 执行文件
 
 
-
+使用 telnet 127.0.0.1 3003 命令 登入管理后台

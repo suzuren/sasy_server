@@ -36,7 +36,7 @@ skynet.start(function()
 			_iterator = 1
 		end
 		local workAddress = _pool[_iterator]
-		skynet.error(string.format("%s connected, pass it to agent :%08x", addr, workAddress))
+		skynet.error(string.format("%s %s connected, pass it to agent :%08x", SERVICE_NAME, addr, workAddress))
 		skynet.send(workAddress, "lua", connectionId, ipUtility.getAddressOfIP(addr))
 	end)
 end)

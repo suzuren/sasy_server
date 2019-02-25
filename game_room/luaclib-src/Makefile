@@ -4,16 +4,19 @@ LUA_INC = ../../skynet/3rd/lua/
 SKYNET_DIR = ../../skynet/
 SKYNET_INC = ../../skynet/skynet-src/
 SKYNET_SIC = ../../skynet/service-src/
+SKYNET_LIB = ../../skynet/lualib-src/
 #SKYNET_LUA_CLIB_PATH = ../skynet/luaclib/
 MYSQL_INC = /usr/include/mysql/
 
 .PHONY : all clean
 
-all : protobuf.so pbcc.so skynetHelper.so sui.so mysqlutil.so
+all : protobuf.so pbcc.so skynetHelper.so sui.so memory.so # mysqlutil.so 
 
 protobuf.so : pbc-lua53.c
 	cd lua-cjson && make
 	cp lua-cjson/cjson.so cjson.so
+	cd lua-arc4random && make
+	cp lua-arc4random/arc4random.so arc4random.so
 	cd pbc && make
 	$(CC) $(CFLAGS) -shared -o $@ -I./pbc -I$(LUA_INC) -L./pbc/build $^ -lpbc
 
@@ -26,8 +29,11 @@ skynetHelper.so : lua-skynetHelper.c
 sui.so : lua-sui.c
 	gcc -g -O2 -Wall -I$(LUA_INC)  -fPIC --shared $^ -o $@
 
-mysqlutil.so : lua-mysqlutil.c
-	gcc -g -O2 -Wall -I$(LUA_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@
+memory.so : $(SKYNET_LIB)/lua-memory.c
+	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_LIB) -I$(SKYNET_INC) -fPIC --shared $^ -o $@
+
+#mysqlutil.so : lua-mysqlutil.c
+#	gcc -g -O2 -Wall -I$(LUA_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@
 
 #socketdriver.so : $(SKYNET_DIR)lualib-src/lua-socket.c | $(SKYNET_LUA_CLIB_PATH)
 	#gcc -g -O2 -Wall -fPIC --shared $^ -o $@ -I$(SKYNET_INC) -I$(SKYNET_SIC) -I$(LUA_INC)
@@ -35,5 +41,6 @@ mysqlutil.so : lua-mysqlutil.c
 
 clean :
 	cd lua-cjson && make clean
+	cd lua-arc4random && make clean
 	cd pbc && make clean
 	rm -f *.so

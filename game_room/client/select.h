@@ -23,6 +23,24 @@
 #include <stdbool.h>
 
 
+#pragma  pack(1)
+
+struct packet_header
+{
+    int       uin;
+	int       cmd;
+	int       len;   //消息数据长度(不包括包头)
+};
+
+
+struct packet_data
+{
+	struct packet_header header;
+	char      buf[2048];
+};
+
+#pragma pack()
+
 bool SetSocketNonblock(int fd)
 {
 	//下面获取套接字的标志
@@ -136,14 +154,16 @@ int socket_connect(const char *ip, int port)
 			}
 			//到这里说明connect()正确返回 
 			//下面恢复套接字阻塞状态 
-			//int flags = 1;
-			//if (fcntl(client_fd, F_SETFL, flags) < 0)
-			//{
+			/*
+			int flags = 1;
+			if (fcntl(client_fd, F_SETFL, flags) < 0)
+			{
 				//错误处理
-			//	printf("4 connect failed\n");
+				printf("4 connect failed\n");
 
-			//	return -1;
-			//}
+				return -1;
+			}
+			*/
 			//下面是连接成功后要执行的代码
 			//printf("connect success 2\n");
 			return client_fd;
@@ -244,6 +264,15 @@ char * http_build_post_head(const char * api,const char * body)
 	return buffer;
 }
 
+
+static void create_thread(pthread_t *thread, void *(*start_routine) (void *), void *arg)
+{
+	if (pthread_create(thread, NULL, start_routine, arg))
+	{
+		fprintf(stderr, "Create thread failed");
+		exit(1);
+	}
+}
 
 
 
