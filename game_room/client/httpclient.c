@@ -37,7 +37,7 @@ struct tagparam_gate
 
 // --------------------------------------------------------------------------------------------------------------------------
 
-static void * thread_http_socket(void *p)
+void * thread_http_socket(void *p)
 {
 
 	struct tagparam_http * s = p;
@@ -106,7 +106,7 @@ static void * thread_http_socket(void *p)
 			break;
 		}
 		rlenght += rsize;
-		//printf("\n--------------------------\npid:%ld,fd:%d, rlenght:%d, rsize:%d,\nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s\n--------------------------\n", pthread_self(), fd, rlenght, rsize, wbuffer, rbuffer);
+		printf("\n--------------------------\npid:%ld,fd:%d, rlenght:%d, rsize:%d,\nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s\n--------------------------\n", pthread_self(), fd, rlenght, rsize, wbuffer, rbuffer);
 	}
 	_runflag[id] = false;
 	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
@@ -115,7 +115,7 @@ static void * thread_http_socket(void *p)
 
 // --------------------------------------------------------------------------------------------------------------------------
 
-static void * thread_telnet_socket(void *p)
+void * thread_telnet_socket(void *p)
 {
 	struct tagparam_telnet * s = p;
 
@@ -190,7 +190,7 @@ static void * thread_telnet_socket(void *p)
 		}
 	}
 	
-	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",	pthread_self(), fd, rlenght, wbuffer, rbuffer);
+	printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",	pthread_self(), fd, rlenght, wbuffer, rbuffer);
 
 	_runflag[id] = false;
 	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
@@ -226,101 +226,228 @@ struct pbc_wmessage * getpbc_data(struct pbc_env * env, const char *type_name)
 }
 
 
+int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
+{
+	const char * file_path = "../pbs/loginServer.heartBeat.c2s.pb";
+	const char * type_name = "loginServer.heartBeat.c2s.HeartBeat";
+
+	read_file(file_path, slice);
+	if (slice->buffer == NULL)
+	{
+		printf("file_path:%s, read_file error\n",file_path);
+		return 0;
+	}
+	//printf("read_file - len:%d, buffer:%p\n", slice->len, slice->buffer);
+
+	struct pbc_env * env = pbc_new();
+	if(env == NULL)
+	{
+		printf("file_path:%s, pbc_new error\n",file_path);
+		return 0;
+	}
+	int ret = pbc_register(env, slice);
+	if (ret)
+	{
+		printf("file_path:%s, Error : %s\n",file_path, pbc_error(env));
+		return 0;
+	}
+	//printf("pbc_register - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	
+	DELETE_SLICE_BUFFFER(slice);
+	
+	//printf("DELETE_BUFFFER - len:%d, buffer:%p\n", slice->len, slice->buffer);
+
+	struct pbc_wmessage* w_msg = pbc_wmessage_new(env, type_name);
+	if(w_msg == NULL)
+	{
+		printf("read_file:%s, pbc_wmessage_new error:%s\n",file_path,pbc_error(env));
+		return 0;
+	}
+
+	pbc_wmessage_buffer(w_msg, slice);
+	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	pbc_wmessage_delete(w_msg);
+	pbc_delete(env);
+
+	return 1;
+}
+
+int get_loginServer_heartBeat_c2s_HeartBeat_wbuffer(char * buffer,int size)
+{
+	struct pbc_slice slice;
+	int ret = get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(&slice);
+	if(!ret)
+	{
+		return 0;
+	}
+	if(slice.len + 6 > size)
+	{
+		return 0;
+	}
+
+	unsigned int uProtoNo = 0x000000;
+	unsigned short pack_size = 4 + slice.len;
+	
+	buffer[0] = (pack_size >> 8) & 0xff;
+	buffer[1] = pack_size & 0xff;
+	buffer[2] = 0;
+	buffer[3] = (uProtoNo >> 16) & 0xff;
+	buffer[4] = (uProtoNo >> 8) & 0xff;
+	buffer[5] = uProtoNo & 0xff;
+
+	memcpy(buffer + 6, slice.buffer, slice.len);
+	pack_size += 2;
+	
+	return pack_size;
+}
+
+
+int get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(char * pdata,int len, struct pbc_slice *slice)
+{
+	const char * file_path = "../pbs/loginServer.heartBeat.s2c.pb";
+	const char * type_name = "loginServer.heartBeat.s2c.HeartBeat";
+
+	read_file(file_path, slice);
+	if (slice->buffer == NULL)
+	{
+		printf("file_path:%s, read_file error\n", file_path);
+		return 0;
+	}
+	//printf("read_file - len:%d, buffer:%p\n", slice->len, slice->buffer);
+
+	struct pbc_env * env = pbc_new();
+	if (env == NULL)
+	{
+		printf("file_path:%s, pbc_new error\n", file_path);
+		return 0;
+	}
+	int ret = pbc_register(env, slice);
+	if (ret)
+	{
+		printf("file_path:%s, Error : %s\n", file_path, pbc_error(env));
+		return 0;
+	}
+	//printf("pbc_register - len:%d, buffer:%p\n", slice->len, slice->buffer);
+
+	if (slice->len >= len)
+	{
+		memcpy(slice->buffer, pdata, len);
+	}
+	else
+	{
+		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
+	}
+
+	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, slice);
+	if (r_msg == NULL)
+	{
+		printf("read_file:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
+		return 0;
+	}
+	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	pbc_delete(env);
+	DELETE_SLICE_BUFFFER(slice);
+
+	return 1;
+}
+
+
 static void * thread_gate_socket(void *p)
 {
 	struct tagparam_gate * s = p;
 
 	int id = s->id;
-	int fd = socket_connect(IPADDRESS, 3003);
+	int fd = socket_connect(IPADDRESS, 3001);
 
-	struct pbc_env * env = getpbc_env("./pbs/loginServer.heartBeat.c2s.pb");
-	if(env == NULL)
+	while (true)
 	{
-		goto exit_thread_gate;
-	}
-	struct pbc_wmessage* w_msg = getpbc_data(env, "loginServer.HeartBeat.c2s.HeartBeat");
-	if(w_msg == NULL)
-	{
-		goto exit_thread_gate;
-	}
-	
-	struct pbc_slice slice;
-	pbc_wmessage_buffer(w_msg, &slice);
-
-	char wbuffer[512];
-	memset(wbuffer, 0, sizeof(wbuffer));
-	
-	int size_pack = slice.len;
-	memcpy(wbuffer, slice.buffer, size_pack);
-
-	printf("%s fd:%d,pthread_self:%ld,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(),size_pack, wbuffer);
-
-/*
-	while(true)
-	{
-		int size_send = write(fd, wbuffer, size_pack);
-
-		if (size_send != size_pack)
+		int wlenght = 0;
+		char wbuffer[16384] = { 0 };
+		unsigned short pack_size = get_loginServer_heartBeat_c2s_HeartBeat_wbuffer(wbuffer, 512);
+		//printf("%s fd:%d,pid:%ld,pack_size:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(), pack_size, wbuffer);
+		if (pack_size == 0)
 		{
-			printf("send buf error\n");
+			printf("fd:%d,pid:%ld,get_loginServer_HeartBeat_c2s_HeartBeat_wbuffer error!\n", fd, pthread_self());
+			goto exit_thread_gate;
 		}
-		size_pack -= size_send;
-		if(size_pack == 0)
+		while (true)
 		{
-			break;
-		}
-	}
-
-	char rbuffer[16384 * 5] = { 0 };
-	int  rlenght = 0;
-
-	const char * ptail = "TELNET_OK\n";
-
-	for (;;)
-	{
-		ms_sleep(3);
-		//memset(rbuffer, 0, sizeof(rbuffer));
-		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
-		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
-		if (rsize<0)
-		{
-			if (errno == EINTR) // 指操作被中断唤醒，需要重新读 / 写
+			int send_size = write(fd, wbuffer + wlenght, pack_size - wlenght);
+			if (send_size != pack_size)
 			{
-				continue;
+				printf("send buf error\n");
 			}
-			if (errno == EAGAIN) // 现在没有数据可读请稍后再试
-			{
-				continue;
-			}
-			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno,strerror(errno));
-			close(fd);
-			break;
-		}
-		if (rsize == 0)
-		{
-			close(fd);
-			printf("read socket close.\n");
-			break;
-		}
-		rlenght += rsize;
-		
-		if(rlenght >= strlen(ptail))
-		{
-			char * ptemp = rbuffer + (rlenght - strlen(ptail));
-			int ret = strcmp(ptemp, ptail);
-			//printf("++++ret:%d, ptemp:%s, ptail:%s\n",ret,ptemp, ptail);
-			if(ret == 0)
+			wlenght += send_size;
+			if (wlenght == pack_size)
 			{
 				break;
 			}
 		}
+
+		static const int max_read_szie = 65535;
+		char rbuffer[max_read_szie];
+		memset(rbuffer, 0, max_read_szie);
+
+		int  rlenght = 0;
+		while (true)
+		{
+			ms_sleep(3);
+			int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+			//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
+			if (rsize < 0)
+			{
+				if (errno == EINTR)
+				{
+					continue;
+				}
+				if (errno == EAGAIN)
+				{
+					continue;
+				}
+				fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
+				goto exit_thread_gate;
+			}
+			if (rsize == 0)
+			{
+				printf("read socket close.\n");
+				goto exit_thread_gate;
+			}
+			rlenght += rsize;
+
+			// 解包
+			if (rlenght >= 2)
+			{
+				unsigned char tempbuf[2] = { 0 };
+				tempbuf[0] = rbuffer[0];
+				tempbuf[1] = rbuffer[1];
+				int plenght = (int)tempbuf[0] << 8 | (int)tempbuf[1];
+				if (plenght < 4 || plenght > max_read_szie)
+				{
+					printf("packet error lenght.\n");
+					goto exit_thread_gate;
+				}
+				int alenght = plenght + 2;
+				if (rlenght >= alenght)
+				{
+					unsigned int uProtoNo = ((unsigned char)rbuffer[3] << 16) | ((unsigned char)rbuffer[4] << 8) | (unsigned char)rbuffer[5];
+					char * pdata = rbuffer + 6;
+					int len = rlenght - 6;
+					struct pbc_slice slice;
+					int ret = get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(pdata, len, &slice);
+					printf("read - alenght:%d,uProtoNo:0x%06d,pdata:%p,ret:%d\n", alenght, uProtoNo, pdata, ret);
+					break;
+				}
+			}
+		}
+
+		ms_sleep(3000);
 	}
 	
 	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
-*/
+
 
 exit_thread_gate:
-
+	close(fd);
 	_runflag[id] = false;
 	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
 	return NULL;
@@ -342,6 +469,10 @@ int main(int argc, char const *argv[])
 	//pid_t main_pid = getpid();	
 	//printf("pid:%d\n", main_pid);
 
+	int postcount = 0;
+	int ithread=0;
+	int argindex = 0;
+/*
 	int count = 0;	
 	char * param[1024] = { 0 };
 
@@ -361,12 +492,10 @@ int main(int argc, char const *argv[])
 	param[count++] = "uniformother";
 	param[count++] = "appid=355&serverid=954&ts=1550913857&sign=9710fe234bf0ad65ca9d38cd91a9fa86&event={\"test\":\"hello world\"}";
 
-	int postcount = 5;
+	postcount += 5;
 
 	int index = 0;
-	struct tagparam_http arg_http[5];
-	int argindex = 0;
-	int ithread=0;
+	struct tagparam_http arg_http[5];	
 	for(; ithread < postcount; ithread++)
 	{
 		if(_runflag[ithread])
@@ -423,7 +552,7 @@ int main(int argc, char const *argv[])
 	}
 
 	ms_sleep(1000);
-
+*/
 	postcount += 1;
 	struct tagparam_gate arg_gate[1];
 	argindex = 0;

@@ -275,5 +275,15 @@ static void create_thread(pthread_t *thread, void *(*start_routine) (void *), vo
 }
 
 
+#define DELETE_SLICE_BUFFFER(slice)\
+    do \
+    { \
+		if(slice != NULL && slice->buffer != NULL)\
+		{ \
+			free(slice->buffer); \
+			slice->buffer = NULL; \
+		} \
+		slice->len = 0; \
+    } while(0);
 
 
