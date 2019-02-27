@@ -18,6 +18,6 @@ depend :
 clean :
 	cd pbs && make clean
 	cd luaclib-src && make clean
-	rm -f *.so
+	rm -f *.so core.*
 	rm -rf ./logs ./program_log/*.log ./program_log/*.pid
 	rm -f ./client/*.o ./client/httpclient ./client/core.*

@@ -48,6 +48,7 @@ end
 
 local function sendMessage(protocalNo, protocalObj)
 	_criticalSection(function()	-- 新加，保证消息次序
+	skynet.error(string.format("%s:  sendMessage - no.=%s, obj=%s", SERVICE_NAME, tostring(protocalNo), tostring(protocalObj)))
 	if type(protocalNo)=="string" and protocalObj==nil then
 		--send net packet directly
 		sendPacket(protocalNo)
@@ -116,19 +117,22 @@ local function cmd_clearCache()
 end
 
 local function pbPacketDispatch(_, _, protocalNo, pbStr)
+	
 	--[[
 	if pbStr then
 		-- 如过协议对象里面没有属性，pbStr=nil
 		skynet.error(string.format(
-			"agent dispatch: 0x%06x\n%s",
-			protocalNo,
+			"%s:agent dispatch: 0x%06x\n%s",
+			SERVICE_NAME,protocalNo,
 			skynetHelper.dumpHex(pbStr)
 		))
 	elseif protocalNo ~= _heartBeatData.protocalNo then
-		skynet.error(string.format("agent dispatch: 0x%06x", protocalNo))
+		skynet.error(string.format("%s, agent dispatch: 0x%06x", SERVICE_NAME, protocalNo))
 	end
 	--]]
-	
+
+	skynet.error(string.format("%s, agent dispatch: 0x%06x", SERVICE_NAME, protocalNo))
+
 	local responseNo, responseObj
 	_criticalSection(function()	
 		local pbParser = resourceResolver.get("pbParser")
@@ -146,14 +150,15 @@ local function pbPacketDispatch(_, _, protocalNo, pbStr)
 			return
 		end
 		
-		--[[
+		
 		do
 			local jsonUtil = require "cjson.util"
 			skynet.error(string.format("receive packet: 0x%06X\n%s\n", protocalNo, jsonUtil.serialise_value(protocalObj)))
 		end
-		--]]
+		
 		
 		local controllerAddress = addressResolver.getAddressByKey(protocalNo & 0xffff00)
+		--print("controllerAddress - ",controllerAddress)
 		if not controllerAddress then
 			skynet.error(string.format("%s: 找不到处理协议的服务 protocalNo=0x%06X", SERVICE_NAME, protocalNo))
 			return

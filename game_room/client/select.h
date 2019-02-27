@@ -21,7 +21,7 @@
 #include<sys/poll.h>
 
 #include <stdbool.h>
-
+#include <ctype.h>
 
 #pragma  pack(1)
 
@@ -262,6 +262,149 @@ char * http_build_post_head(const char * api,const char * body)
 	strcat(buffer, "Connection: Keep-Alive\r\n\r\n");
 	strcat(buffer, body);
 	return buffer;
+}
+
+void string_table(const char *W, int * parr, int len)
+{
+	int pos = 2;
+	int cnd = 0;
+	parr[0] = -1;
+	parr[1] = 0;
+	while (pos < len)
+	{
+		if (W[pos - 1] == W[cnd])
+		{
+			cnd++;
+			parr[pos] = cnd;
+			pos++;
+		}
+		else if (cnd >0)
+		{
+			cnd = parr[cnd];
+		}
+		else
+		{
+			parr[pos] = 0;
+			pos++;
+		}
+	}
+}
+
+
+int string_search(const char * psrc, int len_s, const char * pdes, int len_d)
+{
+	if (psrc == NULL || pdes == NULL || len_s < 2 || len_d < 2)
+	{
+		return -1;
+	}
+	int len_src = len_s;
+	int len_des = len_d;
+
+	int m = 0;
+	int i = 0;
+	int arr[len_des];
+
+	string_table(pdes, arr, len_des);
+
+	while (m + i < len_src)
+	{
+		if (pdes[i] == psrc[m + i])
+		{
+			if (i == len_des - 1)
+			{
+				return m;
+			}
+			i++;
+		}
+		else
+		{
+			m = m + i - arr[i];
+			if (arr[i] > -1)
+			{
+				i = arr[i];
+			}
+			else
+			{
+				i = 0;
+			}
+		}
+	}
+	return -1;
+}
+
+
+int get_http_response_body(char * pdata, int len_data, char *pbuff, int len_buff,int * len_http_data)
+{
+	int len_body = -1;
+	char *pLineFeed = (char *)"\r\n\r\n";
+	int len_line_feed = (int)strlen(pLineFeed);
+	int pos_line_feed = string_search(pdata, len_data, pLineFeed, len_line_feed);
+	// all head data pack
+	if (pos_line_feed > 0)
+	{
+		char *pContent = (char *)"content-length: ";
+		int len_content = (int)strlen(pContent);
+		int pos_content = string_search(pdata, len_data, pContent, len_content);
+		if (pos_content > 0)
+		{
+			char * pLenght = pdata + pos_content + len_content;
+			int index = 0;
+			char ltemp[8] = { 0 };
+			bool bbody_flag = true;
+			while (true)
+			{
+				if ((pLenght + index) != NULL)
+				{
+					char ch = (*(pLenght + index));
+					if (isdigit(ch))
+					{
+						ltemp[index] = ch;
+						index++;
+					}
+					else
+					{
+						break;
+					}
+					if (pos_content + len_content + index >= len_data)
+					{
+						bbody_flag = false;
+						break;
+					}
+					if (index == 8)
+					{
+						bbody_flag = false;
+						break;
+					}
+				}
+				else
+				{
+					bbody_flag = false;
+				}
+			}
+			int len_temp = atoi(ltemp);
+			if (bbody_flag && len_temp > 0)
+			{
+				int len_src_body = len_data - (pos_line_feed + len_line_feed);
+				int pos_body_start = pos_line_feed + len_line_feed;
+
+				if (pos_line_feed > 0 && len_src_body == len_temp && pos_body_start + len_src_body == len_data)
+				{
+					len_body = len_temp;
+					*len_http_data = pos_body_start + len_temp;
+					if (len_buff >= len_temp)
+					{
+						memcpy(pbuff, pdata + pos_body_start, len_temp);
+					}
+					else
+					{
+						len_body = 0;
+					}
+					
+				}
+			}
+		}
+	}
+	return len_body;
 }
 
 

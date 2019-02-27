@@ -22,6 +22,8 @@ skynet.start(function()
     skynet.uniqueservice("LS_model_telnet")
 
     --skynet.uniqueservice("LS_model_pay")
+
+    skynet.uniqueservice("LS_controller_login")
     
     skynet.uniqueservice("LS_webController_uniformPlatform")
     skynet.uniqueservice("LS_webController_interface")

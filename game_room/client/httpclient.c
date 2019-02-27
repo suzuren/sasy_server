@@ -205,14 +205,19 @@ struct pbc_env * get_pbc_env(const char * file_path)
 	read_file(file_path, &slice);
 	if (slice.buffer == NULL)
 	{
-		printf("file_path:%s error\n", file_path);
+		printf("file_path:%s, read_file error\n", file_path);
 		return NULL;
 	}
 	struct pbc_env * env = pbc_new();
+	if (env == NULL)
+	{
+		printf("file_path:%s, pbc_new error\n", file_path);
+		return 0;
+	}
 	int ret = pbc_register(env, &slice);
 	if (ret)
 	{
-		printf("file_path:%s,Error : %s\n", file_path, pbc_error(env));
+		printf("file_path:%s, pbc_register Error : %s\n", file_path, pbc_error(env));
 		return NULL;
 	}
 	DELETE_SLICE_STRUCT(slice);
@@ -304,16 +309,19 @@ int get_loginServer_login_c2s_Login_wbuffer(char * buffer, int size)
 	struct pbc_env * env = get_pbc_env(file_path);
 	if (env == NULL)
 	{
+		printf("file_path:%s, get_pbc_env error\n", file_path);
 		return 0;
 	}
+
 	struct pbc_wmessage * w_msg = pbc_wmessage_new(env, type_name);
 	if (w_msg == NULL)
 	{
+		printf("file_path:%s, pbc_wmessage_new error\n", file_path);
 		return 0;
 	}
 
 	struct pbc_slice slice;
-	pbc_wmessage_string(w_msg, "session", "session test", -1);
+	pbc_wmessage_string(w_msg, "session", "test_session_1003", -1);
 	pbc_wmessage_string(w_msg, "nickName", "alice", -1);
 	pbc_wmessage_string(w_msg, "machineID", "HYUInyuijh6", -1);
 	pbc_wmessage_integer(w_msg, "kindID", 200, 0);
@@ -326,6 +334,8 @@ int get_loginServer_login_c2s_Login_wbuffer(char * buffer, int size)
 
 	if (slice.len + 6 > size)
 	{
+		printf("file_path:%s, pbc_wmessage_buffer error\n", file_path);
+
 		return 0;
 	}
 
@@ -511,7 +521,7 @@ int read_gate_data(int fd)
 				}
 				printf("read - alenght:%d,uProtoNo:0x%06d,pdata:%p,ret:%d\n", alenght, uProtoNo, pdata, ret);
 
-				DELETE_SLICE_STRUCT(slice);
+				//DELETE_SLICE_STRUCT(slice);
 				break;
 			}
 		}
@@ -519,7 +529,6 @@ int read_gate_data(int fd)
 	return 1;
 }
 
-static int flag_write_login_data = 0;
 
 int write_heart_beat_data(int fd)
 {
@@ -548,18 +557,34 @@ int write_heart_beat_data(int fd)
 	return 1;
 }
 
-int write_login_data(int fd)
+static int flag_write_login_data = 0;
+
+int write_gate_data(int fd)
 {
 	if (flag_write_login_data == 1)
 	{
 		return 1;
 	}
 
-	int wlenght = 0;
-	char wbuffer[16384] = { 0 };
-	unsigned short pack_size = get_loginServer_login_c2s_Login_wbuffer(wbuffer, 16384);
+	//printf("write_gate_data - 1111111111111\n");
 
-	//printf("%s fd:%d,pid:%ld,pack_size:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(), pack_size, wbuffer);
+	static int max_write_size = 16384;
+	int wlenght = 0;
+	char wbuffer[max_write_size];
+	memset(wbuffer, 0, max_write_size);
+	unsigned short pack_size = 0;
+	//printf("write_gate_data - 222222222222222222\n");
+
+	if (!flag_write_login_data)
+	{
+		pack_size = get_loginServer_login_c2s_Login_wbuffer(wbuffer, max_write_size);
+		flag_write_login_data = 1;
+		goto __START_WRITE_GATE_DATA;
+	}
+
+	printf("%s fd:%d,pid:%ld,pack_size:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(), pack_size, wbuffer);
+
+__START_WRITE_GATE_DATA:
 	if (pack_size == 0)
 	{
 		printf("fd:%d,pid:%ld,get_loginServer_HeartBeat_c2s_HeartBeat_wbuffer error!\n", fd, pthread_self());
@@ -579,16 +604,101 @@ int write_login_data(int fd)
 		}
 	}
 	
-	flag_write_login_data = 1;
+	
 
 	return 1;
 }
 
+int http_register_session()
+{
+	int fd = socket_connect(IPADDRESS, 3002);
+	if (fd < 0)
+	{
+		printf("http_register_session socket_connect error\n");
+		return 0;
+	}
+
+	char wbuffer[10846];
+	memset(wbuffer, 0, sizeof(wbuffer));
+
+	const char * api = "uniformother";
+	const char * body = "appid=355&serverid=954&ts=1550913857&sign=9710fe234bf0ad65ca9d38cd91a9fa86&event={\"TYPE\":\"EVENT_ACCOUNT_SESSION\",\"DATA\":{\"UserID\":1003,\"SessionID\":\"test_session_1003\",\"UserStatus\":0,\"Phone\":\"13280350375\"}}";
+
+	char * ppack = http_build_post_head(api, body);
+	int size_pack = strlen(ppack);
+	memcpy(wbuffer, ppack, size_pack);
+	free(ppack);
+
+	//printf("pthread_self:%ld,api:%s,body:%s\n",pthread_self(),api, body);
+	//printf("%s fd:%d,pthread_self:%ld,size_pack:%d,wbuffer:-\n%s\n-\n", getStrTime(), fd, pthread_self(),size_pack, wbuffer);
+	int wlenght = 0;
+	while (true)
+	{
+		int size_send = write(fd, wbuffer + wlenght, size_pack - wlenght);
+		if (size_send != size_pack)
+		{
+			printf("send buf error\n");
+		}
+		wlenght += size_send;
+		if (size_pack == wlenght)
+		{
+			break;
+		}
+	}
+
+	char rbuffer[16384 * 5] = { 0 };
+	int  rlenght = 0;
+	for (;;)
+	{
+		ms_sleep(3);
+		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
+		if (rsize<0)
+		{
+			if (errno == EINTR) // 指操作被中断唤醒，需要重新读 / 写
+			{
+				continue;
+			}
+			if (errno == EAGAIN) // 现在没有数据可读请稍后再试
+			{
+				continue;
+			}
+			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
+			close(fd);
+			return 0;
+		}
+		if (rsize == 0)
+		{
+			close(fd);
+			printf("read socket close.\n");
+			return 0;
+		}
+		rlenght += rsize;
+		char body[1024] = { 0 };
+		int pack_size = 0;
+		int blength = get_http_response_body(rbuffer, rlenght, body, 1024, &pack_size);
+		if (blength>0)
+		{
+			printf("\n--------------------------\nrlenght:%d,pack_size:%d,length:%d,\nbody:\n--------------------------\n%s\n--------------------------\n", rlenght, pack_size, blength, body);
+			rlenght -= pack_size;
+			memmove(rbuffer, rbuffer + pack_size, rlenght);
+		}
+		//printf("\n--------------------------\npid:%ld,fd:%d, rlenght:%d, rsize:%d,\nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s\n--------------------------\n", pthread_self(), fd, rlenght, rsize, wbuffer, rbuffer);
+	}
+	return 1;
+}
+
+
 static void * thread_gate_socket(void *p)
 {
 	struct tagparam_gate * s = p;
-
 	int id = s->id;
+
+	if (!http_register_session())
+	{
+		goto __exit_thread_gate;
+	}
+
 	int fd = socket_connect(IPADDRESS, 3001);
 
 	while (true)
@@ -601,7 +711,7 @@ static void * thread_gate_socket(void *p)
 		{
 			goto __exit_thread_gate;
 		}
-		if (!write_login_data(fd))
+		if (!write_gate_data(fd))
 		{
 			goto __exit_thread_gate;
 		}
@@ -609,7 +719,7 @@ static void * thread_gate_socket(void *p)
 		{
 			goto __exit_thread_gate;
 		}
-
+		break;
 		ms_sleep(3000);
 	}
 	

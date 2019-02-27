@@ -46,16 +46,16 @@ local function getUniformPlatformData(method, post)
 	end
 	
 	local ts = tonumber(post.ts)
-	if math.abs(os.time() - ts) > 1800 then
-		return false, "request timed out"
-	end
+	--if math.abs(os.time() - ts) > 1800 then
+	--	return false, "request timed out"
+	--end
 	
 	local serverkey = _serverKeyHash[appid][serverid]
 	--print("getUniformPlatformData -",serverkey)
-	print("getUniformPlatformData getSign-",getSign(post, serverkey))
-	if getSign(post, serverkey) ~= post.sign then
-		return false, "invalid sign"
-	end
+	--print("getUniformPlatformData getSign-",getSign(post, serverkey))
+	--if getSign(post, serverkey) ~= post.sign then
+	--	return false, "invalid sign"
+	--end
 	local event = getEvent(post)
 	
 	if not event then

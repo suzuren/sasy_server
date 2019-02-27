@@ -7,6 +7,7 @@ local LS_CONST = require "define.lsConst"
 local timerUtility = require "utility.timer"
 local ServerUserItem = require "sui"
 local CItemBuffer = require "utility.cItemBuffer"
+local inspect = require "inspect"
 
 CItemBuffer.init(ServerUserItem)
 
@@ -169,6 +170,7 @@ local function cmd_registerSession(session, platformID, userStatus, Tel)
 end
 
 local function cmd_getPlatformIDBySession(session)
+	skynet.error("LS_model_sessionManager.lua - cmd_getPlatformIDBySession",string.format("session[%s]",session),"\n",inspect(_hash))
 	local item = _hash.session[session]
 	if item then
 		return item.platformID
