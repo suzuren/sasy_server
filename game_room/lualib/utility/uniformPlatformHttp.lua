@@ -61,7 +61,7 @@ local function getUniformPlatformData(method, post)
 	if not event then
 		return false, "invalid message format"
 	end
-	print("getUniformPlatformData - return", true, appid, serverid, event)
+	--print("getUniformPlatformData - return", true, appid, serverid, event)
 	return true, appid, serverid, event
 end
 

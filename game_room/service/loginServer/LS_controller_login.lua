@@ -37,6 +37,7 @@ local function isFrequenceControlCheckOk(session)
 end
 
 local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
+--[[
 	local sql = string.format(
 		"call kfaccountsdb.sp_loginserver_login(%d, '%s', '%s', '%s')",
 		platformID,
@@ -56,7 +57,48 @@ local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
 			result[k]=tonumber(v)
 		end
 	end
-	
+	]]
+	--SELECT retCode, retMsg, varUserID AS "UserID", inPlatformID AS "PlatformID", varGameID AS "GameID", 
+	--varNickName AS "NickName", varSignature AS "Signature",varHideFlag AS "HideFlag", varFaceID AS "FaceID",
+	-- varPlatformFace AS "PlatformFace", varGender AS "Gender", varUserMedal AS "UserMedal", 
+	--varExperience AS "Experience", varPresent AS "Present", varScore AS "Score", varInsure AS "Insure",
+	-- varLoveLiness AS "LoveLiness", varMemberOrder AS "MemberOrder", UNIX_TIMESTAMP(varMemberOverDate) AS "MemberOverDate",
+	-- varGift AS "Gift", varUserRight AS "UserRight", varMasterRight AS "MasterRight", varMasterOrder AS "MasterOrder",
+	-- varContribution AS "Contribution", varStatus AS "Status", varWinCount AS "WinCount", varLostCount AS "LostCount", 
+	--varFleeCount AS "FleeCount", varDrawCount AS "DrawCount", varIsFirstRegister AS "IsFirstRegister";
+
+	local result = 
+	{
+		retCode = 1,
+		retMsg = "success",
+		UserID = 1003,
+		PlatformID = 3,
+		GameID = 10003,
+		NickName = "alice",
+		Signature = "Signature_1003",
+		HideFlag = 1,
+		FaceID = 1,
+		PlatformFace = "PlatformFace_1003",
+		Gender = 1,
+		UserMedal = 1,
+		Experience = 1,
+		Present = 1,
+		Score = 1,
+		Insure = 1,
+		LoveLiness = 1,
+		MemberOrder = 1,
+		MemberOverDate = 1,
+		Gift = 1,
+		UserRight = 1,
+		MasterRight = 1,
+		MasterOrder = 1,
+		Contribution = 1,
+		WinCount = 1,
+		LostCount = 1,
+		FleeCount = 1,
+		DrawCount = 1,
+		IsFirstRegister = 1,
+	}
 	return result
 end
 
@@ -174,13 +216,14 @@ local REQUEST = {
 		end
 		--print("2222222222222222222222");
 		local platformID = getPlatformIDBySession(pbObj.session)
-		print("2222222222222222222222 - platformID- ",platformID);
+		--print("2222222222222222222222 - platformID- ",platformID);
 		if not platformID then
 			return _cachedProtoStr["0x000100_INVALID_SESSION"]
 		end
-		print("333333333333333333");
+		--print("333333333333333333");
 		local isFirstRegister = false
 		local userItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "getUserItemByPlatformID", platformID, true)
+		print("333333333333333333 - userItem- ",userItem);
 		if userItem then
 			skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "switchUserItem", platformID, {
 				agent=tcpAgent,

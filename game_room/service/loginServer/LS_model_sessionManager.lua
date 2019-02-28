@@ -52,6 +52,7 @@ end
 
 local function createBindingItem(platformID, userStatus, Tel)
 	--创建绑定账号信息
+	--[[
 	local sql = string.format("SELECT * FROM `kfaccountsdb`.`AccountBinding` where PlatformID = %d", platformID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
@@ -60,6 +61,7 @@ local function createBindingItem(platformID, userStatus, Tel)
 	if rows[1] ~= nil then
 		gamestatus = math.tointeger(rows[1].GameStatus)
 	end
+	]]
 	return {
 		platformID=platformID,
 		gameStatus=gamestatus,
@@ -132,11 +134,13 @@ local USER_STATUS = {
 }
 --]]
 local function cmd_registerSession(session, platformID, userStatus, Tel)
+	--skynet.error("LS_model_sessionManager.lua cmd_registerSession - ",string.format("session:%s,platformID:%d,status:%d,Tel:%s",session,platformID,userStatus,Tel))
 	if type(session)~="string" or type(platformID)~="number" then
 		return
 	end
 	
 	local item = _hash.platformID[platformID]
+	--skynet.error("LS_model_sessionManager.lua cmd_registerSession - item - ",item)
 	if item then
 		_hash.session[item.session] = nil
 		_hash.session[session] = item
@@ -162,16 +166,26 @@ local function cmd_registerSession(session, platformID, userStatus, Tel)
 		end
 	else
 		item = createItem(session, platformID)
+		--skynet.error("LS_model_sessionManager.lua cmd_registerSession - item 2- ",item)
 		_hash.platformID[platformID] = item
 		_hash.session[session] = item
 	end
+	
 	--增加绑定信息
 	_hash.platformIDBinding[platformID] = createBindingItem(platformID, userStatus, Tel)
+	
+	--skynet.error("LS_model_sessionManager.lua cmd_registerSession - _hash\n",inspect(_hash))
+
 end
 
 local function cmd_getPlatformIDBySession(session)
-	skynet.error("LS_model_sessionManager.lua - cmd_getPlatformIDBySession",string.format("session[%s]",session),"\n",inspect(_hash))
+	
 	local item = _hash.session[session]
+	--print("LS_model_sessionManager.lua cmd_getPlatformIDBySession - ",string.format("session:-%s-",session))
+	--print("LS_model_sessionManager.lua cmd_getPlatformIDBySession - session,item - ",session,item)
+	--print("LS_model_sessionManager.lua cmd_getPlatformIDBySession - _hash\n",inspect(_hash))
+	--print("LS_model_sessionManager.lua cmd_getPlatformIDBySession - _hash.session\n",inspect(_hash.session))
+	--print("LS_model_sessionManager.lua cmd_getPlatformIDBySession - _hash.platformIDBinding\n",inspect(_hash.platformIDBinding))
 	if item then
 		return item.platformID
 	else
@@ -188,6 +202,7 @@ end
 
 local function cmd_getUserItemByPlatformID(platformID, updateSuiTS)
 	local item = _hash.platformID[platformID]
+	print("LS_model_sessionManager.lua cmd_getUserItemByPlatformID - _hash.platformID\n",platformID, updateSuiTS,item,inspect(_hash.platformID))
 	if item and item.sui then
 		if updateSuiTS and item.suiActiveTS~=nil then
 			item.suiActiveTS = skynet.now()

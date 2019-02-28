@@ -33,6 +33,7 @@ struct tagparam_telnet
 struct tagparam_gate
 {
 	int id;
+	int fd;
 };
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -321,8 +322,10 @@ int get_loginServer_login_c2s_Login_wbuffer(char * buffer, int size)
 	}
 
 	struct pbc_slice slice;
-	pbc_wmessage_string(w_msg, "session", "test_session_1003", -1);
-	pbc_wmessage_string(w_msg, "nickName", "alice", -1);
+	char * psession = "test_session_1003";
+	pbc_wmessage_string(w_msg, "session", psession, strlen(psession));
+	char * pnickName = "alice";
+	pbc_wmessage_string(w_msg, "nickName", "alice", strlen(pnickName));
 	pbc_wmessage_string(w_msg, "machineID", "HYUInyuijh6", -1);
 	pbc_wmessage_integer(w_msg, "kindID", 200, 0);
 	pbc_wmessage_integer(w_msg, "scoreTag", 1, 0);
@@ -459,75 +462,6 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len, struct pbc_sl
 }
 
 
-int read_gate_data(int fd)
-{
-	static const int max_read_szie = 65535;
-	char rbuffer[max_read_szie];
-	memset(rbuffer, 0, max_read_szie);
-
-	int  rlenght = 0;
-	while (true)
-	{
-		ms_sleep(3);
-		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
-		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
-		if (rsize < 0)
-		{
-			if (errno == EINTR)
-			{
-				continue;
-			}
-			if (errno == EAGAIN)
-			{
-				continue;
-			}
-			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
-			return 0;
-		}
-		if (rsize == 0)
-		{
-			printf("read socket close.\n");
-			return 0;
-		}
-		rlenght += rsize;
-
-		// 解包
-		if (rlenght >= 2)
-		{
-			unsigned char tempbuf[2] = { 0 };
-			tempbuf[0] = rbuffer[0];
-			tempbuf[1] = rbuffer[1];
-			int plenght = (int)tempbuf[0] << 8 | (int)tempbuf[1];
-			if (plenght < 4 || plenght > max_read_szie)
-			{
-				printf("packet error lenght.\n");
-				return 0;
-			}
-			int alenght = plenght + 2;
-			if (rlenght >= alenght)
-			{
-				unsigned int uProtoNo = ((unsigned char)rbuffer[3] << 16) | ((unsigned char)rbuffer[4] << 8) | (unsigned char)rbuffer[5];
-				char * pdata = rbuffer + 6;
-				int len = rlenght - 6;
-				struct pbc_slice slice;
-				int ret = -1;
-				if (uProtoNo == 0x000000)
-				{
-					ret = get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(pdata, len, &slice);
-				}
-				if (uProtoNo == 0x000100)
-				{
-					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len, &slice);
-				}
-				printf("read - alenght:%d,uProtoNo:0x%06d,pdata:%p,ret:%d\n", alenght, uProtoNo, pdata, ret);
-
-				//DELETE_SLICE_STRUCT(slice);
-				break;
-			}
-		}
-	}
-	return 1;
-}
 
 
 int write_heart_beat_data(int fd)
@@ -603,21 +537,11 @@ __START_WRITE_GATE_DATA:
 			break;
 		}
 	}
-	
-	
-
 	return 1;
 }
 
-int http_register_session()
+int http_register_session(int fd)
 {
-	int fd = socket_connect(IPADDRESS, 3002);
-	if (fd < 0)
-	{
-		printf("http_register_session socket_connect error\n");
-		return 0;
-	}
-
 	char wbuffer[10846];
 	memset(wbuffer, 0, sizeof(wbuffer));
 
@@ -637,7 +561,7 @@ int http_register_session()
 		int size_send = write(fd, wbuffer + wlenght, size_pack - wlenght);
 		if (size_send != size_pack)
 		{
-			printf("send buf error\n");
+			printf("send buf error - size_send:%d\n", size_send);
 		}
 		wlenght += size_send;
 		if (size_pack == wlenght)
@@ -664,14 +588,12 @@ int http_register_session()
 				continue;
 			}
 			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
-			close(fd);
 			return 0;
 		}
 		if (rsize == 0)
 		{
-			close(fd);
 			printf("read socket close.\n");
-			return 0;
+			break;
 		}
 		rlenght += rsize;
 		char body[1024] = { 0 };
@@ -688,50 +610,154 @@ int http_register_session()
 	return 1;
 }
 
-
-static void * thread_gate_socket(void *p)
+static void * thread_gate_http(void *p)
 {
 	struct tagparam_gate * s = p;
 	int id = s->id;
-
-	if (!http_register_session())
+	int fd = socket_connect(IPADDRESS, 3002);
+	if (fd < 0)
 	{
-		goto __exit_thread_gate;
+		printf("socket_connect error IPADDRESS:3002\n");
+		goto __exit_thread_gate_http;
 	}
 
-	int fd = socket_connect(IPADDRESS, 3001);
+	while (true)
+	{
+		if (!http_register_session())
+		{
+			printf("thread_gate_http register error\n");
+			goto __exit_thread_gate_http;
+			// error
+		}
+		else
+		{
+			goto __exit_thread_gate_http;
+		}
+	}
+
+
+	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
+
+__exit_thread_gate_http:
+	close(fd);
+	_runflag[id] = false;
+	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n", pthread_self(), id, _runflag[id]);
+	return NULL;
+}
+
+static void * thread_gate_write(void *p)
+{
+	struct tagparam_gate * s = p;
+	int id = s->id;
+	int fd = s->fd;
+
 
 	while (true)
 	{
 		if (!write_heart_beat_data(fd))
 		{
-			goto __exit_thread_gate;
-		}
-		if (!read_gate_data(fd))
-		{
-			goto __exit_thread_gate;
+			goto __exit_thread_gate_write;
 		}
 		if (!write_gate_data(fd))
 		{
-			goto __exit_thread_gate;
-		}
-		if (!read_gate_data(fd))
-		{
-			goto __exit_thread_gate;
+			goto __exit_thread_gate_write;
 		}
 		break;
-		ms_sleep(3000);
+		ms_sleep(300);
 	}
 	
 	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
 	
-__exit_thread_gate:
-	close(fd);
+__exit_thread_gate_write:
 	_runflag[id] = false;
-	printf("pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
+	printf("thread_gate_write - pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n",pthread_self(),id,_runflag[id]);
 	return NULL;
 }
 
+
+static void * thread_gate_read(void *p)
+{
+	struct tagparam_gate * s = p;
+	int id = s->id;
+	int fd = s->fd;
+
+	static const int max_read_szie = 65535;
+	char rbuffer[max_read_szie];
+	memset(rbuffer, 0, max_read_szie);
+
+	int  rlenght = 0;
+	while (true)
+	{
+		ms_sleep(3);
+		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
+		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
+		if (rsize < 0)
+		{
+			if (errno == EINTR)
+			{
+				continue;
+			}
+			if (errno == EAGAIN)
+			{
+				continue;
+			}
+			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
+			return 0;
+		}
+		if (rsize == 0)
+		{
+			printf("read socket close.\n");
+			return 0;
+		}
+		rlenght += rsize;
+
+		// 解包
+		if (rlenght >= 2)
+		{
+			unsigned char tempbuf[2] = { 0 };
+			tempbuf[0] = rbuffer[0];
+			tempbuf[1] = rbuffer[1];
+			int plenght = (int)tempbuf[0] << 8 | (int)tempbuf[1];
+			if (plenght < 4 || plenght > max_read_szie)
+			{
+				printf("packet error lenght.\n");
+				return 0;
+			}
+			int alenght = plenght + 2;
+			if (rlenght >= alenght)
+			{
+				unsigned int uProtoNo = ((unsigned char)rbuffer[3] << 16) | ((unsigned char)rbuffer[4] << 8) | (unsigned char)rbuffer[5];
+				char * pdata = rbuffer + 6;
+				int len = rlenght - 6;
+				struct pbc_slice slice;
+				int ret = -1;
+				if (uProtoNo == 0x000000)
+				{
+					ret = get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(pdata, len, &slice);
+				}
+				if (uProtoNo == 0x000100)
+				{
+					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len, &slice);
+				}
+				printf("read - alenght:%d,uProtoNo:0x%06d,pdata:%p,ret:%d\n", alenght, uProtoNo, pdata, ret);
+
+				rlenght -= alenght;
+				memmove(rbuffer, rbuffer + alenght, rlenght);
+
+				//DELETE_SLICE_STRUCT(slice);
+				//break;
+			}
+		}
+		ms_sleep(300);
+	}
+
+	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
+
+__exit_thread_gate_read:
+	_runflag[id] = false;
+	printf("thread_gate_read - pthread_self:%ld,id:%d,_runflag:%d,socket thread exit!\n", pthread_self(), id, _runflag[id]);
+	return NULL;
+}
 
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -795,12 +821,6 @@ int main(int argc, char const *argv[])
 
 	ms_sleep(1000);
 
-
-	//const char * ptail = "TELNET_OK";
-	//char * py = "0000001aTELNET_OK";
-	//printf("++++strlen(py):%d,strlen(ptail):%d,py:%s\n",strlen(py),strlen(ptail),py + (strlen(py) - strlen(ptail)));
-
-
 	param[count++] = "help\n";	
 	param[count++] = "list\n";
 	param[count++] = "stat\n";
@@ -834,8 +854,28 @@ int main(int argc, char const *argv[])
 
 	ms_sleep(1000);
 */
+
 	postcount += 1;
-	struct tagparam_gate arg_gate[1];
+	struct tagparam_gate arg_gate_http[1];
+	argindex = 0;
+	for (; ithread < postcount; ithread++)
+	{
+		if (_runflag[ithread])
+		{
+			continue;
+		}
+		_runflag[ithread] = true;
+		pthread_t pid;
+		arg_gate_http[argindex].id = ithread;
+		create_thread(&pid, thread_gate_http, &arg_gate_http[argindex]);
+		printf("i:%d, main_pid:%d, pid:%ld\n", ithread, getpid(), pid);
+		argindex++;
+	}
+
+	int fd_gate_tcp = socket_connect(IPADDRESS, 3001);
+
+	postcount += 1;
+	struct tagparam_gate arg_gate_write[1];
 	argindex = 0;
 	for(; ithread < postcount; ithread++)
 	{
@@ -845,11 +885,32 @@ int main(int argc, char const *argv[])
 		}
 		_runflag[ithread] = true;
 		pthread_t pid;
-		arg_gate[argindex].id = ithread;
-		create_thread(&pid, thread_gate_socket, &arg_gate[argindex]);
+		arg_gate_write[argindex].id = ithread;
+		arg_gate_write[argindex].fd = fd_gate_tcp;
+		create_thread(&pid, thread_gate_write, &arg_gate_write[argindex]);
 		printf("i:%d, main_pid:%d, pid:%ld\n", ithread, getpid(), pid);
 		argindex++;
 	}
+
+	postcount += 1;
+	struct tagparam_gate arg_gate_read[1];
+	argindex = 0;
+	for (; ithread < postcount; ithread++)
+	{
+		if (_runflag[ithread])
+		{
+			continue;
+		}
+		_runflag[ithread] = true;
+		pthread_t pid;
+		arg_gate_read[argindex].id = ithread;
+		arg_gate_read[argindex].fd = fd_gate_tcp;
+		create_thread(&pid, thread_gate_read, &arg_gate_read[argindex]);
+		printf("i:%d, main_pid:%d, pid:%ld\n", ithread, getpid(), pid);
+		argindex++;
+	}
+
+	close(fd_gate_tcp);
 
 
 	while (true)

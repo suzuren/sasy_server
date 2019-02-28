@@ -38,7 +38,7 @@ skynet.start(function()
 				if string.byte(path, 1) == 0x2f then
 					path = string.sub(path, 2)
 				end
-				skynet.error(string.format("2 path-%s, query-%s", path, query))
+				--skynet.error(string.format("2 path-%s, query-%s", path, query))
 
 				local controllerAddress = addressResolver.getAddressByKey(path)
 				if controllerAddress then
