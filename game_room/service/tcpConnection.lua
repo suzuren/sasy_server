@@ -9,6 +9,8 @@ local controllerResolveConfig = require "define.controllerResolveConfig"
 local commonServiceHelper = require "serviceHelper.common"
 local MCClinetUtility = require "utility.mcClient"
 
+local inspect = require "inspect"
+
 local _fd
 local _gate							-- address of tcpGateway
 local _cache = {}					-- {addr, session, userID, sui}
@@ -48,16 +50,25 @@ end
 
 local function sendMessage(protocalNo, protocalObj)
 	_criticalSection(function()	-- 新加，保证消息次序
-	skynet.error(string.format("%s:  sendMessage - no.=%s, obj=%s", SERVICE_NAME, tostring(protocalNo), tostring(protocalObj)))
+	skynet.error(string.format("%s:  sendMessage - no=%s, obj=%s", SERVICE_NAME, tostring(protocalNo), tostring(protocalObj)))
+	
 	if type(protocalNo)=="string" and protocalObj==nil then
 		--send net packet directly
 		sendPacket(protocalNo)
 	elseif type(protocalNo)=="number" and type(protocalObj)=="table" then
 		local pbParser = resourceResolver.get("pbParser")
-		local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, false)
+		--local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, false)
+		local protocalObj = {}
+		if protocalNo == 0x000100 then
+			protocalObj = { index = 127 }
+		else
+			protocalObj = protocalObj
+		end
+		local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, true)
 		if ptr==nil then
 			return exit()
 		else
+			--skynet.error("sendMessage protocalObj - \n",sz,type(protocalNo),type(protocalObj),inspect(protocalObj))
 			sendPacket(ptr, sz)
 		end
 	else

@@ -447,10 +447,10 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len)
 		return 0;
 	}
 	//printf("pbc_register - len:%d, buffer:%p\n", slice->len, slice->buffer);
-
+	slice.buffer = pdata;
 	if (slice.len >= len)
 	{
-		memcpy(slice.buffer, pdata, len);
+		//memcpy(slice.buffer, pdata, len);
 	}
 	else
 	{
@@ -460,10 +460,10 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len)
 	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, &slice);
 	if (r_msg == NULL)
 	{
-		printf("file_path:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
+		printf("file_path:%s, pbc_rmessage_new error:%s\n", file_path, pbc_error(env));
 		return 0;
 	}
-	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	//printf("pbc_rmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
 	pbc_delete(env);
 	//DELETE_SLICE_BUFFFER(slice);
 
@@ -683,10 +683,10 @@ static void * thread_gate_write(void *p)
 		{
 			goto __exit_thread_gate_write;
 		}
-		if (!write_heart_beat_data(fd))
-		{
-			goto __exit_thread_gate_write;
-		}
+		//if (!write_heart_beat_data(fd))
+		//{
+		//	goto __exit_thread_gate_write;
+		//}
 		if (!write_gate_data(fd))
 		{
 			goto __exit_thread_gate_write;

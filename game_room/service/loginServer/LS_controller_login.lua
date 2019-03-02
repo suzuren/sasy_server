@@ -302,7 +302,8 @@ local REQUEST = {
 		
 		skynet.error("LS_controller_login.lua REQUEST - loginSuccess-\n",inspect(loginSuccess),"\n-")
 
-		skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK",msg="success",data=loginSuccess})
+		--skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK",msg="success",data=loginSuccess})
+		skynet.send(tcpAgent, "lua", "forward", 0x000100, {msg=56})
 		--[[
 		skynet.send(tcpAgent, "lua", "forward", 0x000102, {
 			medal=attr.medal,
@@ -481,13 +482,13 @@ local conf = {
 	initFunc = function()
 		resourceResolver.init()
 		local pbParser = resourceResolver.get("pbParser")
-		_cachedProtoStr["0x000100_INVALID_SESSION"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_INVALID_SESSION"}, true)
-		_cachedProtoStr["0x000100_IP_BANNED"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_IP_BANNED"}, true)
-		_cachedProtoStr["0x000100_MACHINE_BANNED"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_MACHINE_BANNED"}, true)
-		_cachedProtoStr["0x000100_INTERAL_DB_ERROR"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_INTERAL_DB_ERROR"}, true)
-		_cachedProtoStr["0x000100_ACCOUNT_NULLITY"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ACCOUNT_NULLITY"}, true)
-		_cachedProtoStr["0x000100_ACCOUNT_STUNDOWN"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ACCOUNT_STUNDOWN"}, true)
-		_cachedProtoStr["0x000100_ALREADY_LOGIN"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ALREADY_LOGIN"}, true)
+		--_cachedProtoStr["0x000100_INVALID_SESSION"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_INVALID_SESSION"}, true)
+		--_cachedProtoStr["0x000100_IP_BANNED"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_IP_BANNED"}, true)
+		--_cachedProtoStr["0x000100_MACHINE_BANNED"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_MACHINE_BANNED"}, true)
+		--_cachedProtoStr["0x000100_INTERAL_DB_ERROR"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_INTERAL_DB_ERROR"}, true)
+		--_cachedProtoStr["0x000100_ACCOUNT_NULLITY"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ACCOUNT_NULLITY"}, true)
+		--_cachedProtoStr["0x000100_ACCOUNT_STUNDOWN"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ACCOUNT_STUNDOWN"}, true)
+		--_cachedProtoStr["0x000100_ALREADY_LOGIN"] = skynet.call(pbParser, "lua", "encode", 0x000100, {code="RC_ALREADY_LOGIN"}, true)
 		
 		timerUtility.start(LS_CONST.LOGIN_CONTROL.TIMEOUT_CHECK_INTERVAL_TICK)
 		timerUtility.setInterval(checkFrequenceControl, 1)
