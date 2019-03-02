@@ -1,4 +1,5 @@
 package loginServer.heartBeat.c2s;
 
 message HeartBeat {				// 0x000000
+    optional int32 index = 1;
 }

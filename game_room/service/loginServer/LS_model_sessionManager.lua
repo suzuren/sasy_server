@@ -202,7 +202,7 @@ end
 
 local function cmd_getUserItemByPlatformID(platformID, updateSuiTS)
 	local item = _hash.platformID[platformID]
-	print("LS_model_sessionManager.lua cmd_getUserItemByPlatformID - _hash.platformID\n",platformID, updateSuiTS,item,inspect(_hash.platformID))
+	--print("LS_model_sessionManager.lua cmd_getUserItemByPlatformID - _hash.platformID\n",platformID, updateSuiTS,item,inspect(_hash.platformID))
 	if item and item.sui then
 		if updateSuiTS and item.suiActiveTS~=nil then
 			item.suiActiveTS = skynet.now()
@@ -314,7 +314,7 @@ local function cmd_registerUser(platformID, userInfo, userInfoPlus)
 	
 	item.sui = CItemBuffer.allocate()
 	ServerUserItem.initialize(item.sui, userInfo, userInfoPlus)
-	--skynet.error(string.format("%s.cmd_registerUser userID=%d 生成sui数据 userStatus=%d", SERVICE_NAME, userInfo.userID, userInfoPlus.userStatus));
+	skynet.error(string.format("%s.cmd_registerUser userID=%d 生成sui数据 userStatus=%d", SERVICE_NAME, userInfo.userID, userInfoPlus.userStatus));
 	
 	item.sessionActiveTS=skynet.now()
 	item.suiActiveTS = nil
@@ -323,11 +323,11 @@ local function cmd_registerUser(platformID, userInfo, userInfoPlus)
 	_hash.userID[attr.userID] = item
 
 	--老玩家vip调整
-	checkOldUserVip(item.sui,attr)
+	--checkOldUserVip(item.sui,attr)
 
-	cmd_loadUserData(item.sui)
+	--cmd_loadUserData(item.sui)
 
-	skynet.send(addressResolver.getAddressByServiceName("LS_model_huoDong"), "lua", "CheckActivityReward", item.sui)
+	--skynet.send(addressResolver.getAddressByServiceName("LS_model_huoDong"), "lua", "CheckActivityReward", item.sui)
 	
 	skynet.call(attr.agent, "lua", "setCache", item.session, item.sui, attr.userID)
 	-- --增加账号绑定信息

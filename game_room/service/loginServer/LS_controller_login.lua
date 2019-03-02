@@ -10,6 +10,8 @@ local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
 local sysConfig = require "sysConfig"
 
+local inspect = require "inspect"
+
 local _cachedProtoStr={}
 local _0x000100FrequenceControl = {}
 
@@ -69,7 +71,7 @@ local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
 
 	local result = 
 	{
-		retCode = 1,
+		retCode = 0,
 		retMsg = "success",
 		UserID = 1003,
 		PlatformID = 3,
@@ -97,7 +99,7 @@ local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
 		LostCount = 1,
 		FleeCount = 1,
 		DrawCount = 1,
-		IsFirstRegister = 1,
+		IsFirstRegister = 0,
 	}
 	return result
 end
@@ -223,7 +225,7 @@ local REQUEST = {
 		--print("333333333333333333");
 		local isFirstRegister = false
 		local userItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "getUserItemByPlatformID", platformID, true)
-		print("333333333333333333 - userItem- ",userItem);
+		print("444444444444444444 - userItem- ",userItem);
 		if userItem then
 			skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "switchUserItem", platformID, {
 				agent=tcpAgent,
@@ -253,12 +255,13 @@ local REQUEST = {
 			end
 			userItem = registerUser(row, platformID, tcpAgent, tcpAgentData.addr, pbObj.machineID)
 		end
-				
+		--skynet.error("LS_controller_login.lua REQUEST - userItem-\n",inspect(userItem),"\n-")
+
 		local attr = ServerUserItem.getAttribute(userItem, {
 			"userID", "gameID", "faceID", "gender", "nickName", "memberOrder", "signature", "platformFace",
 			"medal", "experience", "loveliness", "score", "insure", "gift", "present", "contribution",
 		})
-
+		--skynet.error("LS_controller_login.lua REQUEST - attr-\n",inspect(attr),"\n-")
 		--变更玩家初始金币
 		if isFirstRegister then
 			skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "changeRegistBinding", platformID, attr.userID, pbObj.scoreTag)
@@ -289,15 +292,18 @@ local REQUEST = {
 
 		local isChangeNickName = false
 		local limitId = COMMON_CONST.OPERATOR_LIMIT.OP_LIMIT_ID_CHANGE_NAME
-		local sql = string.format("select * from `kfrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
-       	local dbConn = addressResolver.getMysqlConnection()
-        local rowss = skynet.call(dbConn, "lua", "call", sql)
-        if rowss[1] ~= nil then
-        	isChangeNickName = true
-        end
-        loginSuccess.isChangeNickName = isChangeNickName
+		--local sql = string.format("select * from `kfrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
+       	--local dbConn = addressResolver.getMysqlConnection()
+        --local rowss = skynet.call(dbConn, "lua", "call", sql)
+        --if rowss[1] ~= nil then
+        --	isChangeNickName = true
+        --end
+		loginSuccess.isChangeNickName = isChangeNickName
 		
-		skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK", data=loginSuccess})
+		skynet.error("LS_controller_login.lua REQUEST - loginSuccess-\n",inspect(loginSuccess),"\n-")
+
+		skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK",msg="success",data=loginSuccess})
+		--[[
 		skynet.send(tcpAgent, "lua", "forward", 0x000102, {
 			medal=attr.medal,
 			experience=attr.experience,
@@ -308,7 +314,7 @@ local REQUEST = {
 			present=attr.present,
 		})
 
-		UploadUserToPlatform(tcpAgent,attr.userID,pbObj)
+		--UploadUserToPlatform(tcpAgent,attr.userID,pbObj)
 	
 		--通过发送事件来发送其他需要的协议
 		skynet.send(addressResolver.getAddressByServiceName("eventDispatcher"), "lua", "dispatch", LS_EVENT.EVT_LS_LOGIN_SUCCESS, {
@@ -319,6 +325,7 @@ local REQUEST = {
 			kindID = pbObj.kindID,
 			contribution = attr.contribution,
 		})
+		]]
 
 		local endTime = skynet.now()
 		skynet.error(string.format("--0x000100------大厅登入----costTime=%d------userid=%d------------",endTime-startTime,attr.userID))

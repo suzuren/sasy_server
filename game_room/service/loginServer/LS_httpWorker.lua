@@ -23,6 +23,7 @@ skynet.start(function()
 	skynet.dispatch("lua", function (_,_,id,ipAddr)
 		socket.start(id)
 		-- limit request body size to 8192 (you can pass nil to unlimit)
+		--skynet.error("httpd.read_request(sockethelper.readfunc - id", id);
 		local code, url, method, header, body = httpd.read_request(sockethelper.readfunc(id), 8192)		
 		--skynet.error(string.format("code-%d, url-%s, method-%s, header-%s, body-%s", code, url, method, header, body))
 		--skynet.error("header-\n",inspect(header),"\n-")

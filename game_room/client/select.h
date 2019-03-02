@@ -185,6 +185,16 @@ const char* getStrTime()
 }
 
 
+#define NANOSEC 1000000000
+#define MICROSEC 1000000
+
+unsigned long long get_millisecond()
+{
+	struct timespec ti;
+	clock_gettime(CLOCK_MONOTONIC, &ti);
+	unsigned long long millisecond = ti.tv_sec * 1000 + ti.tv_nsec / 1000 / 1000;
+	return millisecond;
+}
 
 void ms_sleep(unsigned int msec)
 {

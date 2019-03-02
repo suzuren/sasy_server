@@ -25,8 +25,10 @@ local function getEvent(param)
 	if type(param.event) ~= "string" then
 		return nil
 	end
-
+	--print("LS_webController_uniformPlatform.lua getEvent - json,param start - ",json,param)
+	--print("LS_webController_uniformPlatform.lua getEvent - json.decode,param.event - ",json.decode,param.event)
 	local isOK, event = pcall(json.decode, param.event)
+	--print("LS_webController_uniformPlatform.lua getEvent - json,param end - ",json,param)
 	if isOK then
 		return event;
 	else

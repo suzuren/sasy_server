@@ -145,17 +145,20 @@ local function pbPacketDispatch(_, _, protocalNo, pbStr)
 			end
 		end
 		
-		if protocalNo == _heartBeatData.protocalNo then
-			sendPacket(_heartBeatData.protocalStr)
-			return
-		end
+
 		
 		
 		do
 			local jsonUtil = require "cjson.util"
+			--print("tcpConnection.lua pbPacketDispatch - protocalNo,protocalObj start - ",protocalNo,protocalObj)
 			skynet.error(string.format("receive packet: 0x%06X\n%s\n", protocalNo, jsonUtil.serialise_value(protocalObj)))
+			--print("tcpConnection.lua pbPacketDispatch - protocalNo,protocalObj end - ",protocalNo,protocalObj)
 		end
 		
+		if protocalNo == _heartBeatData.protocalNo then
+			sendPacket(_heartBeatData.protocalStr)
+			return
+		end
 		
 		local controllerAddress = addressResolver.getAddressByKey(protocalNo & 0xffff00)
 		--print("controllerAddress - ",controllerAddress)

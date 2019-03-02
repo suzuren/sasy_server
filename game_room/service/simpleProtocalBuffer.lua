@@ -4,14 +4,22 @@ local resourceResolver = require "resourceResolver"
 
 local _packetBuf = {}
 
+local inspect = require "inspect"
+
 local function cmd_get(protocalNo)
 	if not _packetBuf[protocalNo] then
-		local packetStr = skynet.call(resourceResolver.get("pbParser"), "lua", "encode", protocalNo, {}, true)
+		local protocalObj = {}
+		if protocalNo == 0x000000 then
+			protocalObj = { index = 127 }
+		end
+		local packetStr = skynet.call(resourceResolver.get("pbParser"), "lua", "encode", protocalNo, protocalObj, true)
 		if packetStr and not _packetBuf[protocalNo] then
 			_packetBuf[protocalNo] = packetStr
 		end
 	end
 	
+	--skynet.error("_packetBuf-\n",inspect(_packetBuf),"\n-")
+
 	return _packetBuf[protocalNo]
 end
 

@@ -4,7 +4,7 @@
 .PHONY : depend httpclient clean
 
 httpclient : ./client/httpclient.o depend
-	gcc -lpthread ./client/httpclient.o -o ./client/httpclient -Iclient -L./luaclib-src/pbc/build  -lpbc
+	gcc -lpthread -lrt ./client/httpclient.o -o ./client/httpclient -Iclient -L./luaclib-src/pbc/build  -lpbc
 
 ./client/httpclient.o : ./client/httpclient.c
 	gcc  -g -Wall -c ./client/httpclient.c -o ./client/httpclient.o -I./luaclib-src

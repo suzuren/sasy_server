@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include <time.h>
+
 #include "select.h"
 
 #include "pbc/pbc.h"
@@ -265,7 +267,10 @@ int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
 		return 0;
 	}
 
+	pbc_wmessage_integer(w_msg, "index", 2147483647, 0);
+
 	pbc_wmessage_buffer(w_msg, slice);
+
 	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
 	pbc_wmessage_delete(w_msg);
 	pbc_delete(env);
@@ -392,10 +397,13 @@ int get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(char * pdata,int len, struct
 	}
 	else
 	{
-		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
+		printf("slice_error - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
 	}
-
+	printf("s2c_HeartBeat_rbuffer - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
 	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, slice);
+	unsigned int index = pbc_rmessage_integer(r_msg, "index", 0, NULL);
+	printf("s2c_HeartBeat_rbuffer - index:%d\n", index);
+
 	if (r_msg == NULL)
 	{
 		printf("read_file:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
@@ -410,15 +418,16 @@ int get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(char * pdata,int len, struct
 
 
 
-int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len, struct pbc_slice *slice)
+int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len)
 {
-	return 0;
 
 	const char * file_path = "../pbs/loginServer.login.s2c.pb";
 	const char * type_name = "loginServer.login.s2c.Login";
 
-	read_file(file_path, slice);
-	if (slice->buffer == NULL)
+	struct pbc_slice slice;
+
+	read_file(file_path, &slice);
+	if (slice.buffer == NULL)
 	{
 		printf("file_path:%s, read_file error\n", file_path);
 		return 0;
@@ -431,7 +440,7 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len, struct pbc_sl
 		printf("file_path:%s, pbc_new error\n", file_path);
 		return 0;
 	}
-	int ret = pbc_register(env, slice);
+	int ret = pbc_register(env, &slice);
 	if (ret)
 	{
 		printf("file_path:%s, Error : %s\n", file_path, pbc_error(env));
@@ -439,33 +448,41 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len, struct pbc_sl
 	}
 	//printf("pbc_register - len:%d, buffer:%p\n", slice->len, slice->buffer);
 
-	if (slice->len >= len)
+	if (slice.len >= len)
 	{
-		memcpy(slice->buffer, pdata, len);
+		memcpy(slice.buffer, pdata, len);
 	}
 	else
 	{
-		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
+		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice.len, slice.buffer);
 	}
-
-	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, slice);
+	printf("s2c_Login_rbuffer - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice.len, slice.buffer);
+	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, &slice);
 	if (r_msg == NULL)
 	{
-		printf("read_file:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
+		printf("file_path:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
 		return 0;
 	}
 	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
 	pbc_delete(env);
-	DELETE_SLICE_BUFFFER(slice);
+	//DELETE_SLICE_BUFFFER(slice);
 
 	return 1;
 }
 
 
-
+unsigned long long _last_check_heart_beat_time = 0;
 
 int write_heart_beat_data(int fd)
 {
+	if (_last_check_heart_beat_time != 0)
+	{
+		//printf("_last_check_heart_beat_time:%llu,get_millisecond:%llu\n", _last_check_heart_beat_time, get_millisecond());
+		if (_last_check_heart_beat_time + 10*1000 > get_millisecond() )
+		{
+			return 1;
+		}
+	}
 	int wlenght = 0;
 	char wbuffer[16384] = { 0 };
 	unsigned short pack_size = get_loginServer_heartBeat_c2s_HeartBeat_wbuffer(wbuffer, 16384);
@@ -488,14 +505,20 @@ int write_heart_beat_data(int fd)
 			break;
 		}
 	}
+
+
+	_last_check_heart_beat_time = get_millisecond();
+
+	printf("%s - fd:%d,pid:%ld,pack_size:%d,_last_check_heart_beat_time:%llu.\n", getStrTime(), fd, pthread_self(), pack_size, _last_check_heart_beat_time);
+
 	return 1;
 }
 
-static int flag_write_login_data = 0;
+static int _flag_write_login_data = 0;
 
 int write_gate_data(int fd)
 {
-	if (flag_write_login_data == 1)
+	if (_flag_write_login_data == 1)
 	{
 		return 1;
 	}
@@ -509,10 +532,10 @@ int write_gate_data(int fd)
 	unsigned short pack_size = 0;
 	//printf("write_gate_data - 222222222222222222\n");
 
-	if (!flag_write_login_data)
+	if (!_flag_write_login_data)
 	{
 		pack_size = get_loginServer_login_c2s_Login_wbuffer(wbuffer, max_write_size);
-		flag_write_login_data = 1;
+		_flag_write_login_data = 1;
 		goto __START_WRITE_GATE_DATA;
 	}
 
@@ -623,7 +646,7 @@ static void * thread_gate_http(void *p)
 
 	while (true)
 	{
-		if (!http_register_session())
+		if (!http_register_session(fd))
 		{
 			printf("thread_gate_http register error\n");
 			goto __exit_thread_gate_http;
@@ -645,6 +668,8 @@ __exit_thread_gate_http:
 	return NULL;
 }
 
+static bool _flag_gate_socket_close = false;
+
 static void * thread_gate_write(void *p)
 {
 	struct tagparam_gate * s = p;
@@ -654,6 +679,10 @@ static void * thread_gate_write(void *p)
 
 	while (true)
 	{
+		if (_flag_gate_socket_close == true)
+		{
+			goto __exit_thread_gate_write;
+		}
 		if (!write_heart_beat_data(fd))
 		{
 			goto __exit_thread_gate_write;
@@ -662,8 +691,8 @@ static void * thread_gate_write(void *p)
 		{
 			goto __exit_thread_gate_write;
 		}
-		break;
-		ms_sleep(300);
+		//break;
+		//ms_sleep(300);
 	}
 	
 	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
@@ -702,12 +731,13 @@ static void * thread_gate_read(void *p)
 				continue;
 			}
 			fprintf(stderr, "socket : read socket error-%d-%s.\n\n", errno, strerror(errno));
-			return 0;
+			goto __exit_thread_gate_read;
 		}
 		if (rsize == 0)
 		{
 			printf("read socket close.\n");
-			return 0;
+			_flag_gate_socket_close = true;
+			goto __exit_thread_gate_read;
 		}
 		rlenght += rsize;
 
@@ -721,14 +751,14 @@ static void * thread_gate_read(void *p)
 			if (plenght < 4 || plenght > max_read_szie)
 			{
 				printf("packet error lenght.\n");
-				return 0;
+				goto __exit_thread_gate_read;
 			}
 			int alenght = plenght + 2;
 			if (rlenght >= alenght)
 			{
 				unsigned int uProtoNo = ((unsigned char)rbuffer[3] << 16) | ((unsigned char)rbuffer[4] << 8) | (unsigned char)rbuffer[5];
 				char * pdata = rbuffer + 6;
-				int len = rlenght - 6;
+				int len = alenght - 6;
 				struct pbc_slice slice;
 				int ret = -1;
 				if (uProtoNo == 0x000000)
@@ -737,9 +767,9 @@ static void * thread_gate_read(void *p)
 				}
 				if (uProtoNo == 0x000100)
 				{
-					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len, &slice);
+					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len);
 				}
-				printf("read - alenght:%d,uProtoNo:0x%06d,pdata:%p,ret:%d\n", alenght, uProtoNo, pdata, ret);
+				printf("read - rlenght:%d,alenght:%d,uProtoNo:0x%06X,rbuffer:%p,pdata:%p,ret:%d\n", rlenght, alenght, uProtoNo, rbuffer, pdata, ret);
 
 				rlenght -= alenght;
 				memmove(rbuffer, rbuffer + alenght, rlenght);
@@ -872,8 +902,13 @@ int main(int argc, char const *argv[])
 		argindex++;
 	}
 
+	ms_sleep(1000);
+	_flag_gate_socket_close = true;
 	int fd_gate_tcp = socket_connect(IPADDRESS, 3001);
-
+	if (fd_gate_tcp > 0)
+	{
+		_flag_gate_socket_close = false;
+	}
 	postcount += 1;
 	struct tagparam_gate arg_gate_write[1];
 	argindex = 0;
@@ -910,9 +945,6 @@ int main(int argc, char const *argv[])
 		argindex++;
 	}
 
-	close(fd_gate_tcp);
-
-
 	while (true)
 	{
 		bool brun = false;
@@ -935,6 +967,9 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	}
+
+	close(fd_gate_tcp);
+
 	printf("main thread exit!\n");
 }
 
