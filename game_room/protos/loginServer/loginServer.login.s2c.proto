@@ -1,7 +1,35 @@
 package loginServer.login.s2c;
 
 message Login {				// 0x000100
-	optional int32 index = 1;
+	enum RetCode {
+		RC_OK=0;
+		RC_INVALID_SESSION=1;
+		RC_INTERAL_DB_ERROR=2;
+		RC_LOGIN_CLOSED=3;
+		RC_IP_BANNED=4;
+		RC_MACHINE_BANNED=5;
+		RC_ACCOUNT_NULLITY=6;					//您的帐号处于冻结状态，请与客服联系
+		RC_ACCOUNT_STUNDOWN=7;					//您的帐号使用了安全关闭功能，必须重新开通后才能继续使用
+		RC_ALREADY_LOGIN=8;						//已经登入，换帐号需要先断开连接
+	}
+
+	message LoginSuccess
+	{
+		required uint32 userID=1;				//用户 I D
+		required uint32 gameID=2;				//游戏 I D
+		required int32 faceID=3;				//头像标识
+		required int32 gender=4;				//用户性别
+		required string	nickName=5;				//用户昵称
+		required bool isRegister=6;				//是否注册
+		required uint32 memberOrder=7;			//会员等级
+		optional string	signature=8;			//个性签名
+		optional string	platformFace=9;
+		required bool isChangeNickName=10;		//是否修改过昵称
+	}
+
+	required RetCode code=1;
+	optional string msg=2;
+	optional LoginSuccess data=3;
 }
 
 message Logout {			// 0x000101
