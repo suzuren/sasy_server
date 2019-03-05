@@ -9,8 +9,6 @@
 
 #include "select.h"
 
-#include "pbc/pbc.h"
-#include "pbc/readfile.h"
 
 
 #define threadcount 1024
@@ -39,6 +37,7 @@ struct tagparam_gate
 };
 
 // --------------------------------------------------------------------------------------------------------------------------
+
 
 void * thread_http_socket(void *p)
 {
@@ -227,7 +226,7 @@ struct pbc_env * get_pbc_env(const char * file_path)
 	return env;
 }
 
-
+static int _heartBeatIndex = 0;
 
 int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
 {
@@ -267,7 +266,7 @@ int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
 		return 0;
 	}
 
-	pbc_wmessage_integer(w_msg, "index", 2147483647, 0);
+	pbc_wmessage_integer(w_msg, "index", _heartBeatIndex, 0);
 
 	pbc_wmessage_buffer(w_msg, slice);
 
@@ -275,6 +274,11 @@ int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
 	pbc_wmessage_delete(w_msg);
 	pbc_delete(env);
 
+	_heartBeatIndex += 1;
+	if (_heartBeatIndex > 2147483647)
+	{
+		_heartBeatIndex = 0;
+	}
 	return 1;
 }
 
@@ -307,61 +311,6 @@ int get_loginServer_heartBeat_c2s_HeartBeat_wbuffer(char * buffer,int size)
 	return pack_size;
 }
 
-int get_loginServer_login_c2s_Login_wbuffer(char * buffer, int size)
-{
-	const char * file_path = "../pbs/loginServer.login.c2s.pb";
-	const char * type_name = "loginServer.login.c2s.Login";
-
-	struct pbc_env * env = get_pbc_env(file_path);
-	if (env == NULL)
-	{
-		printf("file_path:%s, get_pbc_env error\n", file_path);
-		return 0;
-	}
-
-	struct pbc_wmessage * w_msg = pbc_wmessage_new(env, type_name);
-	if (w_msg == NULL)
-	{
-		printf("file_path:%s, pbc_wmessage_new error\n", file_path);
-		return 0;
-	}
-
-	struct pbc_slice slice;
-	char * psession = "test_session_1003";
-	pbc_wmessage_string(w_msg, "session", psession, strlen(psession));
-	char * pnickName = "alice";
-	pbc_wmessage_string(w_msg, "nickName", "alice", strlen(pnickName));
-	pbc_wmessage_string(w_msg, "machineID", "HYUInyuijh6", -1);
-	pbc_wmessage_integer(w_msg, "kindID", 200, 0);
-	pbc_wmessage_integer(w_msg, "scoreTag", 1, 0);
-	pbc_wmessage_integer(w_msg, "appID", 201, 0);
-	pbc_wmessage_string(w_msg, "appChannel", "appChannel test", -1);
-	pbc_wmessage_string(w_msg, "appVersion", "appVersion test", -1);
-
-	pbc_wmessage_buffer(w_msg, &slice);	
-
-	if (slice.len + 6 > size)
-	{
-		printf("file_path:%s, pbc_wmessage_buffer error\n", file_path);
-
-		return 0;
-	}
-
-	unsigned int uProtoNo = 0x000100;
-	unsigned short pack_size = 4 + slice.len;
-
-	buffer[0] = (pack_size >> 8) & 0xff;
-	buffer[1] = pack_size & 0xff;
-	buffer[2] = 0;
-	buffer[3] = (uProtoNo >> 16) & 0xff;
-	buffer[4] = (uProtoNo >> 8) & 0xff;
-	buffer[5] = uProtoNo & 0xff;
-
-	memcpy(buffer + 6, slice.buffer, slice.len);
-	pack_size += 2;
-
-	return pack_size;
-}
 
 
 int get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(char * pdata,int len, struct pbc_slice *slice)
@@ -394,40 +343,99 @@ int get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(char * pdata,int len, struct
 	if (slice->len >= len)
 	{
 		memcpy(slice->buffer, pdata, len);
+		slice->len = len;
 	}
 	else
 	{
 		printf("slice_error - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
 	}
-	printf("s2c_HeartBeat_rbuffer - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
+	//printf("s2c_HeartBeat_rbuffer - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
 	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, slice);
-	unsigned int index = pbc_rmessage_integer(r_msg, "index", 0, NULL);
-	printf("s2c_HeartBeat_rbuffer - index:%d\n", index);
-
 	if (r_msg == NULL)
 	{
 		printf("read_file:%s, pbc_wmessage_new error:%s\n", file_path, pbc_error(env));
 		return 0;
 	}
+	unsigned int index = pbc_rmessage_integer(r_msg, "index", 0, NULL);
+	printf("get_loginServer_heartBeat_s2c_HeartBeat_rbuffer - index:%d\n", index);
 	//printf("pbc_wmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	pbc_rmessage_delete(r_msg);
 	pbc_delete(env);
 	DELETE_SLICE_BUFFFER(slice);
 
 	return 1;
 }
 
+int get_loginServer_login_c2s_Login_wbuffer(char * buffer, int size)
+{
+	const char * file_path = "../pbs/loginServer.login.c2s.pb";
+	const char * type_name = "loginServer.login.c2s.Login";
+
+	struct pbc_env * env = get_pbc_env(file_path);
+	if (env == NULL)
+	{
+		printf("file_path:%s, get_pbc_env error\n", file_path);
+		return 0;
+	}
+
+	struct pbc_wmessage * w_msg = pbc_wmessage_new(env, type_name);
+	if (w_msg == NULL)
+	{
+		printf("file_path:%s, pbc_wmessage_new error\n", file_path);
+		return 0;
+	}
+
+	struct pbc_slice slice;
+	char * psession = "test_session_1003";
+	pbc_wmessage_string(w_msg, "session", psession, strlen(psession));
+	char * pnickName = "alice";
+	pbc_wmessage_string(w_msg, "nickName", pnickName, strlen(pnickName));
+	pbc_wmessage_string(w_msg, "machineID", "HYUInyuijh6", -1);
+	pbc_wmessage_integer(w_msg, "kindID", 200, 0);
+	pbc_wmessage_integer(w_msg, "scoreTag", 1, 0);
+	pbc_wmessage_integer(w_msg, "appID", 201, 0);
+	pbc_wmessage_string(w_msg, "appChannel", "appChannel test", -1);
+	pbc_wmessage_string(w_msg, "appVersion", "appVersion test", -1);
+
+	pbc_wmessage_buffer(w_msg, &slice);
+
+	if (slice.len + 6 > size)
+	{
+		printf("file_path:%s, pbc_wmessage_buffer error\n", file_path);
+
+		return 0;
+	}
+
+	unsigned int uProtoNo = 0x000100;
+	unsigned short pack_size = 4 + slice.len;
+
+	buffer[0] = (pack_size >> 8) & 0xff;
+	buffer[1] = pack_size & 0xff;
+	buffer[2] = 0;
+	buffer[3] = (uProtoNo >> 16) & 0xff;
+	buffer[4] = (uProtoNo >> 8) & 0xff;
+	buffer[5] = uProtoNo & 0xff;
+
+	memcpy(buffer + 6, slice.buffer, slice.len);
+	pack_size += 2;
+
+	pbc_wmessage_delete(w_msg);
+	pbc_delete(env);
+
+	return pack_size;
+}
 
 
-int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len)
+
+
+int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len, struct pbc_slice * slice)
 {
 
 	const char * file_path = "../pbs/loginServer.login.s2c.pb";
 	const char * type_name = "loginServer.login.s2c.Login";
 
-	struct pbc_slice slice;
-
-	read_file(file_path, &slice);
-	if (slice.buffer == NULL)
+	read_file(file_path, slice);
+	if (slice->buffer == NULL)
 	{
 		printf("file_path:%s, read_file error\n", file_path);
 		return 0;
@@ -440,32 +448,64 @@ int get_loginServer_login_s2c_Login_rbuffer(char * pdata, int len)
 		printf("file_path:%s, pbc_new error\n", file_path);
 		return 0;
 	}
-	int ret = pbc_register(env, &slice);
+	int ret = pbc_register(env, slice);
 	if (ret)
 	{
 		printf("file_path:%s, Error : %s\n", file_path, pbc_error(env));
 		return 0;
 	}
 	//printf("pbc_register - len:%d, buffer:%p\n", slice->len, slice->buffer);
-	slice.buffer = pdata;
-	if (slice.len >= len)
+
+	//slice.buffer = pdata;
+	if (slice->len >= len)
 	{
-		//memcpy(slice.buffer, pdata, len);
+		memcpy(slice->buffer, pdata, len);
+		slice->len = len;
 	}
 	else
 	{
-		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice.len, slice.buffer);
+		printf("slice_error - len%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice->len, slice->buffer);
 	}
-	printf("s2c_Login_rbuffer - len:%d, pdata:%p, slice_len:%d, buffer:%p\n", len, pdata, slice.len, slice.buffer);
-	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, &slice);
+	dump_buffer(slice->buffer, slice->len);
+	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, type_name, slice);
 	if (r_msg == NULL)
 	{
 		printf("file_path:%s, pbc_rmessage_new error:%s\n", file_path, pbc_error(env));
 		return 0;
 	}
+
+	const char *  pread_code = pbc_rmessage_string(r_msg, "code", 0, NULL);
+	const char *  pread_msg = pbc_rmessage_string(r_msg, "msg", 0, NULL);
+	struct pbc_rmessage *  pread_data = pbc_rmessage_message(r_msg, "data", 0);
+	int iread_userID = pbc_rmessage_integer(pread_data, "userID", 0, NULL);
+	int iread_gameID = pbc_rmessage_integer(pread_data, "gameID", 0, NULL);
+	int iread_faceID = pbc_rmessage_integer(pread_data, "faceID", 0, NULL);
+	int iread_gender = pbc_rmessage_integer(pread_data, "gender", 0, NULL);
+	const char *  pread_nickName = pbc_rmessage_string(pread_data, "nickName", 0, NULL);
+	int iread_isRegister = pbc_rmessage_integer(pread_data, "isRegister", 0, NULL);
+	int iread_memberOrder = pbc_rmessage_integer(pread_data, "memberOrder", 0, NULL);
+	const char *  pread_signature = pbc_rmessage_string(pread_data, "signature", 0, NULL);
+	const char *  pread_platformFace = pbc_rmessage_string(pread_data, "platformFace", 0, NULL);
+	int iread_isChangeNickName = pbc_rmessage_integer(pread_data, "isChangeNickName", 0, NULL);
+
+	printf("             pread_code : %s\n", pread_code);
+	printf("              pread_msg : %s\n", pread_msg);
+	printf("           iread_userID : %d\n", iread_userID);
+	printf("           iread_gameID : %d\n", iread_gameID);
+	printf("           iread_faceID : %d\n", iread_faceID);
+	printf("           iread_gender : %d\n", iread_gender);
+	printf("         pread_nickName : %s\n", pread_nickName);
+	printf("       iread_isRegister : %d\n", iread_isRegister);
+	printf("      iread_memberOrder : %d\n", iread_memberOrder);
+	printf("        pread_signature : %s\n", pread_signature);
+	printf("     pread_platformFace : %s\n", pread_platformFace);
+	printf(" iread_isChangeNickName : %d\n", iread_isChangeNickName);
+
 	//printf("pbc_rmessage_buffer - len:%d, buffer:%p\n", slice->len, slice->buffer);
+	pbc_rmessage_delete(r_msg);
 	pbc_delete(env);
-	//DELETE_SLICE_BUFFFER(slice);
+
+	DELETE_SLICE_BUFFFER(slice);
 
 	return 1;
 }
@@ -478,7 +518,7 @@ int write_heart_beat_data(int fd)
 	if (_last_check_heart_beat_time != 0)
 	{
 		//printf("_last_check_heart_beat_time:%llu,get_millisecond:%llu\n", _last_check_heart_beat_time, get_millisecond());
-		if (_last_check_heart_beat_time + 10*1000 > get_millisecond() )
+		if (_last_check_heart_beat_time + 3*1000 > get_millisecond() )
 		{
 			return 1;
 		}
@@ -509,7 +549,7 @@ int write_heart_beat_data(int fd)
 
 	_last_check_heart_beat_time = get_millisecond();
 
-	printf("%s - fd:%d,pid:%ld,pack_size:%d,_last_check_heart_beat_time:%llu.\n", getStrTime(), fd, pthread_self(), pack_size, _last_check_heart_beat_time);
+	//printf("%s - fd:%d,pid:%ld,pack_size:%d,_last_check_heart_beat_time:%llu.\n", getStrTime(), fd, pthread_self(), pack_size, _last_check_heart_beat_time);
 
 	return 1;
 }
@@ -683,10 +723,10 @@ static void * thread_gate_write(void *p)
 		{
 			goto __exit_thread_gate_write;
 		}
-		//if (!write_heart_beat_data(fd))
-		//{
-		//	goto __exit_thread_gate_write;
-		//}
+		if (!write_heart_beat_data(fd))
+		{
+			goto __exit_thread_gate_write;
+		}
 		if (!write_gate_data(fd))
 		{
 			goto __exit_thread_gate_write;
@@ -717,7 +757,7 @@ static void * thread_gate_read(void *p)
 	int  rlenght = 0;
 	while (true)
 	{
-		ms_sleep(3);
+		//ms_sleep(3);
 		int rsize = read(fd, rbuffer + rlenght, sizeof(rbuffer) - rlenght);
 		//printf("read function - pthread_self:%ld,rsize:%d,errno:%d,EINTR:%d,EAGAIN:%d\n",pthread_self(),rsize,errno,EINTR,EAGAIN);
 		if (rsize < 0)
@@ -759,15 +799,23 @@ static void * thread_gate_read(void *p)
 				unsigned int uProtoNo = ((unsigned char)rbuffer[3] << 16) | ((unsigned char)rbuffer[4] << 8) | (unsigned char)rbuffer[5];
 				char * pdata = rbuffer + 6;
 				int len = alenght - 6;
+				
 				struct pbc_slice slice;
+				slice.buffer = NULL;
+				slice.len = 0;
+
 				int ret = -1;
 				if (uProtoNo == 0x000000)
 				{
 					ret = get_loginServer_heartBeat_s2c_HeartBeat_rbuffer(pdata, len, &slice);
 				}
-				if (uProtoNo == 0x000100)
+				else if (uProtoNo == 0x000100)
 				{
-					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len);
+					ret = get_loginServer_login_s2c_Login_rbuffer(pdata, len, &slice);
+				}
+				else
+				{
+
 				}
 				printf("read - rlenght:%d,alenght:%d,uProtoNo:0x%06X,rbuffer:%p,pdata:%p,ret:%d\n", rlenght, alenght, uProtoNo, rbuffer, pdata, ret);
 
@@ -778,7 +826,7 @@ static void * thread_gate_read(void *p)
 				//break;
 			}
 		}
-		ms_sleep(300);
+		//ms_sleep(300);
 	}
 
 	//printf("\n--------------------------\npthread_self:%ld,fd:%d, rlenght:%d, \nwbuffer:\n--------------------------\n%s\n--------------------------,\nrbuffer:\n--------------------------\n%s--------------------------\n",pthread_self(), fd, rlenght, wbuffer, rbuffer);
@@ -791,6 +839,10 @@ __exit_thread_gate_read:
 
 
 // --------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 int main(int argc, char const *argv[])
 {
@@ -884,6 +936,9 @@ int main(int argc, char const *argv[])
 
 	ms_sleep(1000);
 */
+
+	//int iret_pbc_write_read_data = test_pbc_write_read_data();
+	//printf("iret_pbc_write_read_data:%d\n", iret_pbc_write_read_data);
 
 	postcount += 1;
 	struct tagparam_gate arg_gate_http[1];

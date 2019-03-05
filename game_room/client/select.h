@@ -23,6 +23,10 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+
+#include "pbc/pbc.h"
+#include "pbc/readfile.h"
+
 #pragma  pack(1)
 
 struct packet_header
@@ -450,5 +454,176 @@ static void create_thread(pthread_t *thread, void *(*start_routine) (void *), vo
 		} \
 		slice.len = 0; \
     } while(0);
+
+
+void dump_buffer(unsigned char *buffer, int sz)
+{
+	int i, j;
+	for (i = 0; i<sz; i++)
+	{
+		printf("%02X ", buffer[i]);
+		if (i % 16 == 15)
+		{
+			for (j = 0; j <16; j++)
+			{
+				char c = buffer[i / 16 * 16 + j];
+				if (c >= 32 && c<127)
+				{
+					printf("%c", c);
+				}
+				else
+				{
+					printf(".");
+				}
+			}
+			printf("\n");
+		}
+	}
+
+	printf("\n");
+}
+
+
+int test_pbc_write_read_data()
+{
+	const char * file_path = "../pbs/loginServer.login.s2c.pb";
+	const char * type_name = "loginServer.login.s2c.Login";
+
+	struct pbc_slice slice_write;
+	read_file(file_path, &slice_write);
+	if (slice_write.buffer == NULL)
+	{
+		printf("file_path:%s, read_file error\n", file_path);
+		return 0;
+	}
+	struct pbc_env * env_write = pbc_new();
+	if (env_write == NULL)
+	{
+		printf("file_path:%s, pbc_new error\n", file_path);
+		return 0;
+	}
+	int ret_write = pbc_register(env_write, &slice_write);
+	if (ret_write)
+	{
+		printf("file_path:%s, pbc_register Error : %s\n", file_path, pbc_error(env_write));
+		return 0;
+	}
+	free(slice_write.buffer);
+
+	struct pbc_wmessage * w_msg = pbc_wmessage_new(env_write, type_name);
+	if (w_msg == NULL)
+	{
+		printf("file_path:%s, pbc_wmessage_new error\n", file_path);
+		return 0;
+	}
+
+	pbc_wmessage_string(w_msg, "code", "RC_OK", strlen("RC_OK"));
+	pbc_wmessage_string(w_msg, "msg", "success", strlen("success"));
+
+	struct pbc_wmessage * pwrite_data = pbc_wmessage_message(w_msg, "data");
+	pbc_wmessage_integer(pwrite_data, "userID", 1003, 0);
+	pbc_wmessage_integer(pwrite_data, "gameID", 10003, 0);
+	pbc_wmessage_integer(pwrite_data, "faceID", 1, 0);
+	pbc_wmessage_integer(pwrite_data, "gender", 1, 0);
+	pbc_wmessage_string(pwrite_data, "nickName", "alice", strlen("alice"));
+	pbc_wmessage_integer(pwrite_data, "isRegister", 0, 0);
+	pbc_wmessage_integer(pwrite_data, "memberOrder", 1, 0);
+	pbc_wmessage_string(pwrite_data, "signature", "Signature_1003", strlen("Signature_1003"));
+	pbc_wmessage_string(pwrite_data, "platformFace", "PlatformFace_1003", strlen("PlatformFace_1003"));
+	pbc_wmessage_integer(pwrite_data, "isChangeNickName", 0, 0);
+	pbc_wmessage_buffer(w_msg, &slice_write);
+
+	//-------------------------------------------------------
+
+	char read_buffer[65535] = { 0 };
+	int read_lenght = 0;
+
+	read_lenght = slice_write.len;
+	memcpy(read_buffer, slice_write.buffer, read_lenght);
+
+	pbc_wmessage_delete(w_msg);
+	pbc_delete(env_write);
+
+	printf("            read_lenght : %d\n", read_lenght);
+
+
+	//-------------------------------------------------------
+
+
+	struct pbc_slice slice_read;
+	read_file(file_path, &slice_read);
+	if (slice_read.buffer == NULL)
+	{
+		printf("read_file - file_path:%s,error\n", file_path);
+		return 0;
+	}
+	struct pbc_env * env_read = pbc_new();
+	if (env_read == NULL)
+	{
+		printf("pbc_new - file_path:%s,error\n", file_path);
+		return 0;
+	}
+	int ret_read = pbc_register(env_read, &slice_read);
+	if (ret_read)
+	{
+		printf("pbc_register - file_path:%s,error:%s\n", file_path, pbc_error(env_read));
+		return 0;
+	}
+
+	free(slice_read.buffer);
+	slice_read.buffer = read_buffer;
+	slice_read.len = read_lenght;
+	struct pbc_rmessage * r_msg = pbc_rmessage_new(env_read, type_name, &slice_read);
+	if (r_msg == NULL)
+	{
+		printf("pbc_rmessage_new - file_path:%s,error:%s\n", file_path, pbc_error(env_read));
+		return 0;
+	}
+
+	const char *  pread_code = pbc_rmessage_string(r_msg, "code", 0, NULL);
+	const char *  pread_msg = pbc_rmessage_string(r_msg, "msg", 0, NULL);
+
+	printf("             pread_code : %s\n", pread_code);
+	printf("              pread_msg : %s\n", pread_msg);
+
+	//int iread_size_data = pbc_rmessage_size(r_msg, "data");
+	//for (int index = 0; index < iread_size_data; index++)
+	//{
+	//	const char *  pread_data = pbc_rmessage_message(r_msg, "data", index);
+	//	int iread_userID = pbc_rmessage_integer(pread_data, "userID", index, NULL);
+	//}
+
+	struct pbc_rmessage *  pread_data = pbc_rmessage_message(r_msg, "data", 0);
+	int iread_userID = pbc_rmessage_integer(pread_data, "userID", 0, NULL);
+	int iread_gameID = pbc_rmessage_integer(pread_data, "gameID", 0, NULL);
+	int iread_faceID = pbc_rmessage_integer(pread_data, "faceID", 0, NULL);
+	int iread_gender = pbc_rmessage_integer(pread_data, "gender", 0, NULL);
+	const char *  pread_nickName = pbc_rmessage_string(pread_data, "nickName", 0, NULL);
+	int iread_isRegister = pbc_rmessage_integer(pread_data, "isRegister", 0, NULL);
+	int iread_memberOrder = pbc_rmessage_integer(pread_data, "memberOrder", 0, NULL);
+	const char *  pread_signature = pbc_rmessage_string(pread_data, "signature", 0, NULL);
+	const char *  pread_platformFace = pbc_rmessage_string(pread_data, "platformFace", 0, NULL);
+	int iread_isChangeNickName = pbc_rmessage_integer(pread_data, "isChangeNickName", 0, NULL);
+
+	printf("           iread_userID : %d\n", iread_userID);
+	printf("           iread_gameID : %d\n", iread_gameID);
+	printf("           iread_faceID : %d\n", iread_faceID);
+	printf("           iread_gender : %d\n", iread_gender);
+	printf("         pread_nickName : %s\n", pread_nickName);
+	printf("       iread_isRegister : %d\n", iread_isRegister);
+	printf("      iread_memberOrder : %d\n", iread_memberOrder);
+	printf("        pread_signature : %s\n", pread_signature);
+	printf("     pread_platformFace : %s\n", pread_platformFace);
+	printf(" iread_isChangeNickName : %d\n", iread_isChangeNickName);
+
+	dump_buffer(slice_read.buffer, slice_read.len);
+
+
+	pbc_rmessage_delete(r_msg);
+	pbc_delete(env_read);
+
+	return 1;
+}
+
 
 

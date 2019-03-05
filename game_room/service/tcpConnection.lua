@@ -17,7 +17,7 @@ local _cache = {}					-- {addr, session, userID, sui}
 local _event = {}					-- {disconnect }
 local _heartBeatData = {}			-- {protocalNo, protocalStr}
 local _criticalSection = queue()
-
+local _heartBeatIndex = 0
 local function sendPacket(msg, sz)
 	if _fd then
 		socket.write(_fd, msg, sz)
@@ -50,21 +50,14 @@ end
 
 local function sendMessage(protocalNo, protocalObj)
 	_criticalSection(function()	-- 新加，保证消息次序
-	skynet.error(string.format("%s:  sendMessage - no=%s, obj=%s", SERVICE_NAME, tostring(protocalNo), tostring(protocalObj)))
-	
+	--skynet.error(string.format("%s:  sendMessage - no=%s, obj=%s", SERVICE_NAME, tostring(protocalNo), tostring(protocalObj)))
+	--skynet.error("sendMessage protocalObj - \n",sz,type(protocalNo),type(protocalObj),inspect(protocalObj))
 	if type(protocalNo)=="string" and protocalObj==nil then
 		--send net packet directly
 		sendPacket(protocalNo)
 	elseif type(protocalNo)=="number" and type(protocalObj)=="table" then
 		local pbParser = resourceResolver.get("pbParser")
-		--local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, false)
-		local protocalObj = {}
-		if protocalNo == 0x000100 then
-			protocalObj = { index = 127 }
-		else
-			protocalObj = protocalObj
-		end
-		local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, true)
+		local ptr, sz = skynet.call(pbParser, "lua", "encode", protocalNo, protocalObj, false)
 		if ptr==nil then
 			return exit()
 		else
@@ -142,7 +135,7 @@ local function pbPacketDispatch(_, _, protocalNo, pbStr)
 	end
 	--]]
 
-	skynet.error(string.format("%s, agent dispatch: 0x%06x", SERVICE_NAME, protocalNo))
+	--skynet.error(string.format("%s, agent dispatch: 0x%06x", SERVICE_NAME, protocalNo))
 
 	local responseNo, responseObj
 	_criticalSection(function()	
@@ -155,9 +148,13 @@ local function pbPacketDispatch(_, _, protocalNo, pbStr)
 				return exit()
 			end
 		end
-		
 
-		
+		--[[
+		if protocalNo == _heartBeatData.protocalNo then
+			sendPacket(_heartBeatData.protocalStr)
+			return
+		end
+		]]
 		
 		do
 			local jsonUtil = require "cjson.util"
@@ -167,7 +164,12 @@ local function pbPacketDispatch(_, _, protocalNo, pbStr)
 		end
 		
 		if protocalNo == _heartBeatData.protocalNo then
-			sendPacket(_heartBeatData.protocalStr)
+			local responseObj = skynet.call(resourceResolver.get("pbParser"), "lua", "encode", protocalNo, { index = _heartBeatIndex }, true)
+			sendPacket(responseObj)
+			_heartBeatIndex = _heartBeatIndex + 1
+			if _heartBeatIndex > 2147483647 then
+				_heartBeatIndex = 0
+			end
 			return
 		end
 		

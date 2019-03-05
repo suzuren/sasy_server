@@ -225,7 +225,7 @@ local REQUEST = {
 		--print("333333333333333333");
 		local isFirstRegister = false
 		local userItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "getUserItemByPlatformID", platformID, true)
-		print("444444444444444444 - userItem- ",userItem);
+		--print("444444444444444444 - userItem- ",userItem);
 		if userItem then
 			skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", "switchUserItem", platformID, {
 				agent=tcpAgent,
@@ -302,8 +302,8 @@ local REQUEST = {
 		
 		skynet.error("LS_controller_login.lua REQUEST - loginSuccess-\n",inspect(loginSuccess),"\n-")
 
-		--skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK",msg="success",data=loginSuccess})
-		skynet.send(tcpAgent, "lua", "forward", 0x000100, {msg=56})
+		skynet.send(tcpAgent, "lua", "forward", 0x000100, {code="RC_OK",msg="success",data=loginSuccess})
+		
 		--[[
 		skynet.send(tcpAgent, "lua", "forward", 0x000102, {
 			medal=attr.medal,
