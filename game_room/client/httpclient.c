@@ -275,7 +275,7 @@ int get_loginServer_heartBeat_c2s_HeartBeat_pbc_slice(struct pbc_slice *slice)
 	pbc_delete(env);
 
 	_heartBeatIndex += 1;
-	if (_heartBeatIndex > 2147483647)
+	if (_heartBeatIndex >= 2147483647)
 	{
 		_heartBeatIndex = 0;
 	}
