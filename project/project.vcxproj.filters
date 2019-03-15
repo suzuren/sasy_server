@@ -1,0 +1,2653 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\clean.sh" />
+    <None Include="..\README.md" />
+    <None Include="..\chat_room\lualib\chat_socket.lua">
+      <Filter>chat_room\lualib</Filter>
+    </None>
+    <None Include="..\chat_room\lualib\manager_socket.lua">
+      <Filter>chat_room\lualib</Filter>
+    </None>
+    <None Include="..\chat_room\service\chat_config">
+      <Filter>chat_room\service</Filter>
+    </None>
+    <None Include="..\chat_room\service\chat_main.lua">
+      <Filter>chat_room\service</Filter>
+    </None>
+    <None Include="..\chat_room\service\chat_service.lua">
+      <Filter>chat_room\service</Filter>
+    </None>
+    <None Include="..\chat_room\makefile">
+      <Filter>chat_room</Filter>
+    </None>
+    <None Include="..\chat_room\start.sh">
+      <Filter>chat_room</Filter>
+    </None>
+    <None Include="..\testservice\client.lua">
+      <Filter>testservice</Filter>
+    </None>
+    <None Include="..\testservice\config">
+      <Filter>testservice</Filter>
+    </None>
+    <None Include="..\testservice\test_main.lua">
+      <Filter>testservice</Filter>
+    </None>
+    <None Include="..\testservice\test_simpleweb.lua">
+      <Filter>testservice</Filter>
+    </None>
+    <None Include="..\testservice\test_socket.lua">
+      <Filter>testservice</Filter>
+    </None>
+    <None Include="..\testsocket\Makefile">
+      <Filter>testsocket</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lua-md5\README">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lua\Makefile">
+      <Filter>skynet\3rd\lua</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lua\README">
+      <Filter>skynet\3rd\lua</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\HISTORY">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\lpeg.html">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\makefile">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\re.html">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\re.lua">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\lpeg\test.lua">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\bin\jemalloc.sh.in">
+      <Filter>skynet\3rd\jemalloc\bin</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\bin\jemalloc-config.in">
+      <Filter>skynet\3rd\jemalloc\bin</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\bin\jeprof.in">
+      <Filter>skynet\3rd\jemalloc\bin</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\build-aux\config.guess">
+      <Filter>skynet\3rd\jemalloc\build-aux</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\build-aux\config.sub">
+      <Filter>skynet\3rd\jemalloc\build-aux</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\build-aux\install-sh">
+      <Filter>skynet\3rd\jemalloc\build-aux</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\doc\html.xsl.in">
+      <Filter>skynet\3rd\jemalloc\doc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\doc\jemalloc.xml.in">
+      <Filter>skynet\3rd\jemalloc\doc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\doc\manpages.xsl.in">
+      <Filter>skynet\3rd\jemalloc\doc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_defs.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_preamble.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\private_namespace.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\private_symbols.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\public_namespace.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\public_unnamespace.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\smoothstep.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_defs.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_macros.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_mangle.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_protos.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_rename.sh">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\include\jemalloc\jemalloc_typedefs.h.in">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\m4\ax_cxx_compile_stdcxx.m4">
+      <Filter>skynet\3rd\jemalloc\m4</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\scripts\gen_run_tests.py">
+      <Filter>skynet\3rd\jemalloc\scripts</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\scripts\gen_travis.py">
+      <Filter>skynet\3rd\jemalloc\scripts</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\include\test\jemalloc_test.h.in">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\include\test\jemalloc_test_defs.h.in">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\integration\extent.sh">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\integration\mallocx.sh">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\integration\slab_sizes.sh">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\integration\smallocx.sh">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\integration\xallocx.sh">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\arena_reset_prof.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\binshard.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\decay.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\junk.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\junk_alloc.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\junk_free.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\pack.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_accum.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_active.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_gdump.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_idump.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_log.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_reset.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_tctx.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\prof_thread_name.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\unit\zero.sh">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\test\test.sh.in">
+      <Filter>skynet\3rd\jemalloc\test</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.appveyor.yml">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.autom4te.cfg">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.cirrus.yml">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.gitattributes">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.gitignore">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\.travis.yml">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\autogen.sh">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\ChangeLog">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\config.stamp.in">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\configure.ac">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\COPYING">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\INSTALL.md">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\jemalloc.pc.in">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\Makefile.in">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\README">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\run_tests.sh">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\3rd\jemalloc\TUNING.md">
+      <Filter>skynet\3rd\jemalloc</Filter>
+    </None>
+    <None Include="..\skynet\examples\abort.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\agent.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\checkdeadloop.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\client.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\cluster1.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\cluster2.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\clustername.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.c1">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.c2">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.login">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.mc">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.mongodb">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.mysql">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.path">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config.userlog">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\config_log">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\globallog.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\injectlaunch.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\main.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\main_log.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\main_mongodb.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\main_mysql.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\preload.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\proto.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\protoloader.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\share.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\simpledb.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\simplemonitor.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\simpleweb.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\userlog.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\watchdog.lua">
+      <Filter>skynet\examples</Filter>
+    </None>
+    <None Include="..\skynet\examples\login\client.lua">
+      <Filter>skynet\examples\login</Filter>
+    </None>
+    <None Include="..\skynet\examples\login\gated.lua">
+      <Filter>skynet\examples\login</Filter>
+    </None>
+    <None Include="..\skynet\examples\login\logind.lua">
+      <Filter>skynet\examples\login</Filter>
+    </None>
+    <None Include="..\skynet\examples\login\main.lua">
+      <Filter>skynet\examples\login</Filter>
+    </None>
+    <None Include="..\skynet\examples\login\msgagent.lua">
+      <Filter>skynet\examples\login</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\cluster.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\crypt.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\datacenter.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\dns.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\memory.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\mongo.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\mqueue.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\multicast.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\mysql.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\netpack.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\profile.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\redis.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\sharedata.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\sharemap.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\snax.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\socket.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\socketchannel.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\socketdriver.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\compat10\stm.lua">
+      <Filter>skynet\lualib\compat10</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\httpc.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\httpd.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\internal.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\sockethelper.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\url.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\skynet\lualib\snax\gateserver.lua">
+      <Filter>skynet\lualib\snax</Filter>
+    </None>
+    <None Include="..\skynet\lualib\snax\hotfix.lua">
+      <Filter>skynet\lualib\snax</Filter>
+    </None>
+    <None Include="..\skynet\lualib\snax\interface.lua">
+      <Filter>skynet\lualib\snax</Filter>
+    </None>
+    <None Include="..\skynet\lualib\snax\loginserver.lua">
+      <Filter>skynet\lualib\snax</Filter>
+    </None>
+    <None Include="..\skynet\lualib\snax\msgserver.lua">
+      <Filter>skynet\lualib\snax</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\cluster.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\coroutine.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\datacenter.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\debug.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\dns.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\harbor.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\inject.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\injectcode.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\manager.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\mqueue.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\multicast.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\queue.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\remotedebug.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\service.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\sharedata.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\sharemap.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\snax.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\socket.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\socketchannel.lua">
+      <Filter>skynet\lualib\skynet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\datasheet\builder.lua">
+      <Filter>skynet\lualib\skynet\datasheet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\datasheet\dump.lua">
+      <Filter>skynet\lualib\skynet\datasheet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\datasheet\init.lua">
+      <Filter>skynet\lualib\skynet\datasheet</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\db\mongo.lua">
+      <Filter>skynet\lualib\skynet\db</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\db\mysql.lua">
+      <Filter>skynet\lualib\skynet\db</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\db\redis.lua">
+      <Filter>skynet\lualib\skynet\db</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\db\redis\cluster.lua">
+      <Filter>skynet\lualib\skynet\db\redis</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\db\redis\crc16.lua">
+      <Filter>skynet\lualib\skynet\db\redis</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet\sharedata\corelib.lua">
+      <Filter>skynet\lualib\skynet\sharedata</Filter>
+    </None>
+    <None Include="..\skynet\lualib\loader.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib\md5.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib\skynet.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib\sproto.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib\sprotoloader.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib\sprotoparser.lua">
+      <Filter>skynet\lualib</Filter>
+    </None>
+    <None Include="..\skynet\lualib-src\sproto\README">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </None>
+    <None Include="..\skynet\lualib-src\sproto\README.md">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </None>
+    <None Include="..\skynet\service\bootstrap.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\cdummy.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\clusteragent.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\clusterd.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\clusterproxy.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\cmaster.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\cmemory.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\console.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\cslave.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\datacenterd.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\dbg.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\debug_agent.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\debug_console.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\gate.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\launcher.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\multicastd.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\service_cell.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\service_mgr.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\service_provider.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\sharedatad.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\snaxd.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\.gitignore">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\.gitmodules">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\HISTORY.md">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\LICENSE">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\Makefile">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\platform.mk">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\README.md">
+      <Filter>skynet</Filter>
+    </None>
+    <None Include="..\skynet\test\testservice\init.lua">
+      <Filter>skynet\test\testservice</Filter>
+    </None>
+    <None Include="..\skynet\test\testservice\kvdb.lua">
+      <Filter>skynet\test\testservice</Filter>
+    </None>
+    <None Include="..\skynet\test\pingserver.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\sharemap.sp">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testbson.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testcoroutine.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testdatacenter.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testdatasheet.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testdeadcall.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testdeadloop.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testdns.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testecho.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testendless.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testharborlink.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testhttp.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testmemlimit.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testmongodb.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testmulticast.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testmulticast2.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testmysql.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testoverload.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testping.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testpipeline.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testqueue.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testredis.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testredis2.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testrediscluster.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testresponse.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testsha.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testsm.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testsocket.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\teststm.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testterm.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testtimeout.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testtimer.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\testudp.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\test\time.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\game_room\comprise\testGame\lualib\androidUserItemSink.lua">
+      <Filter>game_room\comprise\testGame\lualib</Filter>
+    </None>
+    <None Include="..\game_room\comprise\testGame\lualib\const.lua">
+      <Filter>game_room\comprise\testGame\lualib</Filter>
+    </None>
+    <None Include="..\game_room\comprise\testGame\lualib\tableFrameSink.lua">
+      <Filter>game_room\comprise\testGame\lualib</Filter>
+    </None>
+    <None Include="..\game_room\comprise\testGame\lualib\volcano.lua">
+      <Filter>game_room\comprise\testGame\lualib</Filter>
+    </None>
+    <None Include="..\game_room\comprise\testGame\service\testGame_controller.lua">
+      <Filter>game_room\comprise\testGame\service</Filter>
+    </None>
+    <None Include="..\game_room\config\clustername.lua">
+      <Filter>game_room\config</Filter>
+    </None>
+    <None Include="..\game_room\config\config.game">
+      <Filter>game_room\config</Filter>
+    </None>
+    <None Include="..\game_room\config\config.login">
+      <Filter>game_room\config</Filter>
+    </None>
+    <None Include="..\game_room\config\sysConfig.lua">
+      <Filter>game_room\config</Filter>
+    </None>
+    <None Include="..\game_room\luaclib-src\Makefile">
+      <Filter>game_room\luaclib-src</Filter>
+    </None>
+    <None Include="..\game_room\lualib\addressResolver.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\defenseList.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\eventList.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\inspect.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\pbco.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\protobuf.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\resourceResolver.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\xLog.lua">
+      <Filter>game_room\lualib</Filter>
+    </None>
+    <None Include="..\game_room\lualib\business\activity.lua">
+      <Filter>game_room\lualib\business</Filter>
+    </None>
+    <None Include="..\game_room\lualib\cjson\util.lua">
+      <Filter>game_room\lualib\cjson</Filter>
+    </None>
+    <None Include="..\game_room\lualib\config\testGame_210.lua">
+      <Filter>game_room\lualib\config</Filter>
+    </None>
+    <None Include="..\game_room\lualib\config\tableConfig\DropTable.csv">
+      <Filter>game_room\lualib\config\tableConfig</Filter>
+    </None>
+    <None Include="..\game_room\lualib\config\tableConfig\Prize.csv">
+      <Filter>game_room\lualib\config\tableConfig</Filter>
+    </None>
+    <None Include="..\game_room\lualib\config\tableConfig\t_task_table_info.csv">
+      <Filter>game_room\lualib\config\tableConfig</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\commonConst.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\controllerResolveConfig.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\eventGameServer.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\eventLoginServer.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\gsConst.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\lsConst.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\define\pbConfig.lua">
+      <Filter>game_room\lualib\define</Filter>
+    </None>
+    <None Include="..\game_room\lualib\match\gameMatchSink.lua">
+      <Filter>game_room\lualib\match</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\bullet.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\cItemBuffer.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\currency.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\ip.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\jsonHttpResponse.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\mcClient.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\path.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\readFile.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\sign.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\string.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\table.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\tableController.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\time.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\timer.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\uniformPlatformHttp.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\utility\xpcall.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\lualib\serviceHelper\common.lua">
+      <Filter>game_room\lualib\serviceHelper</Filter>
+    </None>
+    <None Include="..\game_room\lualib\serviceHelper\pb.lua">
+      <Filter>game_room\lualib\serviceHelper</Filter>
+    </None>
+    <None Include="..\game_room\lualib\serviceHelper\web.lua">
+      <Filter>game_room\lualib\serviceHelper</Filter>
+    </None>
+    <None Include="..\game_room\mysql\all_databases.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\service\eventDispatcher.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\mainGameServer.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\mainLoginServer.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\pbParser.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\resourceManager.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\simpleProtocalBuffer.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\tcpConnection.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\tcpGateway.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\telnetServer.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\xLogService.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_bag.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_bank.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_chat.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_gunUplevel.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_huoDong.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_login.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_ping.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_property.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_reward_gold_fish.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_table.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_task.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_controller_worldBoss.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_android.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_androidManager.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_attemperEngine.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_bag.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_gunUplevel.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_hd_dropBox.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_huoDong.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_invalidGun.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_item_config.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_LSPuller.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_matchManager.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_operatorLimit.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_property.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_protect.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_reward_gold_fish.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_serverStatus.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_tableFrame.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_tableManager.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_task.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_userManager.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\gameServer\GS_model_worldBoss.lua">
+      <Filter>game_room\service\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_account.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_activity.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_bag.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_bank.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_chat.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_gunUplevel.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_huoDong.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_invitation.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_login.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_message.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_pay.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_ping.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_ranking.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_rescueCoin.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_server.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_signin.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_controller_worldBoss.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_httpWorker.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_httpWorkerPool.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_bag.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_chat.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_gm.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_GSProxy.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_gunUplevel.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_huoDong.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_invitation.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_item_config.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_message.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_operatorLimit.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_pay.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_ranking.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_rescueCoin.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_serverManager.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_sessionManager.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_signin.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_telnet.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_model_worldBoss.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_telnetServer.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_webController_interface.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\service\loginServer\LS_webController_uniformPlatform.lua">
+      <Filter>game_room\service\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\common\common.misc.s2c.proto">
+      <Filter>game_room\protos\common</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.heartBeat.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.heartBeat.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.login.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.login.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\pbs\makefile">
+      <Filter>game_room\pbs</Filter>
+    </None>
+    <None Include="..\game_room\program_log\service_log_dir">
+      <Filter>game_room\program_log</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="chat_room">
+      <UniqueIdentifier>{3fd10e91-80f9-4023-96fc-94495b808922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="document">
+      <UniqueIdentifier>{32662cf9-b154-4c72-b9ca-dd1748bdda2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room">
+      <UniqueIdentifier>{5c3a5f56-92c2-4009-a48a-41b0c4f1838b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet">
+      <UniqueIdentifier>{21dddcba-56e4-4297-b283-b5ad4c17659a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="testservice">
+      <UniqueIdentifier>{ef9989b9-26dc-4dfa-bdcc-8a5437e9ef01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="testsocket">
+      <UniqueIdentifier>{d0450a01-4dba-4f27-bebe-5c473a4e7727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chat_room\client">
+      <UniqueIdentifier>{c74aad87-920d-40e5-9497-776f682fd692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chat_room\lualib">
+      <UniqueIdentifier>{8a137583-155a-4621-ad6d-0eae258c7c13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chat_room\lualib-src">
+      <UniqueIdentifier>{91069979-677e-4a9b-a489-6073ca32d6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chat_room\service">
+      <UniqueIdentifier>{d697c6f9-fcea-4fb8-8f58-8e1f5680e6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd">
+      <UniqueIdentifier>{f836c7ea-8365-41aa-b268-8fc7984757d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\examples">
+      <UniqueIdentifier>{594acc72-41df-4fca-945a-d863c4817dfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib">
+      <UniqueIdentifier>{ccf9956b-551d-4472-839c-6d585b9c27fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib-src">
+      <UniqueIdentifier>{5fec88a5-953c-41fd-a3b4-70d8c16facb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\service">
+      <UniqueIdentifier>{2a8ab612-4f7a-4605-b5c0-6928998791d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\service-src">
+      <UniqueIdentifier>{95336ece-07cb-46ff-998b-9815f27f9ff0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\skynet-src">
+      <UniqueIdentifier>{69235655-d83c-493c-8857-27c72ff5410d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\test">
+      <UniqueIdentifier>{6ec77d4e-49c9-4095-95bb-e19280829d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc">
+      <UniqueIdentifier>{9da17858-c1e5-4322-9db6-c75d7546f03f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\lpeg">
+      <UniqueIdentifier>{e95dc86d-812a-4642-8b56-7976737276fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\lua">
+      <UniqueIdentifier>{c6205e1f-22c3-4176-9088-e7218815d1c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\lua-md5">
+      <UniqueIdentifier>{5e908c4a-a841-4ad7-9c63-623bd2690bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\bin">
+      <UniqueIdentifier>{c0ad0402-2e2b-4c63-99d9-a2e3a6f8949d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\build-aux">
+      <UniqueIdentifier>{ed13067e-414d-4f8e-a666-88eecaa4efe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\doc">
+      <UniqueIdentifier>{56891e3c-c630-4b1f-8bb6-f9684547436e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\include">
+      <UniqueIdentifier>{c7ad3a66-2de0-477d-83ec-de805b91e1c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\m4">
+      <UniqueIdentifier>{37ebc892-b625-4c6f-8c7f-db3237461b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\msvc">
+      <UniqueIdentifier>{8c6f7800-c62f-49ad-8c21-a6de4a57364c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\scripts">
+      <UniqueIdentifier>{f5f153d1-11e9-48c3-9c3c-387aa8d2176a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\src">
+      <UniqueIdentifier>{fc9b4809-7c51-4a77-87c7-a8cae5e032fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test">
+      <UniqueIdentifier>{a766c642-8b36-4766-96ce-c36f0ca95969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\include\jemalloc">
+      <UniqueIdentifier>{475d24dc-1b68-4f18-b040-1226d8f3cb7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\include\msvc_compat">
+      <UniqueIdentifier>{c1631d2a-b722-43b6-8fce-db7788de8520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\include\jemalloc\internal">
+      <UniqueIdentifier>{52c5f390-afb3-4cd3-95e1-23390e86c34c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\include\msvc_compat\C99">
+      <UniqueIdentifier>{d81e1cce-5c75-4b4a-8370-a314bc2eb397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\include">
+      <UniqueIdentifier>{d42c5e45-a20f-4f37-933c-c09a156e6878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\integration">
+      <UniqueIdentifier>{806f6617-203d-4ef4-acc9-3930ac62b091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\src">
+      <UniqueIdentifier>{c6277675-51e6-4a57-966d-9059f2618297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\stress">
+      <UniqueIdentifier>{a057a37f-1171-4f3a-afd7-6dc085664540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\unit">
+      <UniqueIdentifier>{25b82662-b5d5-47b6-a300-2b303776bc9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\3rd\jemalloc\test\include\test">
+      <UniqueIdentifier>{1bc5c9da-a999-4469-843f-22d529e92049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\examples\login">
+      <UniqueIdentifier>{38420cc3-8f55-4346-a068-0b12d4ba28b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\compat10">
+      <UniqueIdentifier>{e85c0561-7ee5-48a5-a5d2-bd30afd565bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\http">
+      <UniqueIdentifier>{2ce92fd7-c2cd-4295-a6d6-5b3a953f14c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\skynet">
+      <UniqueIdentifier>{79684543-c42d-494d-873b-9eb9456239c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\snax">
+      <UniqueIdentifier>{dd19d166-5377-4c65-ae27-4516cc1a0721}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\skynet\datasheet">
+      <UniqueIdentifier>{11a03bcd-3cde-4984-b461-2ca4401f3991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\skynet\sharedata">
+      <UniqueIdentifier>{019ba722-7a4e-4c34-8127-dc150e6b9b4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\skynet\db">
+      <UniqueIdentifier>{dee4dee9-5d1a-4022-9224-812362165b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib\skynet\db\redis">
+      <UniqueIdentifier>{65bae3cc-d81e-49c6-8ce0-d33e5bdf8f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\lualib-src\sproto">
+      <UniqueIdentifier>{509b3d8d-9957-43ba-8fc8-96cb67f2e975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet\test\testservice">
+      <UniqueIdentifier>{09b750b9-bc30-41fb-b1f7-cd3c6a4a9e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\client">
+      <UniqueIdentifier>{984d8f35-84e9-4b9c-b833-531e6aa7ffd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\comprise">
+      <UniqueIdentifier>{2e008d93-d6ba-4fea-87da-2027aa05e06f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\config">
+      <UniqueIdentifier>{223759ba-1f1a-4571-8782-becd81585a2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\luaclib-src">
+      <UniqueIdentifier>{2e8466e2-edf1-4178-aed9-4febff7f90c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib">
+      <UniqueIdentifier>{efb43338-9c3b-407c-a370-7da5d23c1a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\mysql">
+      <UniqueIdentifier>{29c4a03b-6ee3-4838-8d2d-f4c2e541cff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\pbs">
+      <UniqueIdentifier>{1b305fa5-8d54-452e-85c4-a62e5f5a0566}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\program_log">
+      <UniqueIdentifier>{8a602279-73da-4c26-8a6e-16d8a4d0df94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\protos">
+      <UniqueIdentifier>{bf86a309-cb96-4277-a985-23551a577f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\service">
+      <UniqueIdentifier>{91b25a30-755e-4b37-91aa-2b9c7c8a8c1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\comprise\testGame">
+      <UniqueIdentifier>{87a882ad-ff23-4391-b474-6e2b884f5e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\comprise\testGame\lualib">
+      <UniqueIdentifier>{afe6399d-fcc9-49f0-ae78-2b678f94d59e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\comprise\testGame\service">
+      <UniqueIdentifier>{15558adb-d864-455e-a903-534717cc4123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\luaclib-src\pbc">
+      <UniqueIdentifier>{36a0c68a-66e0-45a4-8688-6811c6877488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\luaclib-src\lua-arc4random">
+      <UniqueIdentifier>{2749167c-9ff1-47dc-be29-77563770bfc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\luaclib-src\lua-cjson">
+      <UniqueIdentifier>{47cfd483-1510-49de-a957-9b327394c77c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\business">
+      <UniqueIdentifier>{47984245-1920-4c0c-bf1a-f6a0d02ae916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\cjson">
+      <UniqueIdentifier>{a74a25b0-c7ec-4e57-9e09-fbec3dc1c1ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\config">
+      <UniqueIdentifier>{9a063a90-5830-40c7-899e-c1a9e5c30b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\define">
+      <UniqueIdentifier>{9dd9da1d-514c-4206-a9ba-03bc397b0c09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\match">
+      <UniqueIdentifier>{9a5d9751-24bb-4b08-8ac5-959424502310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\serviceHelper">
+      <UniqueIdentifier>{64b2ab3c-0968-49ef-a117-c5ad9dc17ecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\utility">
+      <UniqueIdentifier>{ed3490ed-eef6-4514-a4f1-4d2322ded545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\lualib\config\tableConfig">
+      <UniqueIdentifier>{e6fdde88-70a6-4d25-9f88-7201904ef0d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\service\gameServer">
+      <UniqueIdentifier>{5b960987-f417-4cd9-9bcd-3456e41f4d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\service\loginServer">
+      <UniqueIdentifier>{f4591d63-6d21-49e4-b62d-027cfe13b15c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\protos\common">
+      <UniqueIdentifier>{82568101-7a35-4c1c-bf4c-ec8d969621a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\protos\loginServer">
+      <UniqueIdentifier>{0b3c8b7f-26b0-449e-9604-31af59ec381f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\chat_room\client\client.c">
+      <Filter>chat_room\client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chat_room\lualib-src\lua-parsedata.c">
+      <Filter>chat_room\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chat_room\lualib-src\lua-socket.c">
+      <Filter>chat_room\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\testsocket\client.c">
+      <Filter>testsocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\testsocket\lua-parsedata.c">
+      <Filter>testsocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\testsocket\server.c">
+      <Filter>testsocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua-md5\compat-5.2.c">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua-md5\md5.c">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua-md5\md5lib.c">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lapi.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lauxlib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lbaselib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lbitlib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lcode.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lcorolib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lctype.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ldblib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ldebug.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ldo.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ldump.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lfunc.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lgc.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\linit.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\liolib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\llex.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lmathlib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lmem.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\loadlib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lobject.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lopcodes.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\loslib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lparser.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lstate.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lstring.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lstrlib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ltable.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ltablib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\ltm.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lua.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\luac.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lundump.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lutf8lib.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lvm.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lua\lzio.c">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lpeg\lpcap.c">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lpeg\lpcode.c">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lpeg\lpprint.c">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lpeg\lptree.c">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\lpeg\lpvm.c">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\arena.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\background_thread.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\base.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\bin.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\bitmap.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\ckh.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\ctl.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\div.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\extent.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\extent_dss.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\extent_mmap.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\hash.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\hook.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\jemalloc.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\jemalloc_cpp.cpp">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\large.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\log.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\malloc_io.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\mutex.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\mutex_pool.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\nstime.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\pages.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\prng.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\prof.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\rtree.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\sc.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\stats.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\sz.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\tcache.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\test_hooks.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\ticker.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\tsd.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\witness.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\src\zone.c">
+      <Filter>skynet\3rd\jemalloc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\aligned_alloc.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\allocated.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\extent.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\malloc.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\mallocx.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\MALLOCX_ARENA.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\overflow.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\posix_memalign.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\rallocx.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\sdallocx.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\slab_sizes.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\smallocx.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\thread_arena.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\thread_tcache_enabled.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\integration\xallocx.c">
+      <Filter>skynet\3rd\jemalloc\test\integration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\btalloc.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\btalloc_0.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\btalloc_1.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\math.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\mq.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\mtx.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\SFMT.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\test.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\thd.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\src\timer.c">
+      <Filter>skynet\3rd\jemalloc\test\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\stress\hookbench.c">
+      <Filter>skynet\3rd\jemalloc\test\stress</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\stress\microbench.c">
+      <Filter>skynet\3rd\jemalloc\test\stress</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\a0.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\arena_reset.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\arena_reset_prof.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\atomic.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\background_thread.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\background_thread_enable.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\base.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\binshard.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\bit_util.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\bitmap.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\ckh.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\decay.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\div.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\emitter.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\extent_quantize.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\fork.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\hash.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\hook.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\huge.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\junk.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\junk_alloc.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\junk_free.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\log.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\mallctl.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\malloc_io.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\math.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\mq.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\mtx.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\nstime.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\pack.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\pages.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\ph.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prng.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_accum.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_active.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_gdump.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_idump.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_log.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_reset.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_tctx.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\prof_thread_name.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\ql.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\qr.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\rb.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\retained.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\rtree.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\sc.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\seq.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\SFMT.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\size_classes.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\slab.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\smoothstep.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\spin.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\stats.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\stats_print.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\test_hooks.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\ticker.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\tsd.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\witness.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\3rd\jemalloc\test\unit\zero.c">
+      <Filter>skynet\3rd\jemalloc\test\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\sproto\lsproto.c">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\sproto\sproto.c">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lsha1.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-bson.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-clientsocket.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-cluster.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-crypt.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-datasheet.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-debugchannel.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-memory.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-mongo.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-multicast.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-netpack.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-profile.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-seri.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-sharedata.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-skynet.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-socket.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-stm.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\service-src\service_gate.c">
+      <Filter>skynet\service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\service-src\service_harbor.c">
+      <Filter>skynet\service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\service-src\service_logger.c">
+      <Filter>skynet\service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\service-src\service_snlua.c">
+      <Filter>skynet\service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\malloc_hook.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_daemon.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_env.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_error.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_handle.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_harbor.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_log.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_main.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_module.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_monitor.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_mq.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_server.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_socket.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_start.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\skynet_timer.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\skynet-src\socket_server.c">
+      <Filter>skynet\skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\client\httpclient.c">
+      <Filter>game_room\client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\lua-mysqlutil.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\lua-pbcc.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\lua-skynetHelper.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\lua-sui.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\pbc-lua53.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\chat_room\client\select.h">
+      <Filter>chat_room\client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chat_room\lualib-src\packetmacro.h">
+      <Filter>chat_room\lualib-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testsocket\packetmacro.h">
+      <Filter>testsocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testsocket\select.h">
+      <Filter>testsocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua-md5\compat-5.2.h">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua-md5\md5.h">
+      <Filter>skynet\3rd\lua-md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lapi.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lauxlib.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lcode.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lctype.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\ldebug.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\ldo.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lfunc.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lgc.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\llex.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\llimits.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lmem.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lobject.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lopcodes.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lparser.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lprefix.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lstate.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lstring.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\ltable.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\ltm.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lua.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lua.hpp">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\luaconf.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lualib.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lundump.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lvm.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lua\lzio.h">
+      <Filter>skynet\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lpcap.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lpcode.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lpprint.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lptree.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lptypes.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\lpeg\lpvm.h">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_inlines_a.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_inlines_b.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_stats.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_structs_a.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_structs_b.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\arena_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\assert.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\atomic.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\atomic_c11.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\atomic_gcc_atomic.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\atomic_gcc_sync.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\atomic_msvc.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\background_thread_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\background_thread_inlines.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\background_thread_structs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\base_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\base_inlines.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\base_structs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\base_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\bin.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\bin_stats.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\bin_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\bit_util.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\bitmap.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\cache_bin.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\ckh.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\ctl.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\div.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\emitter.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_dss.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_inlines.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_mmap.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_structs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\extent_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\hash.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\hook.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_decls.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_includes.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_inlines_a.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_inlines_b.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_inlines_c.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_macros.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\jemalloc_internal_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\large_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\log.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\malloc_io.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\mutex.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\mutex_pool.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\mutex_prof.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\nstime.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\pages.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\ph.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prng.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prof_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prof_inlines_a.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prof_inlines_b.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prof_structs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\prof_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\ql.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\qr.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\quantum.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\rb.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\rtree.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\rtree_tsd.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\sc.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\seq.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\smoothstep.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\spin.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\stats.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\sz.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tcache_externs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tcache_inlines.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tcache_structs.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tcache_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\test_hooks.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\ticker.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd_generic.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd_malloc_thread_cleanup.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd_tls.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd_types.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\tsd_win.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\util.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\jemalloc\internal\witness.h">
+      <Filter>skynet\3rd\jemalloc\include\jemalloc\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\msvc_compat\strings.h">
+      <Filter>skynet\3rd\jemalloc\include\msvc_compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\msvc_compat\windows_extra.h">
+      <Filter>skynet\3rd\jemalloc\include\msvc_compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\msvc_compat\C99\stdbool.h">
+      <Filter>skynet\3rd\jemalloc\include\msvc_compat\C99</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\include\msvc_compat\C99\stdint.h">
+      <Filter>skynet\3rd\jemalloc\include\msvc_compat\C99</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\btalloc.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\extent_hooks.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\math.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\mq.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\mtx.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-alti.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params607.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params1279.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params2281.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params4253.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params11213.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params19937.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params44497.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params86243.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params132049.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-params216091.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\SFMT-sse2.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\test.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\thd.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\3rd\jemalloc\test\include\test\timer.h">
+      <Filter>skynet\3rd\jemalloc\test\include\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\lualib-src\sproto\msvcint.h">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\lualib-src\sproto\sproto.h">
+      <Filter>skynet\lualib-src\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\lualib-src\lua-seri.h">
+      <Filter>skynet\lualib-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\service-src\databuffer.h">
+      <Filter>skynet\service-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\service-src\hashid.h">
+      <Filter>skynet\service-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\atomic.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\luashrtbl.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\malloc_hook.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\rwlock.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_daemon.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_env.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_handle.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_harbor.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_imp.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_log.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_malloc.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_module.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_monitor.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_mq.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_server.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_socket.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\skynet_timer.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\socket_epoll.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\socket_info.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\socket_kqueue.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\socket_poll.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\socket_server.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\skynet\skynet-src\spinlock.h">
+      <Filter>skynet\skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game_room\client\select.h">
+      <Filter>game_room\client</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\document\introduce.txt">
+      <Filter>document</Filter>
+    </Text>
+    <Text Include="..\skynet\3rd\jemalloc\msvc\ReadMe.txt">
+      <Filter>skynet\3rd\jemalloc\msvc</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\skynet\3rd\lpeg\lpeg-128.gif">
+      <Filter>skynet\3rd\lpeg</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\skynet\3rd\jemalloc\doc\stylesheet.xsl">
+      <Filter>skynet\3rd\jemalloc\doc</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>
