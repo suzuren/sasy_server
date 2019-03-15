@@ -58,8 +58,8 @@ end
 local function getConfig(type)
 	if type=="loginServer" then
 		return mergeConfig("loginServer", "common")
-	elseif type=="fish" then
-		return mergeConfig("gameServer", "fish", "common")
+	elseif type=="testGame" then
+		return mergeConfig("gameServer", "testGame", "common")
 	else
 		error(string.format("invalid type \"%s\"", type), 2)
 	end
