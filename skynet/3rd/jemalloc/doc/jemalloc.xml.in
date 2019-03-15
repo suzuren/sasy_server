@@ -433,10 +433,11 @@ for (i = 0; i < nbins; i++) {
       arena statistics, respectively; <quote>b</quote> and <quote>l</quote> can
       be specified to omit per size class statistics for bins and large objects,
       respectively; <quote>x</quote> can be specified to omit all mutex
-      statistics.  Unrecognized characters are silently ignored.  Note that
-      thread caching may prevent some statistics from being completely up to
-      date, since extra locking would be required to merge counters that track
-      thread cache operations.</para>
+      statistics; <quote>e</quote> can be used to omit extent statistics.
+      Unrecognized characters are silently ignored.  Note that thread caching
+      may prevent some statistics from being completely up to date, since extra
+      locking would be required to merge counters that track thread cache
+      operations.</para>
 
       <para>The <function>malloc_usable_size()</function> function
       returns the usable size of the allocation pointed to by
@@ -943,6 +944,9 @@ mallctl("arena." STRINGIFY(MALLCTL_ARENAS_ALL) ".decay",
         <citerefentry><refentrytitle>munmap</refentrytitle>
         <manvolnum>2</manvolnum></citerefentry> or equivalent (see <link
         linkend="stats.retained">stats.retained</link> for related details).
+        It also makes jemalloc use <citerefentry>
+        <refentrytitle>mmap</refentrytitle><manvolnum>2</manvolnum>
+        </citerefentry> in a more greedy way, mapping larger chunks in one go.
         This option is disabled by default unless discarding virtual memory is
         known to trigger
         platform-specific performance problems, e.g. for [64-bit] Linux, which
@@ -1763,10 +1767,11 @@ malloc_conf = "xmalloc:true";]]></programlisting>
         to control allocation for arenas explicitly created via <link
         linkend="arenas.create"><mallctl>arenas.create</mallctl></link> such
         that all extents originate from an application-supplied extent allocator
-        (by specifying the custom extent hook functions during arena creation),
-        but the automatically created arenas will have already created extents
-        prior to the application having an opportunity to take over extent
-        allocation.</para>
+        (by specifying the custom extent hook functions during arena creation).
+        However, the API guarantees for the automatically created arenas may be
+        relaxed -- hooks set there may be called in a "best effort" fashion; in
+        addition there may be extents created prior to the application having an
+        opportunity to take over extent allocation.</para>
 
         <programlisting language="C"><![CDATA[
 typedef extent_hooks_s extent_hooks_t;
@@ -2593,6 +2598,17 @@ struct extent_hooks_s {
         details.</para></listitem>
       </varlistentry>
 
+      <varlistentry id="stats.arenas.i.extent_avail">
+        <term>
+          <mallctl>stats.arenas.&lt;i&gt;.extent_avail</mallctl>
+          (<type>size_t</type>)
+          <literal>r-</literal>
+          [<option>--enable-stats</option>]
+        </term>
+        <listitem><para>Number of allocated (but unused) extent structs in this
+	arena.</para></listitem>
+      </varlistentry>
+
       <varlistentry id="stats.arenas.i.base">
         <term>
           <mallctl>stats.arenas.&lt;i&gt;.base</mallctl>
@@ -2920,6 +2936,30 @@ struct extent_hooks_s {
         scope; bin operation related).  <mallctl>{counter}</mallctl> is one of
         the counters in <link linkend="mutex_counters">mutex profiling
         counters</link>.</para></listitem>
+      </varlistentry>
+
+      <varlistentry id="stats.arenas.i.extents.n">
+        <term>
+          <mallctl>stats.arenas.&lt;i&gt;.extents.&lt;j&gt;.n{extent_type}</mallctl>
+          (<type>size_t</type>)
+          <literal>r-</literal>
+          [<option>--enable-stats</option>]
+        </term>
+        <listitem><para> Number of extents of the given type in this arena in
+	the bucket corresponding to page size index &lt;j&gt;. The extent type
+	is one of dirty, muzzy, or retained.</para></listitem>
+      </varlistentry>
+
+      <varlistentry id="stats.arenas.i.extents.bytes">
+        <term>
+          <mallctl>stats.arenas.&lt;i&gt;.extents.&lt;j&gt;.{extent_type}_bytes</mallctl>
+          (<type>size_t</type>)
+          <literal>r-</literal>
+          [<option>--enable-stats</option>]
+        </term>
+	<listitem><para> Sum of the bytes managed by extents of the given type
+	in this arena in the bucket corresponding to page size index &lt;j&gt;.
+	The extent type is one of dirty, muzzy, or retained.</para></listitem>
       </varlistentry>
 
       <varlistentry id="stats.arenas.i.lextents.j.nmalloc">
