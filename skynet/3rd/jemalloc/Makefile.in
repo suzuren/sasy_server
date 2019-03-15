@@ -414,7 +414,7 @@ endif
 ifneq ($(SOREV),$(SO))
 %.$(SO) : %.$(SOREV)
 	@mkdir -p $(@D)
-	ln -sf $(<F) $@
+	#ln -sf $(<F) $@
 endif
 
 $(objroot)lib/$(LIBJEMALLOC).$(SOREV) : $(if $(PIC_CFLAGS),$(C_PIC_OBJS),$(C_OBJS)) $(if $(PIC_CFLAGS),$(CPP_PIC_OBJS),$(CPP_OBJS))
