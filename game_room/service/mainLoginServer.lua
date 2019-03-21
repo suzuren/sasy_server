@@ -76,7 +76,7 @@ skynet.start(function()
 		port = tonumber(skynet.getenv("port")),
 		nodelay = true,
 	})
-	
+	--print("--cluster")
     cluster.open "loginServer"
     
 	skynet.exit()

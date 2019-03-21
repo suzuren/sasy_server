@@ -60,14 +60,6 @@ local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
 		end
 	end
 	]]
-	--SELECT retCode, retMsg, varUserID AS "UserID", inPlatformID AS "PlatformID", varGameID AS "GameID", 
-	--varNickName AS "NickName", varSignature AS "Signature",varHideFlag AS "HideFlag", varFaceID AS "FaceID",
-	-- varPlatformFace AS "PlatformFace", varGender AS "Gender", varUserMedal AS "UserMedal", 
-	--varExperience AS "Experience", varPresent AS "Present", varScore AS "Score", varInsure AS "Insure",
-	-- varLoveLiness AS "LoveLiness", varMemberOrder AS "MemberOrder", UNIX_TIMESTAMP(varMemberOverDate) AS "MemberOverDate",
-	-- varGift AS "Gift", varUserRight AS "UserRight", varMasterRight AS "MasterRight", varMasterOrder AS "MasterOrder",
-	-- varContribution AS "Contribution", varStatus AS "Status", varWinCount AS "WinCount", varLostCount AS "LostCount", 
-	--varFleeCount AS "FleeCount", varDrawCount AS "DrawCount", varIsFirstRegister AS "IsFirstRegister";
 
 	local result = 
 	{

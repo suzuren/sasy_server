@@ -1197,6 +1197,15 @@
     <None Include="..\game_room\program_log\service_log_dir">
       <Filter>game_room\program_log</Filter>
     </None>
+    <None Include="..\game_room\service\mysqlConnection.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\mysqlConnectionPool.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\xLogTcpConnection.lua">
+      <Filter>game_room\service</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">

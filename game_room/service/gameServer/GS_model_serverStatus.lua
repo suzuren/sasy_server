@@ -6,6 +6,7 @@ local GS_EVENT = require "define.eventGameServer"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local timerUtility = require "utility.timer"
+local inspect = require "inspect"
 
 local _sign
 local _data
@@ -14,9 +15,32 @@ local _LS_serverManagerAddress
 
 local function populateMatchOption(serverID)
 
-	local sql = string.format("call kfplatformdb.sp_load_match_option(%d)", serverID)
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn, "lua", "call", sql)
+	--local sql = string.format("call kfplatformdb.sp_load_match_option(%d)", serverID)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn, "lua", "call", sql)
+	
+	--SELECT *, 
+	local rows = 
+	{
+	{
+		ServerID = 201,
+		MatchName = "比赛名称",
+		MatchStartHour = 0,
+		MatchStartMinute = 0,
+		MatchEndHour = 0,
+		MatchEndMinute = 0,
+		FirstMatchHour = 0,
+		FirstMatchMinute = 0,
+		MatchDuration = 0,
+		MatchInterval = 0,
+		MatchFee = 0,
+		MatchInitScore = 0,
+		MatchAwardMinScore = 0,
+		MatchInitTable = 0,
+	}
+	}
+
+
 	local row = rows[1]
 	
 	if not row then
@@ -140,7 +164,11 @@ local function registerServer(onlineCount)
 end
 
 local function reportToLoginServer()
+	
 	local onlineCount = skynet.call(addressResolver.getAddressByServiceName("GS_model_userManager"), "lua", "getUserItemCount")
+		
+	skynet.error(string.format("%s reportToLoginServer func - onlineCount_%d", SERVICE_NAME, onlineCount))
+
 	if _sign==nil then
 		registerServer(onlineCount)
 	else
@@ -160,10 +188,50 @@ local function cmd_getServerData()
 end
 
 local function cmd_start(serverID)
-	local sql = string.format("call kfplatformdb.sp_load_server_config(%d)", serverID)
-	local mysqlConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(mysqlConn, "lua", "call", sql)	
-	
+
+
+	--local sql = string.format("call kfplatformdb.sp_load_server_config(%d)", serverID)
+	--local mysqlConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(mysqlConn, "lua", "call", sql)
+
+	local rows = 
+	{
+	{
+	retCode = 0,
+	retMsg = "SUCCESS",
+	ServerID = 201,
+	ServerName = "新手海湾",
+	KindID = 2010,
+	NodeID = 1100,
+	SortID = 1,
+	TableCount = 100,
+	ChairPerTable = 4,
+	ServerType = 1,
+	ServerAddr = "127.0.0.1",
+	TelnetPort = 40002,
+	ServerPort = 4200,
+	CellScore = 0,
+	RevenueRatio = 0,
+	ServiceScore = 0,
+	RestrictScore = 0,
+	MinTableScore = 0,
+	MinEnterScore = 0,
+	MaxEnterScore = 0,
+	MinEnterMember = 0,
+	MaxEnterMember = 0,
+	ServerRule = 12585232,
+	DistributeRule = 0,
+	MinDistributeUser = 0,
+	MaxDistributeUser = 0,
+	DistributeTimeSpace = 0,
+	DistributeDrawCount = 0,
+	DistributeStartDelay = 0,
+	AttachUserRight = 0,
+	KindName = "李逵捕鱼",
+	NodeName = "李逵捕鱼初级场",
+	}
+	}
+
 	if type(rows)=="table" and #rows == 1 then
 		if tonumber(rows[1].retCode)==0 then
 			_data=rows[1]
@@ -175,7 +243,8 @@ local function cmd_start(serverID)
 			skynet.abort()
 		end
 	end
-	
+
+	--skynet.error(string.format("%s cmd_start func - serverID_%d", SERVICE_NAME, serverID),"\n - data - \n",inspect(_data))
 	
 	for k, v in pairs(_data) do
 		if k ~= "ServerName" and k ~= "ServerAddr" and k~="KindName" and k~="NodeName" then
@@ -183,8 +252,13 @@ local function cmd_start(serverID)
 		end
 	end
 
+
 	rectifyServiceParameter()
 	
+	--skynet.error(string.format("%s cmd_start func - serverID_%d", SERVICE_NAME, serverID),"\n - data - \n",inspect(_data))
+
+	--print("_data.ServerType & GS_CONST.GAME_GENRE.MATCH - ",_data.ServerType & GS_CONST.GAME_GENRE.MATCH)
+
 	if (_data.ServerType & GS_CONST.GAME_GENRE.MATCH) ~= 0 then
 		populateMatchOption(serverID)
 	end
@@ -195,6 +269,9 @@ local function cmd_start(serverID)
 		error(string.format("invalid notifyInterval: %s", tostring(notifyInterval)))
 	end
 	notifyIntervalTick = notifyInterval * 100
+
+	skynet.error(string.format("%s cmd_start func - notifyInterval_%d,notifyIntervalTick_%d,reportToLoginServer_", SERVICE_NAME, notifyInterval,notifyIntervalTick),reportToLoginServer)
+
 
 	timerUtility.start(notifyIntervalTick)
 	timerUtility.setInterval(reportToLoginServer, 1)

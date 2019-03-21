@@ -9,6 +9,8 @@ local GS_CONST = require "define.gsConst"
 local COMMON_CONST = require "define.commonConst"
 local GS_EVENT = require "define.eventGameServer"
 
+local inspect = require "inspect"
+
 local _serverSignature
 local _LS_GSProxyAddress
 
@@ -281,12 +283,12 @@ end
 
 local function doPulling()
 	local list = cluster.call("loginServer", _LS_GSProxyAddress, "gs_pull", _serverSignature.serverID, _serverSignature.sign)
---[[	
+--[[
 	do
 		local jsonUtil = require "cjson.util"
 		skynet.error(string.format("%s %d\n%s", SERVICE_NAME, skynet.now(), jsonUtil.serialise_value(list)))
 	end
---]]	
+--]]
 	for _, item in ipairs(list) do
 		if (item.msgNo & COMMON_CONST.LSNOTIFY_EVENT_MASK)~=0 then
 			processLSNotify(item.msgNo, item.msgData)
@@ -300,7 +302,9 @@ end
 
 local function cmd_onEventServerRegisterSuccess(data)
 	local isPullingStarted = _serverSignature~=nil
-	
+
+	skynet.error("GS_model_LSPuller.lua - cmd_onEventServerRegisterSuccess - data\n",inspect(data))
+
 	_serverSignature = data
 	
 	if not isPullingStarted then

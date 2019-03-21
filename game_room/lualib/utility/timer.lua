@@ -1,5 +1,6 @@
 local skynet = require "skynet"
 local xpcallUtility = require "utility.xpcall"
+local inspect = require "inspect"
 
 local _timerIDGenerator = 10
 local _tick = 0
@@ -30,9 +31,11 @@ local function doAddTimer(isInterval, func, interval, bindParameter)
 	if bindParameter~=nil then
 		item.bindParameter = bindParameter
 	end
-	
-	_timerIDGenerator = _timerIDGenerator+1
+	_timerIDGenerator = _timerIDGenerator + 1
 	_activeTimer[_timerIDGenerator] = item
+
+	skynet.error(string.format("%s doAddTimer func - _tick_%d,_tickStep_%d,_timerIDGenerator_%d", SERVICE_NAME,_tick,_tickStep,_timerIDGenerator),item.func)
+
 	return _timerIDGenerator
 end
 
@@ -71,6 +74,7 @@ local function ticker()
 					else
 						_activeTimer[timerID] = nil
 					end
+					-- skynet.error(string.format("%s ticker func 1 - timerID_%d,nextTick_%d,_tick_%d,isInterval_%s,isFound_%s", SERVICE_NAME,timerID,item.nextTick,_tick,isInterval,isFound))
 					break
 				end
 			end
