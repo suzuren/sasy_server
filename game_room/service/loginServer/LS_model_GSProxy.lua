@@ -2,6 +2,7 @@ local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local LS_EVENT = require "define.eventLoginServer"
+local inspect = require "inspect"
 
 local _serverResponseHash = {}
 
@@ -43,13 +44,21 @@ end
 
 local function cmd_gs_pull(serverID, sign)
 	local responseItem = _serverResponseHash[serverID]
+
+	skynet.error(string.format("%s cmd_gs_pull func - responseItem ", SERVICE_NAME),responseItem)
+
 	if responseItem==nil or responseItem.sign~=sign then
 		error(string.format("%s: 服务器还没有注册 serverID=%s sign=%s", SERVICE_NAME, tostring(serverID), tostring(sign)))
 	else
+		skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),inspect(responseItem))
+
 		if responseItem.responser~=nil then
 			responseItem.responser(false)
 		end
+
 		responseItem.responser = skynet.response()
+		skynet.error(string.format("%s cmd_gs_pull func - responseItem.responser ", SERVICE_NAME),responseItem.responser)
+
 		checkMsg(responseItem)
 	end
 end

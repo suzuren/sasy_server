@@ -20,7 +20,10 @@ local _isServerClosing = false						--telnet关闭服务器标志
 
 
 local function getUserItemCount(returnLeastScore)
-	local cnt = 0
+
+	-- skynet.error(string.format("%s getUserItemCount func - ", SERVICE_NAME),returnLeastScore)
+
+	local count = 0
 	local leastScore, leastUserID
 	if returnLeastScore then
 		leastScore = math.maxinteger
@@ -28,7 +31,7 @@ local function getUserItemCount(returnLeastScore)
 	end
 	
 	for userID, item in pairs(_userItemHash) do
-		cnt = cnt + 1
+		count = count + 1
 		if returnLeastScore then
 			local itemAttr = ServerUserItem.getAttribute(item, {"score"})
 			
@@ -38,7 +41,10 @@ local function getUserItemCount(returnLeastScore)
 			end
 		end
 	end
-	return cnt, leastScore, leastUserID
+	
+	-- skynet.error(string.format("%s getUserItemCount func - count_%d", SERVICE_NAME,count),_userItemHash)
+
+	return count, leastScore, leastUserID
 end
 
 --生成gameServer.login.s2c.UserInfo或者gameServer.login.s2c.UserInfoViewPort对象

@@ -128,6 +128,7 @@ local function rectifyServiceParameter()
 end
 
 local function doRegister(onlineCount)
+	-- cluster.call(node, address, ...) 向一个节点上的一个服务提起一个请求，等待回应。
 	_sign = cluster.call("loginServer", _LS_serverManagerAddress, "gs_registerServer", {
 		kindID = _data.KindID,
 		nodeID = _data.NodeID,
@@ -165,9 +166,11 @@ end
 
 local function reportToLoginServer()
 	
+	--skynet.error(string.format("%s reportToLoginServer func - ", SERVICE_NAME),_sign)
+
 	local onlineCount = skynet.call(addressResolver.getAddressByServiceName("GS_model_userManager"), "lua", "getUserItemCount")
-		
-	skynet.error(string.format("%s reportToLoginServer func - onlineCount_%d", SERVICE_NAME, onlineCount))
+
+	--skynet.error(string.format("%s reportToLoginServer func - onlineCount_%d", SERVICE_NAME, onlineCount))
 
 	if _sign==nil then
 		registerServer(onlineCount)
@@ -196,40 +199,40 @@ local function cmd_start(serverID)
 
 	local rows = 
 	{
-	{
-	retCode = 0,
-	retMsg = "SUCCESS",
-	ServerID = 201,
-	ServerName = "新手海湾",
-	KindID = 2010,
-	NodeID = 1100,
-	SortID = 1,
-	TableCount = 100,
-	ChairPerTable = 4,
-	ServerType = 1,
-	ServerAddr = "127.0.0.1",
-	TelnetPort = 40002,
-	ServerPort = 4200,
-	CellScore = 0,
-	RevenueRatio = 0,
-	ServiceScore = 0,
-	RestrictScore = 0,
-	MinTableScore = 0,
-	MinEnterScore = 0,
-	MaxEnterScore = 0,
-	MinEnterMember = 0,
-	MaxEnterMember = 0,
-	ServerRule = 12585232,
-	DistributeRule = 0,
-	MinDistributeUser = 0,
-	MaxDistributeUser = 0,
-	DistributeTimeSpace = 0,
-	DistributeDrawCount = 0,
-	DistributeStartDelay = 0,
-	AttachUserRight = 0,
-	KindName = "李逵捕鱼",
-	NodeName = "李逵捕鱼初级场",
-	}
+		{
+			retCode = 0,
+			retMsg = "SUCCESS",
+			ServerID = 201,
+			ServerName = "新手海湾",
+			KindID = 2010,
+			NodeID = 1100,
+			SortID = 1,
+			TableCount = 100,
+			ChairPerTable = 4,
+			ServerType = 1,
+			ServerAddr = "127.0.0.1",
+			TelnetPort = 40002,
+			ServerPort = 4200,
+			CellScore = 0,
+			RevenueRatio = 0,
+			ServiceScore = 0,
+			RestrictScore = 0,
+			MinTableScore = 0,
+			MinEnterScore = 0,
+			MaxEnterScore = 0,
+			MinEnterMember = 0,
+			MaxEnterMember = 0,
+			ServerRule = 12585232,
+			DistributeRule = 0,
+			MinDistributeUser = 0,
+			MaxDistributeUser = 0,
+			DistributeTimeSpace = 0,
+			DistributeDrawCount = 0,
+			DistributeStartDelay = 0,
+			AttachUserRight = 0,
+			KindName = "李逵捕鱼",
+			NodeName = "李逵捕鱼初级场",
+		}
 	}
 
 	if type(rows)=="table" and #rows == 1 then
@@ -293,6 +296,7 @@ local conf = {
 		["isFishRoom"] = {["func"]=cmd_isFishRoom, ["isRet"]=true},
 	},
 	initFunc = function()
+		-- cluster.query(node, name) 在远程节点上查询一个名字对应的地址
 		_LS_serverManagerAddress = cluster.query("loginServer", "LS_model_serverManager")
 	end,
 }

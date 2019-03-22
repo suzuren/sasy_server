@@ -204,14 +204,27 @@ data={
 --]]
 	if _serverHash[data.serverID] then
 		error(string.format("服务器已经注册 serverID=%d", data.serverID))
+
+		local serverItem = _serverHash[data.serverID]
+
+		skynet.send(addressResolver.getAddressByServiceName("eventDispatcher"), "lua", "dispatch", LS_EVENT.EVT_LS_GAMESERVER_CONNECT, {serverID=serverItem.id, sign=serverItem.sign})
+		return serverItem.sign
 	end
 
 	local kindItem = _kindHash[data.kindID]
 	local nodeItem = _nodeHash[data.nodeID]
 	if not kindItem then
-		local sql = string.format("select * from `kfplatformdb`.`GameKindItem` where KindID=%d", data.kindID)
-		local dbConn = addressResolver.getMysqlConnection()
-		local rows = skynet.call(dbConn, "lua", "query", sql)
+		--local sql = string.format("select * from `kfplatformdb`.`GameKindItem` where KindID=%d", data.kindID)
+		--local dbConn = addressResolver.getMysqlConnection()
+		--local rows = skynet.call(dbConn, "lua", "query", sql)
+
+		local rows =
+		{
+			{
+				KindID = 2010,
+				KindName = "李逵捕鱼",
+			}
+		}
 		if #rows ~= 1 then
 			error(string.format("kindID=%d not found", data.kindID))
 		end
@@ -226,9 +239,20 @@ data={
 	end
 	
 	if not nodeItem then
-		local sql = string.format("select * from `kfplatformdb`.`GameNodeItem` where NodeID=%d", data.nodeID)
-		local dbConn = addressResolver.getMysqlConnection()
-		local rows = skynet.call(dbConn, "lua", "query", sql)
+		--local sql = string.format("select * from `kfplatformdb`.`GameNodeItem` where NodeID=%d", data.nodeID)
+		--local dbConn = addressResolver.getMysqlConnection()
+		--local rows = skynet.call(dbConn, "lua", "query", sql)
+
+		local rows =
+		{
+			{
+				NodeID = 1100,
+				KindID = 2010,
+				SortID = 1,
+				NodeName = "李逵捕鱼初级场",
+			}
+		}
+
 		if #rows ~= 1 then
 			error(string.format("nodeID=%d not found", data.nodeID))
 		end

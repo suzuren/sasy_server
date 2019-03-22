@@ -282,13 +282,18 @@ local function processRelayMessage(msgNo, msgBody)
 end
 
 local function doPulling()
+	
+	skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),inspect(_serverSignature))
+
 	local list = cluster.call("loginServer", _LS_GSProxyAddress, "gs_pull", _serverSignature.serverID, _serverSignature.sign)
---[[
+
+	skynet.error(string.format("%s doPulling func - list ", SERVICE_NAME),list)
+
 	do
 		local jsonUtil = require "cjson.util"
 		skynet.error(string.format("%s %d\n%s", SERVICE_NAME, skynet.now(), jsonUtil.serialise_value(list)))
 	end
---]]
+
 	for _, item in ipairs(list) do
 		if (item.msgNo & COMMON_CONST.LSNOTIFY_EVENT_MASK)~=0 then
 			processLSNotify(item.msgNo, item.msgData)
@@ -303,7 +308,8 @@ end
 local function cmd_onEventServerRegisterSuccess(data)
 	local isPullingStarted = _serverSignature~=nil
 
-	skynet.error("GS_model_LSPuller.lua - cmd_onEventServerRegisterSuccess - data\n",inspect(data))
+	
+	skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - data \n", SERVICE_NAME),inspect(data))
 
 	_serverSignature = data
 	

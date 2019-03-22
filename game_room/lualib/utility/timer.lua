@@ -34,7 +34,7 @@ local function doAddTimer(isInterval, func, interval, bindParameter)
 	_timerIDGenerator = _timerIDGenerator + 1
 	_activeTimer[_timerIDGenerator] = item
 
-	skynet.error(string.format("%s doAddTimer func - _tick_%d,_tickStep_%d,_timerIDGenerator_%d", SERVICE_NAME,_tick,_tickStep,_timerIDGenerator),item.func)
+	--skynet.error(string.format("%s doAddTimer func - _tick_%d,_tickStep_%d,_timerIDGenerator_%d", SERVICE_NAME,_tick,_tickStep,_timerIDGenerator),item.func)
 
 	return _timerIDGenerator
 end
@@ -58,9 +58,15 @@ local function ticker()
 		repeat
 			local isFound = false
 			for timerID, item in pairs(_activeTimer) do
+
+				--skynet.error(string.format("%s ticker func 1 - timerID_%d,nextTick_%d,_tick_%d,isInterval_%s,isFound_%s", SERVICE_NAME,timerID,item.nextTick,_tick,item.isInterval,isFound))
+
 				if item.nextTick <= _tick then
 					isFound = true
 					local isSuccess = xpcall(item.func, xpcallUtility.errorMessageSaver, item.bindParameter)
+					
+					--skynet.error(string.format("%s ticker func 2 - timerID_%d,nextTick_%d,_tick_%d,isSuccess_%s,isFound_%s", SERVICE_NAME,timerID,item.nextTick,_tick,isSuccess,isFound))
+
 					if not isSuccess then
 						skynet.error(string.format("%s: 执行定时器错误: %s", SERVICE_NAME, xpcallUtility.getErrorMessage()))
 						
@@ -74,7 +80,7 @@ local function ticker()
 					else
 						_activeTimer[timerID] = nil
 					end
-					-- skynet.error(string.format("%s ticker func 1 - timerID_%d,nextTick_%d,_tick_%d,isInterval_%s,isFound_%s", SERVICE_NAME,timerID,item.nextTick,_tick,isInterval,isFound))
+					--skynet.error(string.format("%s ticker func 2 - timerID_%d,nextTick_%d,_tick_%d,isInterval_%s,isFound_%s", SERVICE_NAME,timerID,item.nextTick,_tick,item.isInterval,isFound))
 					break
 				end
 			end

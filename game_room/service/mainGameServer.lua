@@ -33,7 +33,9 @@ skynet.start(function()
 	skynet.uniqueservice("GS_model_item_config")
 	skynet.uniqueservice("GS_model_property")
 	skynet.uniqueservice("GS_model_attemperEngine")
+	]]
 	skynet.uniqueservice("GS_model_userManager")
+	--[[
 	skynet.uniqueservice("GS_model_tableManager")
 	
 	local androidManager = skynet.uniqueservice("GS_model_androidManager")
