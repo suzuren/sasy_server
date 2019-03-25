@@ -37,7 +37,9 @@ skynet.start(function()
     --[[
 	skynet.uniqueservice("LS_model_gunUplevel")
 	cluster.register("LS_model_huoDong", skynet.uniqueservice("LS_model_huoDong"))
+	]]
 	cluster.register("LS_model_worldBoss", skynet.uniqueservice("LS_model_worldBoss"))
+	--[[
 	skynet.uniqueservice("LS_model_invitation")
     skynet.uniqueservice("LS_model_gm")
     ]]

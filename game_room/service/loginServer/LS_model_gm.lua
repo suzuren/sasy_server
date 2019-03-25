@@ -358,8 +358,13 @@ local function http_sendLoveliness(data)
 
 	local dbConn = addressResolver.getMysqlConnection()
 	
-	sql = string.format("select UserID from `kfaccountsdb`.`AccountsInfo` where GameID=%d", targetGameId)
-	rows = skynet.call(dbConn, "lua", "query", sql)
+	local sql = string.format("select UserID from `kfaccountsdb`.`AccountsInfo` where GameID=%d", targetGameId)
+	--local rows = skynet.call(dbConn, "lua", "query", sql)
+	local rows ={
+		{
+			UserID = 1003,
+		}
+	}
 	local targetUserId = tonumber(rows[1].UserID)
 	
 	if userId == nil or targetUserId == nil then
@@ -369,7 +374,12 @@ local function http_sendLoveliness(data)
 	end
 	
 	sql = string.format("select Status from `kfaccountsdb`.`AccountsInfo` where UserID=%d", userId)
-	rows = skynet.call(dbConn, "lua", "query", sql)
+	--rows = skynet.call(dbConn, "lua", "query", sql)
+	rows ={
+		{
+			Status = 0,
+		}
+	}
 	if tonumber(rows[1].Status) & 0x01 == 1 then
 		re.code = "RC_OTHER"
 		re.msg = "账号已被冻结"
@@ -380,14 +390,21 @@ local function http_sendLoveliness(data)
 		"call kftreasuredb.p_pay(%d)",
 		userId
 	)
-	rows = skynet.call(dbConn, "lua", "call", sql)
+	--rows = skynet.call(dbConn, "lua", "call", sql)
+	rows ={
+		{
+			retCode = 0,
+			totalPay = 10000,
+		}
+	}
 	if tonumber(rows[1].retCode) ~= 0 or tonumber(rows[1].totalPay) < 10000 then
 		re.code = "RC_OTHER"
 		re.msg = "充值小于100，无法赠送"
 		return false, re
 	end
 	
-	local needGold = loveliness * commonConst.lovelinessToGold
+	--local needGold = loveliness * commonConst.lovelinessToGold
+	local needGold = loveliness * 0
 	local userItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), 
 			"lua", "getUserItemByUserID", userId)
 	if userItem then
@@ -415,15 +432,12 @@ local function http_sendLoveliness(data)
 		end
 	end
 	
-	sql = string.format("update `kftreasuredb`.`GameScoreInfo` set `Score`=`Score`+%d where UserID=%d", 
-			-needGold, userId)
-	skynet.call(dbConn, "lua", "query", sql)
-	sql = string.format("update `kfaccountsdb`.`AccountsInfo` set `LoveLiness`=`LoveLiness`+%d where UserID=%d", 
-			loveliness, targetUserId)
-	skynet.call(dbConn, "lua", "query", sql)
-	sql = string.format("insert into `kfrecorddb`.`r_deal_info` values (%d, %d, 0, 0, %d, 0, 0, %d, NOW())", 
-			userId, -needGold, targetUserId, loveliness)
-	skynet.send(dbConn, "lua", "execute", sql)
+	sql = string.format("update `kftreasuredb`.`GameScoreInfo` set `Score`=`Score`+%d where UserID=%d", -needGold, userId)
+	--skynet.call(dbConn, "lua", "query", sql)
+	sql = string.format("update `kfaccountsdb`.`AccountsInfo` set `LoveLiness`=`LoveLiness`+%d where UserID=%d", loveliness, targetUserId)
+	--skynet.call(dbConn, "lua", "query", sql)
+	sql = string.format("insert into `kfrecorddb`.`r_deal_info` values (%d, %d, 0, 0, %d, 0, 0, %d, NOW())", userId, -needGold, targetUserId, loveliness)
+	--skynet.send(dbConn, "lua", "execute", sql)
 	
 	local targetUserItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", 
 			"getUserItemByUserID", targetUserId)

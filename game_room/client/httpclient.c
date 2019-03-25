@@ -843,7 +843,6 @@ __exit_thread_gate_read:
 
 
 
-
 int main(int argc, char const *argv[])
 {
 	for(int i=0; i<threadcount; i++)

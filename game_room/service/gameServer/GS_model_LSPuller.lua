@@ -308,7 +308,6 @@ end
 local function cmd_onEventServerRegisterSuccess(data)
 	local isPullingStarted = _serverSignature~=nil
 
-	
 	skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - data \n", SERVICE_NAME),inspect(data))
 
 	_serverSignature = data
@@ -316,7 +315,9 @@ local function cmd_onEventServerRegisterSuccess(data)
 	if not isPullingStarted then
 		skynet.fork(function()
 			while true do
+				skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - whiledo", SERVICE_NAME))
 				local isSuccess, errMsg = pcall(doPulling)
+				skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - isSuccess:%s,errMsg", SERVICE_NAME,isSuccess),errMsg)
 				if not isSuccess then
 					skynet.error(string.format("%s connect to loginserver is failed: %s", SERVICE_NAME, tostring(errMsg)))
 					skynet.sleep(1000)

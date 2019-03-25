@@ -5,6 +5,7 @@ local resourceResolver = require "resourceResolver"
 local timerUtility = require "utility.timer"
 local COMMON_CONST = require "define.commonConst"
 local ServerUserItem = require "sui"
+local inspect = require "inspect"
 
 local _data = {
 	poolScore = 0,	--奖池积分
@@ -321,9 +322,9 @@ local function loadData()
 end
 
 local function WriteWorldBossScore()
-	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("INSERT INTO `kffishdb`.`t_world_boss_score` VALUES (1,%d) ON DUPLICATE KEY UPDATE `PoolScore`=VALUES(`PoolScore`)",_data.poolScore)
-	skynet.send(dbConn,"lua","execute",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local sql = string.format("INSERT INTO `kffishdb`.`t_world_boss_score` VALUES (1,%d) ON DUPLICATE KEY UPDATE `PoolScore`=VALUES(`PoolScore`)",_data.poolScore)
+	--skynet.send(dbConn,"lua","execute",sql)
 end
 
 local function NotifyInvalidScore(agent)
@@ -727,11 +728,14 @@ local function NotifyUserTimeFlushStart()
 end
 
 local function checkTimeFlushBoss()
-	local nowTime = os.time()	
+	local nowTime = os.time()
 	local nowHour = tonumber(os.date("%H",nowTime))
 	local nowMin = tonumber(os.date("%M",nowTime))
 	local nowDate = tonumber(os.date("%Y%m%d%H%M%S",nowTime))
 	local nowTimeMin = nowHour*60 + nowMin
+
+	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",
+	 SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin))
 
 	if not _data.timeConfig.notTimeFlushFlag or _data.timeConfig.activity2normal then
 		for k, v in pairs(_data.timeConfig.notTimeFlush) do
@@ -776,6 +780,9 @@ local function checkTimeFlushBoss()
 		end
 	end
 
+	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",
+	 SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin),inspect(_data.timeConfig.timeFlush))
+
 	for k, v in pairs(_data.timeConfig.timeFlush) do
 		local configTime = v.hour*60 + v.min
 		if v.isActivity then
@@ -799,7 +806,7 @@ local function checkTimeFlushBoss()
 				_data.startTime = os.time()
 				_data.nextTime = 0
 				_data.bKillFalg = false
-
+				--
 				notifyWorldBossInfoToGS()
 				NotifyWorldBossStart()
 
@@ -827,9 +834,12 @@ local conf = {
 		resourceResolver.init()
 		timerUtility.start(100)
 		_data.worldBossWriteSocreTimer = timerUtility.setInterval(WriteWorldBossScore, 10)
-		timerUtility.setInterval(checkTimeFlushBoss, 10)
-		timerUtility.setInterval(NotifyInvalidScore, 10)
-		loadData()
+		local timerID_checkTimeFlushBoss = timerUtility.setInterval(checkTimeFlushBoss, 10)
+		local timerID_NotifyInvalidScore = timerUtility.setInterval(NotifyInvalidScore, 10)
+
+		skynet.error(string.format("%s initFunc func - worldBossWriteSocreTimer_%d,timerID_checkTimeFlushBoss_%d,timerID_NotifyInvalidScore_%d", SERVICE_NAME,_data.worldBossWriteSocreTimer,timerID_checkTimeFlushBoss,timerID_NotifyInvalidScore))
+
+		--loadData()
 	end,
 }
 
