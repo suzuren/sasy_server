@@ -1,0 +1,37 @@
+package loginServer.chat.s2c;
+
+//用户发送留言板
+message SendMessageBoardInfo	//0x004000
+{
+	required uint32 code=1;	//0成功 非0失败 1vip 2.钻石要求 3字数要求
+}
+
+message UserGoodsItem
+{
+	required int32 goodsID=1;
+	required sint64 goodsCount=2;
+}
+
+message MessageBoardItemInfo						
+{
+	required uint32 userIcon=1;						//用户icon
+	required uint32 sendUserID=2;					//发送用户
+	required uint32 sendUserVip=3;					//发送用户
+	required string sendNickname=4;					//发送用户名称
+	required string	content=5;						//邮件信息
+	repeated UserGoodsItem userGoodsItem=6; 		//包含展示的物品
+	required int32	wordTime = 7;							//留言时间--时间戳
+}
+
+//留言板列表--全部
+message MessageBoardInfoList						//0x004001
+{
+	repeated MessageBoardItemInfo messageBoardItemInfo=1; 		//邮件节点
+}
+
+//留言板列表--单个
+message MessageBoardInfo						//0x004002
+{
+	repeated MessageBoardItemInfo messageBoardItemInfo=1; 		//邮件节点
+}
+

@@ -1,0 +1,45 @@
+package gameServer.rewardGoldFish.s2c;
+
+message LotteryGoodsItem {						//抽奖物品节点
+	required int32 itemID=1;					
+	required int32 goodsID=2;					//奖品数量
+	required int64 goodsCount=3;
+}
+
+message LotteryItemInfo
+{	
+	required int32 type = 1;
+	required int32 goodsID=2;			//需要的道具id		金币
+	required int64 goodsCount=3;	
+	repeated LotteryGoodsItem lotteryGoodsItem=4; //抽奖物品节点
+}
+	
+message LotteryInfo 								//0x011000 抽奖信息队列
+{
+	repeated LotteryItemInfo lotteryItemInfo=1;
+}
+
+message LotteryGoodsInfo 							//0x011003 奖金池当前物品信息
+{
+	required int32 lotteryCoinCount=1;				//奖池金币数量
+	required int64 limitFishCount=2;				//奖金鱼数量
+}
+
+message RequestLotteryItem 							//0x011001 请求获取奖励物品节点
+{
+	required int32 lotteryType=1;
+	required int64 itemID=2;
+	required int32 code=3;		//0 有效   1 无效
+}
+
+message ReceiveGoodsItem 
+{					
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message ReceiveLotteryGoodsInfo 							//0x011002 领取奖励
+{	
+	required int32 code=1;	// 0有效 1 无效
+	repeated ReceiveGoodsItem receiveGoodsItem=2;
+}

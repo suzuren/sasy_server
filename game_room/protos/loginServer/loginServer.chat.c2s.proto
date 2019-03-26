@@ -1,0 +1,8 @@
+package loginServer.chat.c2s;
+
+//用户发送邮件
+message SendMessageBoardInfo						//0x004000
+{
+	required string	content=1;						//邮件信息
+}
+

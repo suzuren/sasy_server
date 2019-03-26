@@ -1,0 +1,72 @@
+package loginServer.account.s2c;
+
+
+//修改头像
+message ChangeFaceID							//0x000600
+{
+	enum RetCode {
+		RC_OK=1;
+	}
+	required RetCode code=1;
+}
+
+//修改签名
+message ChangeSignature							//0x000601
+{
+	enum RetCode {
+		RC_OK=1;
+		RC_TOO_LONG=2;
+		RC_SENSITIVE_WORD_FOUND=3;
+	}
+	required RetCode code=1;
+}
+
+message ChangeNickname							//0x000602
+{
+	enum RetCode {
+		RC_OK=1;
+		RC_STILL_IN_GAME=2;
+		RC_INVALID_NICKNAME_LEN=3;
+		RC_NICKNAME_ALREADY_USED=4;
+		RC_NOT_ENOUGH_SCORE=5;
+		RC_SENSITIVE_WORD_FOUND=6;
+		RC_SAME_NICKNAME=7;
+	}
+	required RetCode code=1;
+	optional string msg=2;
+}
+
+message CheckNickname							//0x000603
+{
+	enum RetCode {
+		RC_OK=1;
+		RC_NICKNAME_ALREADY_USED=2;
+		RC_SENSITIVE_WORD_FOUND=3;
+	}
+
+	required RetCode code=1;
+}
+
+message ChangeGender							//0x000604
+{
+	enum RetCode {
+		RC_OK=1;
+	}
+	required RetCode code=1;
+}
+
+message SetPlatformFace							//0x000605
+{
+	enum RetCode {
+		RC_OK=1;
+	}
+	required RetCode code=1;
+}
+
+message SetBindingInfo							//0x000606
+{
+	enum RetCode {
+		RC_OK=1;
+	}
+	required RetCode code=1;
+}

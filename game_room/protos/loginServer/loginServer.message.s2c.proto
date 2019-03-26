@@ -1,0 +1,54 @@
+package loginServer.message.s2c;
+
+message SystemLogonMessage {			//0x000300
+	message Item {
+		required uint32 id=1;
+		required uint32 type=2;			//0x01=Android, 0x02=IOS (0x03=Android | IOS)
+		required uint32 startTime=3;
+		required string msg=4;
+		optional uint32 kindID=5;
+		required string title=6;
+	}
+	repeated Item list=1;
+}
+
+message GoodsItem {
+	required uint32 goodsID=1;		//物品ID
+	required uint32 goodsCount=2;	//物品数量
+}
+
+message UserLogonMessage {				//0x000301
+	message Item {
+		required uint32 id=1;
+		required uint32 startTime=2;
+		required string msg=3;
+		repeated GoodsItem goodslist=4;
+		required string title=5;
+	}
+	repeated Item list=1;
+}
+
+message ExchangeMessage					//0x000302
+{
+	repeated string msg=1;
+}
+
+
+message RecvGoods						// 0x000303 领取物品
+{
+	required uint32 id=1;				//消息ID
+	repeated GoodsItem goodslist=2;		//物品信息
+	required uint32 code=3;				
+
+}
+
+message UserSingleMessage {				//0x000304
+	message Item {
+		required uint32 id=1;
+		required uint32 startTime=2;
+		required string msg=3;
+		repeated GoodsItem goodslist=4;
+		required string title=5;
+	}
+	repeated Item list=1;
+}

@@ -1,0 +1,12 @@
+
+package loginServer.invitation.s2c;
+
+// 邀请0x008000
+message Invitation
+{
+	//code 0成功，1您不是新用户，邀请码关联失败，2你已经被邀请过了，3该邀请码无效
+	required int32 code = 1;
+	required string err = 2;
+}
+
+

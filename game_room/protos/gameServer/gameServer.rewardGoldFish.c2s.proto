@@ -1,0 +1,22 @@
+package gameServer.rewardGoldFish.c2s;
+
+//0x011000 请求奖金鱼信息
+message LotteryInfo
+{
+
+}
+
+//0x011001 请求抽奖
+message RequestLotteryItem
+{
+	required int32 lotteryType=1;//抽奖类型：1普通 2青铜 3白银 4黄金 5白金
+}
+
+//0x011002 领取奖励
+message ReceiveLotteryGoodsInfo 							
+{	
+	required int32 lotteryType=1;
+	required int32 itemID=2;
+}
+
+

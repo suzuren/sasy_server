@@ -1,0 +1,21 @@
+package gameServer.chat.c2s;
+
+//用户聊天
+message UserChat							//0x010400
+{
+	required uint32 color=1;						//信息颜色
+	required string	content=2;						//聊天信息
+}
+
+//用户表情
+message UserExpression						//0x010401
+{
+	required uint32 expressID=1;					//表情索引
+}
+
+//用户聊天
+message UserMultimedia						//0x010402
+{
+	required uint32 type=1;							//信息类型
+	required string url=2;							//路径信息
+}

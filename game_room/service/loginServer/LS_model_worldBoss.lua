@@ -39,7 +39,7 @@ local _data = {
 		},
 		activityTime = {
 			startTime = 20161223000000,
-			endTime = 20170103000000,
+			endTime = 30170103000000,
 		},
 		poolScore = 0,
 		flushTime = 0,	--判断同一时刻只刷一次用
@@ -160,6 +160,9 @@ local function notifyWorldBossInfoToGS()
 	end
 
 	local serverList = skynet.call(addressResolver.getAddressByServiceName("LS_model_serverManager"), "lua", "getServerIDListByKindID", 2010)
+
+	--skynet.error(string.format("%s notifyWorldBossInfoToGS func - ",SERVICE_NAME),"serverList-\n",inspect(serverList),"\ninfo-\n",inspect(info))
+
 	if serverList then
 		skynet.send(addressResolver.getAddressByServiceName("LS_model_GSProxy"), "lua", "send", serverList, COMMON_CONST.LSNOTIFY_EVENT.EVT_LSNOTIFY_WORLD_BOSS_START_OR_END, info)
 	end
@@ -734,8 +737,7 @@ local function checkTimeFlushBoss()
 	local nowDate = tonumber(os.date("%Y%m%d%H%M%S",nowTime))
 	local nowTimeMin = nowHour*60 + nowMin
 
-	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",
-	 SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin))
+	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin))
 
 	if not _data.timeConfig.notTimeFlushFlag or _data.timeConfig.activity2normal then
 		for k, v in pairs(_data.timeConfig.notTimeFlush) do
@@ -780,8 +782,7 @@ local function checkTimeFlushBoss()
 		end
 	end
 
-	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",
-	 SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin),inspect(_data.timeConfig.timeFlush))
+	--skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin),inspect(_data.timeConfig.timeFlush))
 
 	for k, v in pairs(_data.timeConfig.timeFlush) do
 		local configTime = v.hour*60 + v.min
@@ -791,7 +792,9 @@ local function checkTimeFlushBoss()
 			end 
 		end
 
-		if nowTimeMin == configTime then
+		--skynet.error(string.format("%s checkTimeFlushBoss func - nowTimeMin:%d,configTime:%d,HourFlushBossFlag:%s,status:%d,flushTime:%d,nowTimeMin:%d",SERVICE_NAME,nowTimeMin,configTime,_data.HourFlushBossFlag,_data.status,_data.timeConfig.flushTime,nowTimeMin))
+		--if nowTimeMin == configTime then
+		if nowTimeMin ~= configTime then
 			if not _data.HourFlushBossFlag and _data.status == 0 and _data.timeConfig.flushTime ~= nowTimeMin then
 				_data.HourFlushBossFlag = true
 				_data.timeConfig.poolScore = v.poolScore
@@ -806,7 +809,7 @@ local function checkTimeFlushBoss()
 				_data.startTime = os.time()
 				_data.nextTime = 0
 				_data.bKillFalg = false
-				--
+				
 				notifyWorldBossInfoToGS()
 				NotifyWorldBossStart()
 

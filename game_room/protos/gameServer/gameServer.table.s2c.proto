@@ -1,0 +1,181 @@
+package gameServer.table.s2c;
+
+
+message UserSitDown										// 0x010200
+{
+	enum RetCode {
+		RC_USER_STATUS_PLAYING=1;						// 您正在游戏中，暂时不能离开，请先结束当前游戏！
+		RC_MIN_ENTER_SCORE=2;
+		RC_MAX_ENTER_SCORE=3;
+		RC_MIN_ENTER_MEMBER=4;
+		RC_MAX_ENTER_MEMBER=5;
+		RC_MIN_TABLE_SCORE=6;
+		RC_ROOM_FULL=7;									// 当前游戏房间已经人满为患了，暂时没有可以让您加入的位置，请稍后再试！
+		RC_ROOM_CONFIG_FORBID=8;						// 抱歉，当前游戏桌子禁止用户进入！
+		RC_TABLE_GAME_STARTED=9;						// 游戏已经开始了，现在不能进入游戏桌！
+		RC_CHAIR_ALREADY_TAKEN=10;
+		RC_PASSWORD_ERROR=11;							// 桌子密码错误
+		RC_IP_CONFLICT_WITH_OTHER1=12;					// 此游戏桌玩家设置了不跟相同 IP 地址的玩家游戏，您 IP 地址与此玩家的 IP 地址相同，不能加入游戏！
+		RC_IP_CONFLICT_WITH_OTHER2=13;					// 您设置了不跟相同 IP 地址的玩家游戏，此游戏桌存在与您 IP 地址相同的玩家，不能加入游戏！
+		RC_SAME_IP_EXIST=14;							// 您设置了不跟相同 IP 地址的玩家游戏，此游戏桌存在 IP 地址相同的玩家，不能加入游戏！
+		RC_USER_LIMIT_FLEE_RATE=15;
+		RC_USER_LIMIT_WIN_RATE=16;
+		RC_USER_LIMIT_SCORE_MAX=17;
+		RC_USER_LIMIT_SCORE_MIN=18;
+		RC_WAIT_DISTRIBUTE=19;							// 等待定时器IDI_DISTRIBUTE_USER进行分配
+		RC_TABLE_FRAME_SINK=20;							// 游戏中定义的错误信息
+		RE_LOW_VIP_LEVEL		= 21;					// VIP等级不足
+		RE_LOW_MULTIPLE_LEVEL 	= 22;					// 炮台等级不足
+		
+	}
+	required RetCode code=1;
+	optional string msg=2;
+}
+
+message UserInfo								// 0x010106	CMD_SUB_GR_USER_ENTER
+{
+	required uint32 gameID=1;							//游戏 I D
+	required uint32 userID=2;							//用户 I D
+	required uint32 platformID=3;
+	required int32 faceID=4;							//头像索引
+	required string nickName=5;							//用户昵称
+	required int32 gender=6;							//用户性别
+	required uint32 memberOrder=7;						//会员等级
+	required uint32 masterOrder=8;						//管理等级
+	required uint32 tableID=9;							//桌子索引
+	required uint32 chairID=10;							//椅子索引
+	required uint32 userStatus=11;						//用户状态
+
+	required int64 score=12;							//用户分数
+	required int64 insure=13;							//用户银行
+
+	required int64 medal=14;							//用户奖牌
+	required int64 experience=15;						//经验数值
+	required int64 loveLiness=16;						//用户魅力
+	required int64 gift=17;								//礼券数
+	required int64 present=18;							//优优奖牌
+
+	optional int64 grade=19;							//用户成绩
+	
+	required uint32 winCount=20;						//胜利盘数
+	required uint32 lostCount=21;						//失败盘数
+	required uint32 drawCount=22;						//和局盘数
+	required uint32 fleeCount=23;						//逃跑盘数
+
+	optional string signature=24;						//个性签名
+	optional string platformFace=25;
+}
+
+message UserAutoAllocSignup 							// 0x010230
+{
+	enum RetCode {
+		RC_OK=0;
+		RC_USER_STATUS_PLAYING=1;						// 您正在游戏中，暂时不能离开，请先结束当前游戏！
+		RC_MIN_ENTER_SCORE=2;
+		RC_MAX_ENTER_SCORE=3;
+		RC_MIN_ENTER_MEMBER=4;
+		RC_MAX_ENTER_MEMBER=5;
+		RC_MIN_TABLE_SCORE=6;
+		RC_ROOM_FULL=7;									// 当前游戏房间已经人满为患了，暂时没有可以让您加入的位置，请稍后再试！
+		RC_ROOM_CONFIG_FORBID=8;						// 抱歉，当前游戏桌子禁止用户进入！
+		RC_TABLE_GAME_STARTED=9;						// 游戏已经开始了，现在不能进入游戏桌！
+		RC_CHAIR_ALREADY_TAKEN=10;
+		RC_PASSWORD_ERROR=11;							// 桌子密码错误
+		RC_IP_CONFLICT_WITH_OTHER1=12;					// 此游戏桌玩家设置了不跟相同 IP 地址的玩家游戏，您 IP 地址与此玩家的 IP 地址相同，不能加入游戏！
+		RC_IP_CONFLICT_WITH_OTHER2=13;					// 您设置了不跟相同 IP 地址的玩家游戏，此游戏桌存在与您 IP 地址相同的玩家，不能加入游戏！
+		RC_SAME_IP_EXIST=14;							// 您设置了不跟相同 IP 地址的玩家游戏，此游戏桌存在 IP 地址相同的玩家，不能加入游戏！
+		RC_USER_LIMIT_FLEE_RATE=15;
+		RC_USER_LIMIT_WIN_RATE=16;
+		RC_USER_LIMIT_SCORE_MAX=17;
+		RC_USER_LIMIT_SCORE_MIN=18;
+		RC_WAIT_DISTRIBUTE=19;							// 等待定时器IDI_DISTRIBUTE_USER进行分配
+		RC_TABLE_FRAME_SINK=20;							// 游戏中定义的错误信息
+		
+	}
+	required RetCode code=1;
+	optional string msg=2;
+	repeated UserInfo userInfoList=3;
+}
+
+//用户状态
+message UserStatus										// 0x010201
+{
+	required uint32 userID=1;							//用户标识
+	required uint32 tableID=2;							//桌子索引
+	required uint32 chairID=3;							//椅子位置
+	required uint32 userStatus=4;						//用户状态
+}
+
+message GameStatus										// 0x010203
+{
+	required uint32 gameStatus=1;						//游戏状态
+}
+
+message UserStandUp										// 0x010204
+{
+	enum RetCode
+	{
+		RC_CANNOT_WHILE_PLAYING=1;						// 您正在游戏中，暂时不能离开，请先结束当前游戏！
+	}
+	required RetCode code=1;
+}
+
+message AllPlayerLeft									// 0x010205
+{														// 此游戏桌的所有玩家已经离开了！
+}
+
+message UserLookon										// 0x010207
+{
+	enum RetCode {
+		RC_USER_LOOKON_OK = 0;							//旁观成功
+		RC_USER_CHAIR_INVAILD = 1;						//旁观的椅子无效
+		RC_USER_TABLE_INVAILD = 2;						//旁观的桌子无效
+		RC_NO_USER = 3;									//旁观对象不存在
+		RC_PASSWORD_ERROR = 4;							//密码错误
+		RC_TABLE_FRAME_SINK = 5;						//游戏中定义的错误信息	
+	}
+	required RetCode code=1;
+	optional string msg=2;
+}
+
+//踢出用户
+message KickUser									//0x010208
+{
+	enum RetCode {
+		RC_USER_KICK_OK = 0;							//踢人成功
+		RC_USER_CHAIR_INVAILD = 1;						//椅子无效
+		RC_USER_TABLE_EDUCATE= 2;						//试玩场桌子,试玩场不允许踢人
+		RC_LOVELINESS_NO_ENOUGH = 3;					//魅力值不足
+		RC_KICKUSER_IS_PLAYING = 4;						//玩家正在游戏中，不能踢出
+		RC_USER_SCORE_NOT_ENOUGH = 5;					//筹码比被踢者少
+		RC_USER_EXP_NOT_ENOUGH = 6;						//等级比被踢者少
+		RC_USER_KICK_UNSUCESS = 7;						//踢人失败	
+	}
+	required RetCode code=1;
+	optional string msg=2;
+	required uint32 userID=3;							//被踢者userID
+}
+
+//踢人通知消息
+message KickUserNotify							//0x010209
+{
+	optional string msg=1;
+}
+
+//桌子玩家旁观信息
+message UsersLookonInfo									// 0x01020A
+{
+	repeated bool isAllowLookon=1;
+}
+
+message LockRoomStatus                                    //0x01020B
+{
+    required int32 ownerChairID = 1;      //房主座位
+    required int32 isLock=2;              //锁定状态
+}
+
+//锁上房间
+message LockRoom									//0x01020C
+{
+	required int32 code=1;						// 0成功,1 VIP等级不足, 2 你不是房主
+}

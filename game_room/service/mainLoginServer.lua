@@ -23,8 +23,9 @@ skynet.start(function()
     cluster.register("LS_model_sessionManager", skynet.uniqueservice("LS_model_sessionManager"))
     cluster.register("LS_model_GSProxy", skynet.uniqueservice("LS_model_GSProxy"))
 
-    --[[
+    
     skynet.uniqueservice("LS_model_item_config")
+	--[[
 	skynet.uniqueservice("LS_model_message")
 	skynet.uniqueservice("LS_model_ranking")
 	skynet.uniqueservice("LS_model_pay")
@@ -36,8 +37,9 @@ skynet.start(function()
     skynet.uniqueservice("LS_model_telnet")
     --[[
 	skynet.uniqueservice("LS_model_gunUplevel")
-	cluster.register("LS_model_huoDong", skynet.uniqueservice("LS_model_huoDong"))
 	]]
+	cluster.register("LS_model_huoDong", skynet.uniqueservice("LS_model_huoDong"))
+	
 	cluster.register("LS_model_worldBoss", skynet.uniqueservice("LS_model_worldBoss"))
 	--[[
 	skynet.uniqueservice("LS_model_invitation")

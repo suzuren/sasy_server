@@ -1,0 +1,37 @@
+package loginServer.signin.s2c;
+
+message SigninListInfo						   		// 0x001000	同步签到信息
+{
+	message EveryDayList
+	{
+		required int32 dayID=1;
+		required int32 goodsID=2;					
+		required int32 goodsCount=3;				
+		required int32 signinResult=4;
+	}
+
+	message CumulativeDayList
+	{
+		required int32 dayID=1;
+		required int32 goodsID=2;
+		required int32 goodsCount=3;
+		required int32 signinResult=4;// 0 未签到  1 可以签到 2 已签到
+	}
+
+	repeated EveryDayList 		everyDayList=1;
+	repeated CumulativeDayList  cumulativeDayList=2;
+	required int32 				currentDay=3;
+}
+
+message Sign										// 0x001001	同步签到信息
+{
+	enum RetCode {
+		RC_OK = 0;						//签到成功
+		RC_OTHER = 1;					//未知错误
+		RC_HAVE_GET = 2;				//已经领取过奖励了
+		RC_CAN_NOT_GET = 3;				//未达到领取条件
+	}
+	required int32 signType = 1;					//要领取的奖励类型；1每日签到，2累计登入
+	required int32 dayID = 2;
+	required int32 code = 3;
+}

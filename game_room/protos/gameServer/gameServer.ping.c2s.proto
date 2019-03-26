@@ -1,0 +1,4 @@
+package gameServer.ping.c2s;
+
+message Ping {				// 0x010500
+}

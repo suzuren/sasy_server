@@ -1,0 +1,19 @@
+package loginServer.bank.c2s;
+
+//存入金币
+message Deposit								// 0x000700
+{
+	required uint64 amount=1;
+}
+
+//提取金币
+message Withdraw							// 0x000701
+{
+	required uint64 amount=1;
+}
+
+
+//查询
+message Query								// 0x000702
+{
+}

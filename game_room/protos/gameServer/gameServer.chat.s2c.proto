@@ -1,0 +1,27 @@
+package gameServer.chat.s2c;
+
+//用户聊天
+message UserChat							//0x010400
+{
+	required uint32 color=1;						//信息颜色
+	required uint32 sendUserID=2;					//发送用户
+	required string sendNickname=3;					//发送用户
+	required string	content=4;						//聊天信息
+}
+
+//用户表情
+message UserExpression						//0x010401
+{
+	required uint32 expressID=1;					//表情索引
+	required uint32 sendUserID=2;					//发送用户
+	required string sendNickname=3;					//发送用户
+}
+
+//用户聊天
+message UserMultimedia						//0x010402
+{
+	required uint32 type=1;							//信息类型
+	required string url=2;							//路径信息
+	required uint32 sendUserID=3;					//发送用户
+	required string sendNickname=4;					//发送用户
+}

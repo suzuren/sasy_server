@@ -1,0 +1,38 @@
+package loginServer.account.c2s;
+
+//修改头像
+message ChangeFaceID							//0x000600
+{
+	required uint32 faceID=1;							//头像标识
+}
+
+//修改签名
+message ChangeSignature							//0x000601
+{
+	required string	signature=1;						//个性签名
+}
+
+message ChangeNickname							//0x000602
+{
+	required bool isScoreCharged=1;						//是否收费
+	required string	nickName=2;							//用户昵称
+}
+
+message CheckNickname							//0x000603
+{
+	required string	nickName=1;							//用户昵称
+}
+
+message ChangeGender							//0x000604
+{
+	required int32 gender=1;
+}
+
+message SetPlatformFace							//0x000605
+{
+	required string platformFace=1;
+}
+
+message SetBindingInfo							//0x000606
+{
+}

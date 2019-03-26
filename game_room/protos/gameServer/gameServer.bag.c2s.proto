@@ -1,0 +1,60 @@
+package gameServer.bag.c2s;
+
+//0x010900 物品背包
+message GoodsInfoList
+{
+
+}
+
+//0x010901 单个物品信息
+message GoodsInfo
+{
+	required uint32 goodsID=1;
+}
+
+//0x010902 使用物品信息
+message OffsetGoodsItem
+{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message OffsetGoodsInfo
+{
+	required string callBackAddress=1;
+	repeated OffsetGoodsItem offsetGoodsItem=2; 
+}
+
+//0x010903 使用物品
+message UseGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int32 getGoodsID=2;
+}
+
+//0x010904 合成物品
+message CompositingGoodsInfo 		
+{
+	required int32 goodsID=1;
+}
+
+//0x010905 赠送物品
+message GiveGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+	required int32 UserID=3;
+}
+
+//0x010906 装备宝箱   直接装备的是炮台
+message equipGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int32 equipGoodsID=2; //装备的物品id
+}
+
+//0x010907  合成时候的CD信息
+message CompositingCDInfo 			
+{
+	required int32 goodsID=1; 	//需要合成的物品
+}

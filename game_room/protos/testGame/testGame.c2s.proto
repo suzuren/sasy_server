@@ -1,0 +1,66 @@
+package fish.c2s;
+
+message UserGoodsInfo
+{
+	required int32 goodsID=1;
+	required int32 goodsCount=2;
+}
+
+message UserFire									// 0x020000
+{
+	required int32 bulletKind=1 [default=-1];
+	required int32 bulletID=2;
+	required float angle=3 [default=-1];
+	required int32 bulletMultiple=4;
+	repeated UserGoodsInfo UserGoodsInfo=5;			//当前自身金币			
+	required int32 lockFishID=6; 
+}
+
+message BigNetCatchFish								// 0x020008
+{
+	required int32 bulletID=1;
+	repeated int32 catchFishIDList=2;
+}
+
+
+message CatchSweepFish								// 0x02000C
+{
+	required int32 chairID=1;
+	required int32 sweepID=2;
+	repeated int32 fishIDList=3;
+}
+
+message BigNetCatchFishAndroid						// 0x02000F
+{
+	enum AndroidType {
+		AT_RANDOM = 0;
+		AT_BIGFISH = 1;
+	}
+
+	required int32 bulletID=1;
+	required AndroidType androidType=2;
+}
+
+
+message UserSkillStatus							   // 0x020011 技能状态同步
+{
+	required int32 chairID=1;
+	required int32 skillType=2;		//1 狂暴  2 锁定  3 急速
+	required int32 skillStutus=3;   //0 关闭状态  1开启状态
+	optional int32 skillLeftOverTime=4;   	//技能剩余时间 同步技能状态使用
+}
+
+message UserFort									// 0x020012 用户同步炮台显示
+{
+	required int32 fortOption=1;
+	required int32 fortLevel=2;
+	required int32 chairID=3;
+}
+
+
+message CallFish							   // 0x020015 召唤凤凰
+{
+	required int32 goodsID=1;
+}	
+
+

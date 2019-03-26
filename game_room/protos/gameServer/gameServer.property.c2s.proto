@@ -1,0 +1,24 @@
+package gameServer.property.c2s;
+
+//购买道具
+message BuyProperty								// 0x010302
+{
+	required uint32 propertyID=1;	
+	required uint32 propertyCount=2;
+}
+
+message UseProperty								// 0x010304
+{
+	required uint32 propertyID=1;
+	required uint32 propertyCount=2;
+	required uint32 targetUserID=3;
+}
+
+//发送喇叭
+message SendTrumpet								// 0x010307
+{
+	required uint32 trumpetID=1;               //道具索引 
+	required uint32 color=2;                    //喇叭颜色
+	required string msg=3;						//喇叭内容
+}
+

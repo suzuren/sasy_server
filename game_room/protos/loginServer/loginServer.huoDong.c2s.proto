@@ -1,0 +1,20 @@
+package loginServer.huoDong.c2s;
+
+// 0x006000	请求活动列表信息
+message ActivityInfoList					
+{
+
+}
+
+// 0x006001	兑换奖励
+message ExchangeActivityReward
+{
+	required int32	activityType = 1;			//活动类型
+	required int32	activityIndex = 2;			//节点id
+}
+
+// 0x006003	请求红包雨记录
+message RedPacketInfo
+{
+}
+

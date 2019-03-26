@@ -1,0 +1,15 @@
+package loginServer.activity.c2s;
+
+message QueryScoreActivity					// 0x000800
+{
+}
+
+message Alms							// 0x000801
+{
+}
+
+
+//查询
+message Query								// 0x000702
+{
+}

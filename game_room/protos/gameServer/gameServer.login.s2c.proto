@@ -1,0 +1,111 @@
+package gameServer.login.s2c;
+
+enum LoginRetCode 
+{
+	RC_OK=0;
+	RC_INVALID_SESSION=1;
+	RC_NO_ACCOUNT=2;
+	RC_KICK_TIMEOUT=3;
+	RC_LOGIN_CLOSED=4;
+	RC_NULLITY=7;
+	RC_STUNDOWN=8;
+	RC_ACCOUNT_NOT_EXIST=9;
+	RC_DB_ERROR=10;
+	RC_ROOM_CONFIG_FORBID=11;
+	RC_MIN_ENTER_SCORE=12;
+	RC_MAX_ENTER_SCORE=13;
+	RC_MIN_ENTER_MEMBER=14;
+	RC_MAX_ENTER_MEMBER=15;
+	RC_ONLINE_FULL_LEAST_SCORE=16;
+	RC_BINDING_LOGIN=17;						//请先绑定
+	RC_BINDING_EXIST=18;						//账号已绑定，无法进入该房间
+}
+
+message Login 
+{									// 0x010100
+	required LoginRetCode code=1;
+	optional string msg=2;
+}
+
+message ServerConfig							// 0x010102
+{
+	required uint32 tableCount=1;						//桌子数目
+	required uint32 chairCount=2;						//椅子数目
+	required uint32 serverType=3;						//房间类型
+	required uint32 serverRule=4;						//房间规则
+}
+
+//桌子状态
+message TableStatus									// 0x010104
+{
+	required uint32 tableID=1;							//桌子ID
+	required bool isLocked=2;							//锁定标志
+	required bool isStarted=3;							//开始标志
+	required uint32 sitCount=4;							//用户数
+	required uint32 needVipLv=5;						//需要的vip等级
+	required uint32 multipleLv=6;						//需要的炮倍
+	required string tablePassword=7;					//桌子密码
+	required uint32 tableType=8;						//0普通桌子，1vip桌子
+}
+
+message TableStatusList								// 0x010105
+{
+	repeated TableStatus list=1;					//普通房间list
+	repeated TableStatus vipList=2;					//vip房间list
+}
+
+message UserInfo								// 0x010106	CMD_SUB_GR_USER_ENTER
+{
+	required uint32 gameID=1;							//游戏 I D
+	required uint32 userID=2;							//用户 I D
+	required uint32 platformID=3;
+	required int32 faceID=4;							//头像索引
+	required string nickName=5;							//用户昵称
+	required int32 gender=6;							//用户性别
+	required uint32 memberOrder=7;						//会员等级
+	required uint32 masterOrder=8;						//管理等级
+	required uint32 tableID=9;							//桌子索引
+	required uint32 chairID=10;							//椅子索引
+	required uint32 userStatus=11;						//用户状态
+
+	required int64 score=12;							//用户分数
+	required int64 insure=13;							//用户银行
+
+	required int64 medal=14;							//用户奖牌
+	required int64 experience=15;						//经验数值
+	required int64 loveLiness=16;						//用户魅力
+	required int64 gift=17;								//礼券数
+	required int64 present=18;							//优优奖牌
+
+	optional int64 grade=19;							//用户成绩
+	
+	required uint32 winCount=20;						//胜利盘数
+	required uint32 lostCount=21;						//失败盘数
+	required uint32 drawCount=22;						//和局盘数
+	required uint32 fleeCount=23;						//逃跑盘数
+
+	optional string signature=24;						//个性签名
+	optional string platformFace=25;
+	required uint32 gem=26;								//钻石
+	required int32 signatureIsHide=27;								//签名是否隐藏
+}
+
+message UserInfoViewPort						// 0x010107	CMD_SUB_GR_USER_ENTER
+{
+	repeated UserInfo list=1;
+}
+
+message AndroidLogin							// 0x010108
+{
+	required LoginRetCode code=1;
+}
+
+message Logout									// 0x010109
+{
+	enum RetCode 
+	{
+		RC_OK=0;
+	}
+
+	required RetCode code=1;
+}

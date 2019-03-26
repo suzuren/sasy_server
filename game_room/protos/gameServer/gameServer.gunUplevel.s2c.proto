@@ -1,0 +1,51 @@
+package gameServer.gunUplevel.s2c;
+
+message UpgradeGoodsItem {					//升级需要的物品
+	required uint32 goodsID=1;				//物品ID
+	required uint32 goodsCount=2;			//物品数量
+}
+
+message UpgradeBackGoodsItem {				//升级后返还物品
+	required uint32 goodsID=1;				//物品ID
+	required uint32 goodsCount=2;			//物品数量
+}
+
+message FortLevelInfo										
+{
+	required uint32 fortMultipleID=1;
+	required uint32 fortMultiple=2;							//炮台等级
+	repeated UpgradeGoodsItem upgradeGoodsItem=3;			//升级需要消耗的物品
+	repeated UpgradeBackGoodsItem upgradeBackGoodsItem=4;	//升级需要返还的物品
+}
+
+message FortLevelInfoList									// 0x012000 炮台升级列表
+{
+	repeated FortLevelInfo fortLevelInfo=1;
+	required uint32 currentFortLevel=2;	//炮台当前等级	（65535 代表满级）
+}
+
+message RewardGoodsItem {
+	required uint32 goodsID=1;		//物品ID
+	required uint32 goodsCount=2;	//物品数量
+}
+
+message RequestFortLevel							// 0x012001
+{
+	required uint32 fortLevel=1;					//炮台等级
+	repeated RewardGoodsItem rewardGoodsItem=2;		//升级需要返还的物品
+	required uint32 code = 3;						// 0 有效数据 1 无效数据
+}
+
+
+message VipExperienceFortInfo						
+{
+	required int32 userID = 1;					//用户ID
+	required int32 VipExperienceFortLevel = 2;	//体验炮台vip等级
+	required int32 VipExperienceFortTime = 3;	//体验炮台剩余时间
+}
+
+//体验炮台
+message VipExperienceFortInfoList				//0x012002
+{
+	repeated VipExperienceFortInfo item=1;
+}

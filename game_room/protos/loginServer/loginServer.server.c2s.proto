@@ -1,0 +1,8 @@
+package loginServer.server.c2s;
+
+message QueryServerOnline							//0x000202
+{
+	repeated uint32 serverIDList=1;
+}
+
+

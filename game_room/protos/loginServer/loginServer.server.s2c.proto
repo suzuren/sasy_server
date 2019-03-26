@@ -1,0 +1,69 @@
+package loginServer.server.s2c;
+
+message NodeList {			// 0x000200
+	message NodeItem {
+		message ServerItem {
+			required uint32 serverID=1;
+			required uint32 serverType=2;
+			required string serverAddr=3;
+			required uint32 serverPort=4;
+			required string serverName=5;
+			required int64 cellScore=6;
+			required int64 maxEnterScore=7;
+			required int64 minEnterScore=8;
+			required int64 minEnterMember=9;
+			required int64 maxEnterMember=10;
+			required uint32 onlineCount=11;
+			required uint32 fullCount=12;
+		}
+
+		required uint32 nodeID=1;
+		required uint32 kindID=2;
+		required string name=3;
+		required uint32 onlineCount=4;
+		required uint32 fullCount=5;
+		repeated ServerItem serverList=6;
+	}
+
+	repeated NodeItem list=1;
+}
+
+message MatchConfigList {				// 0x000201
+	message MatchConfigItem {
+		message AwardInfo {
+			required uint32 rank=1;
+			required uint32 gold=2;
+			required uint32 medal=3;
+			required uint32 exp=4;
+		}
+
+		required uint32 serverID=1;
+		required string name=2;
+		required uint32 startHour=3;
+		required uint32 startMinute=4;
+		required uint32 endHour=5;
+		required uint32 endMinute=6;
+		required uint32 firstHour=7;
+		required uint32 firstMinute=8;
+		required uint32 interval=9;
+		required uint32 duration=10;
+		required int64 fee=11;
+		required int64 initScore=12;
+		required int64 awardMinScore=13;
+		repeated AwardInfo awardList=14;
+	}
+	repeated MatchConfigItem list=1;
+}
+
+message ServerOnline					// 0x000202
+{
+	message Item {
+		required uint32 serverID=1;
+		required uint32 onLineCount=2;
+	}
+	repeated Item list=1;
+}
+
+message UserIPAddr {			// 0x000299
+	required string ip=1;
+}

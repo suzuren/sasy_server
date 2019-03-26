@@ -1,0 +1,18 @@
+package loginServer.activity.s2c;
+
+message QueryScoreActivity						// 0x000800
+{
+	required bool isAlmsAvailable=1;
+	required bool isVIPFreeScoreAvailable=2;
+}
+
+message Alms							// 0x000801
+{
+	enum RetCode {
+		RC_OK=1;
+	}
+	required RetCode code=1;
+	optional int32 alms=2;
+	optional int32 score=3;
+}
+

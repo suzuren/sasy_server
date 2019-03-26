@@ -1,0 +1,58 @@
+package gameServer.task.s2c;
+
+message TaskGoodsItem {
+	required uint32 goodsID=1;				//物品ID
+	required uint32 allGoodsCount=2;		//任务总共需要的的物品数量
+	required uint32 currentGoodsCount=3;	//任务当前的物品数量
+}
+
+message GoodsItem {
+	required uint32 goodsID=1;				//物品ID
+	required uint32 goodsCount=2;			//物品数量
+}
+
+//0x010800	任务列表
+message TaskInfoList {			
+	required uint32	taskType = 1;					//新手日常任务 = 1 ，普通任务 = 2 
+	required uint32	taskID = 2;						//任务ID
+	required uint32	code = 3;				// 0.有效任务 1.所有任务已完成 2.未查询到任务数据 
+	required uint32 limitFashShoot=4;				//快速射击
+	required uint32 limitAutoShoot=5;				//自动射击
+	required uint32 limitFortLevel=6;				//炮台等级 1 - 6 号炮台
+	required uint32 limitFortMulti=7;				//炮台倍数 100 - 100000倍
+	repeated TaskGoodsItem taskGoodsInfoList=8;		//任务物品
+	repeated GoodsItem taskRewardGoodsInfoList=9;	//奖励物品
+	required int32 taskLeftTime = 10;				//任务剩余时间	
+}
+
+
+//0x010802	请求完成任务
+message CompleteTask {								
+	required uint32	taskType = 1;					//新手日常任务 = 1 ，普通任务 = 2 
+	required uint32	taskID = 2;						//任务ID
+	repeated GoodsItem taskRewardGoodsInfoList=3;	//奖励物品
+	required uint32	code = 4;						// 0. 成功 1.此任务已失效
+}
+
+//0x010803	完成排名
+message taskRank {
+	required int32 chairID=1;			//座位id
+	required int32 score=2;				//分数
+	required int32 rankId=3;			//排名
+}
+message taskRankList {								
+	repeated taskRank rankList = 1;		
+}
+
+//0x010804	结束任务	
+message TaskEnd {
+	required int32	endType = 1;	// 0.时间结束 1.被玩家完成
+	repeated taskRank rankList = 2; //最终排名
+	required uint32	taskType = 3;	
+}
+
+//0x010805 任务时间同步
+message TaskSynchronizationTime {
+	required uint32	taskType = 1;	//新手日常任务 = 1 ，普通任务 = 2
+	required int32 taskLeftTime = 2; //任务剩余时间
+}

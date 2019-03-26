@@ -207,7 +207,7 @@ local function cmd_start(serverID)
 			KindID = 2010,
 			NodeID = 1100,
 			SortID = 1,
-			TableCount = 100,
+			TableCount = 2,
 			ChairPerTable = 4,
 			ServerType = 1,
 			ServerAddr = "127.0.0.1",

@@ -1,0 +1,11 @@
+package loginServer.message.c2s;
+
+message QueryExchangeMessage			//0x000302
+{
+
+}
+
+message RecvGoods						// 0x000303 领取物品
+{
+	required uint32 id=1;				//消息ID			
+}

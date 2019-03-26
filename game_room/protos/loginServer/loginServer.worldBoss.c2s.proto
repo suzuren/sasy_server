@@ -1,0 +1,11 @@
+package loginServer.worldBoss.c2s;
+
+message WorldBossFishInfo{							// 0x007000 请求世界boss信息
+	required int32 bossType=1;						//boss类型0普通，1定时
+}
+
+message SynchronizationBossSwimTime{				// 0x007004 请求boss的已游动的时间
+	
+}
+
+

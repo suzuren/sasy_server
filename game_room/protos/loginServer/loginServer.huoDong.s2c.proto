@@ -1,0 +1,80 @@
+package loginServer.huoDong.s2c;
+
+message goodsInfo
+{
+	required int32 	goodsID		= 1;			//道具id
+	required int32 	goodsCount 	= 2;			//道具数量
+}
+
+message ActivityItemInfo
+{
+	required int32 	index		= 1;			//id
+	required int32 	leftTimes	= 2;			//剩余次数
+	repeated goodsInfo 	conditionList	= 3;	//需要物品信息
+	repeated goodsInfo 	rewardList		= 4;	//奖励物品信息
+	repeated goodsInfo 	completeGoodsList = 5;	//完成物品信息	
+	required int32 	needVipLv	= 6;			//需要的vip
+	required int32 	maxLimitTimes	= 7;		//上限次数
+}
+
+message ActivityInfo
+{
+	required int32	activityType = 1;			//活动小类型
+	required int64	startTime = 2;				//开始时间
+	required int64	currentTime = 3;			//当前服务器时间
+	required int64  entTime   = 4;				//结束时间
+	repeated ActivityItemInfo ActivityItemInfoList = 5;	
+	required int32	activityClass = 6;			//活动大类型
+	required string activityName = 7;			//活动名字
+	required string tuPianID = 8;				//图片id
+	required string beiJingID = 9;				//背景id
+	required string activityBtnName = 10;		//按钮文本	
+}
+
+// 0x006000	请求活动列表信息
+message ActivityInfoList					
+{	
+	repeated ActivityInfo activityInfoList = 1;
+}
+
+///////////////////////////////
+
+// 0x006001	兑换奖励
+message ExchangeActivityReward
+{
+	required int32	activityType = 1;			//活动类型
+	required int32	activityIndex = 2;			//节点id
+	repeated goodsInfo 	rewardGoodsList	= 3;	//物品列表
+	required int32	reCode	= 4;				//错误码：1失败,0成功
+}
+
+// 0x006002	通知活动开始或者结束
+message NotifyActivityStartOrEnd
+{
+	required int32	activityType = 1;			//活动类型，1国庆活动
+	required bool	bStartOrEnd	= 2;			//开始或者结束 1开始 2结束
+}
+
+// 0x006003 红包雨信息
+message rankInfo
+{
+	required int32	userID	= 1;
+	required string userName = 2;
+	required int32	score = 3;
+}
+message killRecordInfo
+{
+	required int32	userID	= 1;
+	required string userName = 2;
+	required int32  killTime = 3;
+	required int32	multiple = 4;
+	required int32	score = 5;
+}
+message RedPacketInfo
+{
+	repeated rankInfo rankInfoList = 1;
+	repeated killRecordInfo killRecordInfoList = 2;
+	required int32 myRank = 3;
+	required int32 myScore = 4;
+}
+

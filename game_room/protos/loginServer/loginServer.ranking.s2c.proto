@@ -1,0 +1,74 @@
+package loginServer.ranking.s2c;
+
+message WealthRanking							//0x000400
+{
+	message Item {
+		required uint32 userID=1;				//用户 I D
+		required int32 faceID=2;				//头像标识
+		required int32 gender=3;				//用户性别
+		required string	nickName=4;			//用户昵称
+		required int64 medal=5;					//用户奖牌
+		required int64 loveLiness=6;			//用户魅力
+		required int64 score=7;					//用户金币
+		required int64 gift=8;					//礼券数
+		optional string	signature=9;			//个性签名
+		optional int32	experience=10;			//经验值
+		optional int32	platformID=11;			//平台id
+		optional int32	memberOrder=12;			//vip等级
+		optional string platformFace=13;		//自定义头像
+		optional int32  hide = 14;				//签名是否屏蔽，0否，1是
+	}
+	repeated Item list=1;
+}
+
+message LoveLinesRanking					//0x000401 魅力排行
+{
+	message Item {
+		required uint32 userID=1;				//用户 I D
+		required int32 faceID=2;				//头像标识
+		required int32 gender=3;				//用户性别
+		required string	nickName=4;			//用户昵称
+		required int64 medal=5;					//用户奖牌
+		required int64 loveLiness=6;			//用户魅力
+		required int64 score=7;					//用户金币
+		required int64 gift=8;					//礼券数
+		optional string	signature=9;			//个性签名
+		optional int32	experience=10;			//经验值
+		optional int32	platformID=11;			//平台id
+		optional int32	memberOrder=12;			//vip等级
+		optional string platformFace=13;		//自定义头像
+	}
+	repeated Item list=1;
+}
+
+message BoxRanking					//0x000402 宝箱排行
+{
+	message goodsInfo {
+		required int32 goodsID=1;
+		required int64 goodsCount=2;
+	}
+
+	message Item {
+		required uint32 userID=1;				//用户 I D
+		required int32 faceID=2;				//头像标识
+		required int32 gender=3;				//用户性别
+		required string	nickName=4;				//用户昵称
+		repeated goodsInfo goodsInfoList=5;		//物品
+		required int32	memberOrder=6;			//vip等级
+		optional string	signature=7;			//个性签名
+		optional int32  hide = 8;				//签名是否屏蔽，0否，1是
+	}
+
+	repeated Item list=1;
+}
+
+message SendTitleInfo					//0x000403 称号信息
+{
+	message Item {
+		required int32	titleType=1;		//称号类型,1金币，2宝箱
+		required int32	titleId=2;			//称号id
+		required string	titleName=3;		//称号名字
+	}
+	repeated Item list=1;
+}
+

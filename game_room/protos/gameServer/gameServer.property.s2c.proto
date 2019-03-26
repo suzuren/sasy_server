@@ -1,0 +1,104 @@
+package gameServer.property.s2c;
+
+message PropertyConfig							// 0x010300
+{
+	message Item {
+		required uint32 id=1;								//道具标识
+		required uint32 discount=2;							//会员折扣
+		required int64 propertyGold=3;						//道具金币
+		required int64 sendLoveLiness=4;					//赠送魅力
+		required int64 recvLoveLiness=5;					//接受魅力
+	}
+
+	repeated Item list=1;			//道具描述
+}
+
+message PropertyRepository						// 0x010301
+{
+	message Item {
+		required uint32 propertyID=1;
+		required uint32 propertyCount=2;
+	}
+
+	repeated Item list=1;
+}
+
+//购买道具结果
+message BuyProperty								// 0x010302
+{
+	enum RetCode {
+		RC_OK=1;						
+		RC_NO_PROPERTY_FOUND=2;
+		RC_PROPERTY_COUNT_ERROR=3;
+		RC_NOT_ENOUGH_SCORE=4;
+		RC_SERVER_TYPE_CANNOT_BUY=5;
+	}
+
+	required RetCode code=1;
+
+	optional uint32 propertyID=2;
+	optional uint32 propertyCount=3;
+}
+
+message TrumpetScore							// 0x010303
+{
+	required int64 smallTrumpetScore=1;
+	required int64 bigTrumpetScore=2;
+}
+
+message UseProperty								// 0x010304
+{
+	enum RetCode {
+		RC_OK=1;						
+		RC_NO_PROPERTY_FOUND=2;
+		RC_PROPERTY_COUNT_ERROR=3;
+		RC_NEGATIVE_LOVELINESS_CANNOT_USE_HARMFULL_PROPERTY=4;				//魅力为负数不能使用伤害性道具，快给自己买道具提升魅力值吧!
+		RC_MATCH=5;															//比赛房间不可以使用此功能！
+		RC_EDUCATE=6;														//练习房间不可以使用此功能！
+		RC_TARGET_USER_NOT_FOUND=7;
+		RC_PROPERTY_NOT_ENOUGH=8;
+	}
+
+	required RetCode code=1;
+
+	optional uint32 propertyID=2;
+	optional uint32 propertyCount=3;
+	optional uint32 sourceUserID=4;
+	optional uint32 targetUserID=5;
+}
+
+message UsePropertyBroadcast					// 0x010305
+{
+	required uint32 propertyID=1;
+	required uint32 propertyCount=2;
+	required uint32 sourceUserID=3;
+	required uint32 targetUserID=4;
+}
+
+message PropertyRepositoryUpdate				// 0x010306
+{
+	required uint32 propertyID=1;
+	required uint32 propertyCount=2;
+}
+
+//发送喇叭
+message SendTrumpet								// 0x010307
+{
+	enum RetCode {
+		RC_OK=1;						
+		RC_ERROR_TRUMPETID=2;
+		RC_PROPERTY_NOT_ENOUGH=3;
+	}
+
+	required RetCode code=1;
+}
+
+//发送喇叭
+message TrumpetMsg								// 0x010308
+{
+	required uint32 trumpetID=1;					//道具索引 
+	required uint32 sendUserID=2;                   //用户 I D
+	required string sendNickName=3;				    //玩家昵称 
+	required uint32 color=4;                        //喇叭颜色
+	required string msg=5;							//喇叭内容
+}

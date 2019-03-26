@@ -2,15 +2,17 @@ local skynet = require "skynet"
 local arc4 = require "arc4random"
 local ServerUserItem = require "sui"
 local GS_CONST = require "define.gsConst"
-local FISH_CONST = require "fish.lualib.const"
+--local FISH_CONST = require "fish.lualib.const"
+local FISH_CONST = require(string.format("%s.lualib.const", skynet.getenv("gameName")))
 local COMMON_CONST = require "define.commonConst"
 local timerUtility = require "utility.timer"
 local currencyUtility = require "utility.currency"
 local pathUtility = require "utility.path"
-local mysqlutil = require "mysqlutil"
+--local mysqlutil = require "mysqlutil"
 local resourceResolver = require "resourceResolver"
 local addressResolver = require "addressResolver"
 require "utility.table"
+local inspect = require "inspect"
 
 local FENG_HUANG_LIVE_TIME = 60
 
@@ -3643,7 +3645,9 @@ local function initialize(tableFrame, criticalSection)
 	_data.tableFrame = tableFrame
 	_criticalSection = criticalSection
 	
-	_data.config = require(string.format("config.fish_%d", _data.tableFrame.getServerConfig().ServerID))
+	--_data.config = require(string.format("config.fish_%d", _data.tableFrame.getServerConfig().ServerID))
+	_data.config = require(string.format("config/testGame_%d", _data.tableFrame.getServerConfig().ServerID))
+
 	_data.tableFrame.setStartMode(GS_CONST.START_MODE.TIME_CONTROL)
 	_data.fengHuang.minPaoMult = _data.config.cannonMultiple.min
 	

@@ -1,0 +1,5 @@
+package loginServer.ping.c2s;
+
+message Ping					//0x000800
+{
+}

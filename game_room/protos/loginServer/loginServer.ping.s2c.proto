@@ -1,0 +1,5 @@
+package loginServer.ping.s2c;
+
+message Ping					//0x000800
+{
+}

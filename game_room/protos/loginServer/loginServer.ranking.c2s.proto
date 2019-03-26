@@ -1,0 +1,24 @@
+package loginServer.ranking.c2s;
+
+message QueryWealthRanking			//0x000400
+{
+
+}
+
+message QueryLoveLinesRanking		//0x000401
+{
+	
+}
+
+message QueryBoxRanking		//0x000402
+{
+	
+}
+
+message QueryTitleInfo	//0x000403
+{
+	
+}
+
+
+

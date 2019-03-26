@@ -1,0 +1,52 @@
+package loginServer.pay.c2s;
+
+// 0x000500 查询可购买列表
+message QueryPayOrderItem
+{
+}
+
+//0x000501
+message PaymentNotify						
+{
+}
+
+// 0x000502 查询免费金币信息
+message QueryFreeScore
+{
+}
+
+// 0x000503 领取免费金币
+message GetFreeScore
+{
+}
+
+// 0x000504 查询VIP免费金币信息
+message QueryVipFreeScore
+{
+}
+
+// 0x000505 领取VIP免费金币
+message GetVipFreeScore
+{
+	optional int32 memberType = 1;		//vip类型:1绿钻，2蓝钻，3紫钻，4金钻，5皇冠
+}
+
+// 0x000506 礼券换金币
+message GetGiftScore
+{
+	optional int64 gift = 1;			//需要兑换的礼券
+}
+
+// 0x000507 查询自己vip到期信息
+message QueryVipInfo
+{
+}
+
+message ChangePaymentNotify						//0x000512
+{
+	optional int32 payID = 1;
+	required string orderID = 2;
+}
+
+
+

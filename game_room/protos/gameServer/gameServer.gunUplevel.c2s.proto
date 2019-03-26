@@ -1,0 +1,11 @@
+package gameServer.gunUplevel.c2s;
+
+message FortLevelInfoList			// 0x012000	请求信息
+{
+
+}
+
+message RequestFortLevel			// 0x012001 升级
+{
+	required uint32 fortLevel=1;					//炮台等级
+}

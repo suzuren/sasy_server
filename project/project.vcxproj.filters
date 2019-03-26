@@ -789,9 +789,6 @@
     <None Include="..\game_room\config\clustername.lua">
       <Filter>game_room\config</Filter>
     </None>
-    <None Include="..\game_room\config\config.game">
-      <Filter>game_room\config</Filter>
-    </None>
     <None Include="..\game_room\config\config.login">
       <Filter>game_room\config</Filter>
     </None>
@@ -830,9 +827,6 @@
     </None>
     <None Include="..\game_room\lualib\cjson\util.lua">
       <Filter>game_room\lualib\cjson</Filter>
-    </None>
-    <None Include="..\game_room\lualib\config\testGame_210.lua">
-      <Filter>game_room\lualib\config</Filter>
     </None>
     <None Include="..\game_room\lualib\config\tableConfig\DropTable.csv">
       <Filter>game_room\lualib\config\tableConfig</Filter>
@@ -1206,6 +1200,213 @@
     <None Include="..\game_room\service\xLogTcpConnection.lua">
       <Filter>game_room\service</Filter>
     </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.account.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.account.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.activity.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.activity.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.bag.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.bag.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.bank.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.bank.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.chat.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.chat.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.gunUplevel.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.gunUplevel.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.huoDong.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.huoDong.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.invitation.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.invitation.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.message.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.message.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.pay.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.pay.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.ping.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.ping.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.ranking.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.ranking.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.rescueCoin.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.rescueCoin.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.server.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.server.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.signin.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.signin.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.worldBoss.c2s.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\loginServer\loginServer.worldBoss.s2c.proto">
+      <Filter>game_room\protos\loginServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.bag.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.bag.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.bank.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.bank.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.chat.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.chat.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.gunUplevel.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.gunUplevel.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.heartBeat.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.heartBeat.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.huoDong.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.huoDong.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.login.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.login.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.misc.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.ping.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.ping.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.property.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.property.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.rewardGoldFish.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.rewardGoldFish.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.table.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.table.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.task.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.task.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.worldBoss.c2s.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\gameServer\gameServer.worldBoss.s2c.proto">
+      <Filter>game_room\protos\gameServer</Filter>
+    </None>
+    <None Include="..\game_room\protos\testGame\testGame.android.c2s.proto">
+      <Filter>game_room\protos\testGame</Filter>
+    </None>
+    <None Include="..\game_room\protos\testGame\testGame.c2s.proto">
+      <Filter>game_room\protos\testGame</Filter>
+    </None>
+    <None Include="..\game_room\protos\testGame\testGame.s2c.proto">
+      <Filter>game_room\protos\testGame</Filter>
+    </None>
+    <None Include="..\game_room\protos\testGame\testGame.volcano.s2c.proto">
+      <Filter>game_room\protos\testGame</Filter>
+    </None>
+    <None Include="..\game_room\config\config.testgame_201">
+      <Filter>game_room\config</Filter>
+    </None>
+    <None Include="..\game_room\game_start.sh">
+      <Filter>game_room</Filter>
+    </None>
+    <None Include="..\game_room\login_start.sh">
+      <Filter>game_room</Filter>
+    </None>
+    <None Include="..\game_room\Makefile">
+      <Filter>game_room</Filter>
+    </None>
+    <None Include="..\game_room\stopall.sh">
+      <Filter>game_room</Filter>
+    </None>
+    <None Include="..\game_room\lualib\config\testGame_201.lua">
+      <Filter>game_room\lualib\config</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -1447,6 +1648,12 @@
     </Filter>
     <Filter Include="game_room\protos\loginServer">
       <UniqueIdentifier>{0b3c8b7f-26b0-449e-9604-31af59ec381f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\protos\gameServer">
+      <UniqueIdentifier>{ed790213-f916-4c6c-8289-28bc6a1b8f0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_room\protos\testGame">
+      <UniqueIdentifier>{52d7564f-4bb2-418b-a20f-804ea442b9f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

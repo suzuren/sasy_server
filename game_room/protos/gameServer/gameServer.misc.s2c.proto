@@ -1,0 +1,33 @@
+package gameServer.misc.s2c;
+
+//用户分数
+message UserScore										// 0x01ff01
+{
+	required uint32 userID=1;							//用户标识
+	required int64 score=2;								//用户分数
+	required int64 insure=3;							//用户银行
+	required int64 grade=4;								//用户成绩
+	required int64 medal=5;								//用户奖牌
+	required int64 gift=6;								//用户礼券
+	required int64 present=7;							//UU游戏的用户的奖牌数
+	required int64 experience=8;						//用户经验
+	required int64 loveliness=9;						//用户魅力
+
+	required uint32 winCount=10;						//胜利盘数
+	required uint32 lostCount=11;						//失败盘数
+	required uint32 drawCount=12;						//和局盘数
+	required uint32	fleeCount=13;						//逃跑盘数
+
+}
+
+//用户分数
+message PaymentNotify									// 0x01ff02
+{
+	required string orderID=1;
+	required string currencyType=2;
+	required float currencyAmount=3;
+	required int32 payID=4;
+	required int32 score=5;
+	required int32 memberOrder=6;
+	required uint32 userRight=7;
+}

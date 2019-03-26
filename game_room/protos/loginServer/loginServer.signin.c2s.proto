@@ -1,0 +1,9 @@
+package loginServer.signin.c2s;
+
+message Sign									   // 0x001001	签到
+{
+	required int32 signType = 1;					//要领取的奖励类型；1每日签到，2累计登入
+	required int32 dayID = 2;
+}
+
+

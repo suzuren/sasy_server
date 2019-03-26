@@ -14,6 +14,9 @@ local function checkMsg(responseItem)
 		responseItem.msgBuffer = {}
 		-- 记录下请求的 source 和 session ，之后发送消息
 		-- skynet.response 返回的函数，第一个参数是 true 或 false ，后面是回应的参数。当第一个参数是 false 时，会反馈给调用方一个异常；true 则是正常的回应。
+
+		skynet.error(string.format("%s checkMsg func - ",SERVICE_NAME),"msgList-\n",inspect(msgList))
+
 		responser(true, msgList)
 	end
 end

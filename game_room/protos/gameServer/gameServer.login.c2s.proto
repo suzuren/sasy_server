@@ -1,0 +1,22 @@
+package gameServer.login.c2s;
+
+message Login								// 0x010100
+{
+	required string session=1;
+	required string	machineID=2;
+	required uint32 behaviorFlags=3;
+	required uint32 pageTableCount=4;
+}
+
+message AndroidLogin						// 0x010108
+{
+	required uint32 userID=1;
+	required string	machineID=2;
+	required uint32 behaviorFlags=3;
+	required uint32 pageTableCount=4;
+}
+
+message Logout								// 0x010109
+{
+	
+}

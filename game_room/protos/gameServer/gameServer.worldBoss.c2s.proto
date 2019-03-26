@@ -1,0 +1,7 @@
+package gameServer.worldBoss.c2s;
+
+message FishSpawn					// 0x014005
+{
+	
+}
+

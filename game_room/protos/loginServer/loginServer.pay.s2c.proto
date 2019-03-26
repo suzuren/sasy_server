@@ -1,0 +1,149 @@
+package loginServer.pay.s2c;
+
+message QueryPayOrderItem					//0x000500
+{
+	message PayOrderItem
+	{
+		required uint32 id=1;
+		required float price=2;
+		required uint32 gold=3;
+		required uint32 goldExtra=4;
+		required uint32 limitTimes=5;
+		required uint32 limitDays=6;
+		required bool isRecommend=7;
+		required bool isPepeatable=8;
+		required int32 startSecond=9;
+		required int32 endSecond=10;
+		required uint32 memberOrder=11;
+		required uint32 memberOrderDays=12;
+		required string name=13;
+		required int32 availableTimes=14;
+	}
+
+	repeated PayOrderItem list=1;
+	required int32 todayFlag = 2;	//今天是否能双倍 0否，1可以
+}
+
+//0x000501
+message PaymentNotifyItem
+{
+	required int32 payID = 1;
+	required string orderID = 2;
+	required uint32 readResult = 3; // 0未读取 1 已读取
+}
+
+message PaymentNotify						
+{
+	repeated PaymentNotifyItem paymentNotifyItem = 1;
+}
+
+// 0x000502 查询免费金币信息
+message BackQueryFreeScore
+{
+	optional int32 limitScore = 1;		//银行+身上金币小于limitScore时，可领取免费金币
+	optional int32 freeScore = 2;		//每次可领取的金币
+	optional int32 num = 3;				//普通玩家可领次数
+	optional int32 vipNum = 4;			//vip可领次数
+	optional int32 recvNum = 5;			//今日已领次数
+	optional int32 nowTime = 6;			//当前时间戳(秒)
+}
+
+// 0x000503 领取免费金币
+message BackGetFreeScore
+{
+	enum RetCode {
+		RC_OK = 0;						//领取成功
+		RC_OTHER = 1;					//未知错误
+		RC_LIMITNUM_ERROR = 3;			//领取次数不足
+		RC_LIMITSCORE_ERROR = 4;		//身上金币不符合领取条件
+	}
+	optional RetCode code = 1;
+	optional int64 score = 2;			//身上的金币
+}
+
+// 0x000504 查询vip免费金币信息
+message BackQueryVipFreeScore
+{
+	message VipFreeScore
+	{
+		required int32 id = 1;			//vip类型
+		required int64 freeScore = 2;	//可领取金币
+		required int32 recvState = 3;	//领取状态 0不领取，1可领取，2已领取
+	}
+	repeated VipFreeScore vipFreeScore = 1;
+}
+
+// 0x000505 领取vip免费金币
+message BackGetVipFreeScore
+{
+	enum RetCode {
+		RC_OK = 0;						//领取成功
+		RC_OTHER = 1;					//未知错误
+		RC_LIMITNUM_ERROR = 2;			//已经领取
+		RC_CONDITION_ERROR = 3;			//不符合领取条件
+	}
+	optional RetCode code = 1;
+	optional int64 score = 2;			//身上的金币
+}
+
+// 0x000506 礼券换金币
+message BackGetGiftScore
+{
+	optional int32 code = 1;
+	optional int64 gift = 2;			//最终礼券
+	optional int64 score = 3;			//最终身上金币
+}
+
+// 0x000507 查询自己vip到期信息
+message BackQueryVipInfo
+{
+	message VipInfo
+	{
+		optional int32 id = 1;			//vip类型
+		optional int32 overDate = 2;	//到期时间（时间戳s）
+	}
+	repeated VipInfo vipInfo = 1;
+	optional int32 nowTime = 2;			//当前时间戳(秒)
+}
+
+// 0x000508 当前礼券（兑换实物时变化）
+message RefreshGift
+{
+	optional int32 gift = 1;			//当前礼券
+}
+
+// 0x000509 魅力换金币时变化
+message RefreshLoveliness
+{
+	optional int32 loveliness = 1;		//当前魅力
+	optional int64 score = 2;			//当前金币
+}
+
+// 0x00050A gm修改，数据同步
+message RefreshUserInfo
+{
+	optional int64 score = 1 [default=-1];			//最终身上金币
+	optional int64 bank = 2 [default=-1];			//最终银行金币
+	optional int64 present = 3 [default=-1];		//最终礼券
+	optional int64 loveliness = 4 [default=-1];		//最终魅力
+}
+
+message VipPrivilegeInfo
+{
+	required int32  vipLevel = 1;					//vip等级
+	required string vipDesc=2;						//vip特权简介
+	required int32  vipCumulativeRechargeAmount=3;	//累计充值金额
+}
+
+// 0x00050B VIP累充充值列表
+message VipPrivilegeInfoList
+{
+	optional int32  currentCumulativeRechargeAmount = 1;	//目前累计充值金额
+	repeated VipPrivilegeInfo vipPrivilegeInfo = 2;
+}
+
+// 0x00050C VIP累充充值变更
+message RechargeAmount
+{
+	required int32  currentCumulativeRechargeAmount = 1;	//目前累计充值金额
+}

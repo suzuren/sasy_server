@@ -1,0 +1,130 @@
+package loginServer.bag.s2c;
+
+//需求的物品
+message NeedGoodsItem {						
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+//获得的物品
+message GetGoodsItem {						
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+//0x003000 物品背包
+message GoodsItem {
+	required uint32 goodsID=1;
+	required int64 goodsCount=2;
+	required int32 isGive = 3;			//是否可以赠送
+	required int32 isUse = 4;			//是否可以使用
+	required int32 isCompositing = 5;	//是否可以合成
+	repeated NeedGoodsItem needGoodsItem=6; //需求的物品 有额外操作的时候 如：合成 ，使用
+	repeated GetGoodsItem getGoodsItem=7;	//获得的物品
+	required int32 useTime = 8;			//使用剩余时间
+	required int32 equipGoodsID = 9;	//装备物品id
+	required int32 useType = 10;		//使用类型
+	required int32 oldGoodsCount = 11;	//之前有多少个，这个客户端没有用--游戏里保存数据增量用的
+	required int32 endTime = 12;		//结束时间,和useTime配合使用--这个客户端没有用
+}
+message GoodsInfoList
+{
+	repeated GoodsItem goodsItem=1;
+}
+
+//0x003001 单个物品信息
+message GoodsInfo
+{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+	required int32 isGive = 3;			//是否可以赠送
+	required int32 isUse = 4;			//是否可以使用
+	required int32 isCompositing = 5;	//是否可以合成
+	repeated NeedGoodsItem needGoodsItem=6; //需求的物品 有额外操作的时候 如：合成 ，使用
+	repeated GetGoodsItem getGoodsItem=7;	//获得的物品
+	required int32 useTime = 8;			//使用剩余时间
+	required int32 equipGoodsID = 9;	//装备物品id
+	required int32 useType = 10;		//使用类型
+	required int32 oldGoodsCount = 11;	//之前有多少个，这个客户端没有用--游戏里保存数据增量用的
+	required int32 endTime = 12;		//结束时间,和useTime配合使用--这个客户端没有用
+}
+
+//0x003002 使用物品信息
+message OffsetGoodsItem {
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message OffsetGoodsInfo
+{
+	repeated OffsetGoodsItem offsetGoodsItem=1;
+	required int32 code=2; //0成功 非0失败
+	optional string callBackAddress=3;		
+}
+
+//0x003003 使用物品
+message UseGoodsItem {						
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message UseGoodsInfo 						
+{
+	repeated UseGoodsItem useGoodsItem=1;//使用物品后获得的其他物品
+	required int32 code=2; //0成功 非0失败	
+}
+
+//0x003004 合成物品
+message GetCompositingGoodsItem {						
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message CompositingGoodsInfo 				
+{
+	repeated GetCompositingGoodsItem getCompositingGoodsItem=1;//合成物品后获得的其他物品
+	required int32 code=2; //0成功 非0失败	
+}
+
+//0x003005 赠送物品
+message GiveGoodsInfo 						
+{
+	required int32 code=1; //0成功 非0失败	
+}
+
+//0x003006 装备物品
+message equipGoodsInfo 		
+{
+	required int32 code=1; //0成功 非0失败	
+}
+
+//0x003007 购买物品
+message ShopGoodsInfo 		
+{
+	required int32 code=1; //0成功 非0失败 购买成功后发送物品变更消息
+}
+
+//0x003008 合成时候的CD信息
+message CompositingCDInfo 			
+{
+	required int32 goodsID=1; 				//需要合成的物品
+	required int32 isUseCD=2; 				//0不用  1使用
+	repeated NeedGoodsItem needGoodsItem=3; //需求的物品 
+	required int32 CDTime = 4;				//还剩余时间
+}
+
+
+message GivenItemHistory {
+	required uint32 goodsID=1;
+	required uint32 givenUserID=2;			//被赠送的ID
+	required uint32 givenUserIcon=3;		//用户icon
+	optional string	givenUserFace=4;		//自定义头像
+	required uint32 givenUserVip=5;			//用户VIP
+	required string givenUserNickname=6;	//发送用户名称
+	required uint32 givenTime = 7;		//发送时间
+}
+//0x003009 查询赠送记录
+message GivenHistory
+{
+	repeated GivenItemHistory givenItemHistory=1;
+}

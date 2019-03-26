@@ -1,0 +1,74 @@
+package loginServer.bag.c2s;
+
+//0x003000 物品背包
+message GoodsInfoList
+{
+
+}
+
+//0x003001 单个物品信息
+message GoodsInfo
+{
+	required int32 goodsID=1;
+}
+
+//0x003002 使用物品信息
+message OffsetGoodsItem
+{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message OffsetGoodsInfo
+{
+	required string callBackAddress=1;
+	repeated OffsetGoodsItem offsetGoodsItem=2; 
+}
+
+//0x003003 使用物品
+message UseGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int32 getGoodsID=2;
+}
+
+//0x003004 合成物品
+message CompositingGoodsInfo 		
+{
+	required int32 goodsID=1;
+}
+
+//0x003005 赠送物品
+message GiveGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+	required int32 UserID=3;
+}
+
+//0x003006 装备宝箱   直接装备的是炮台
+message equipGoodsInfo 				
+{
+	required int32 goodsID=1;
+	required int32 equipGoodsID=2; //装备的物品id
+}
+
+//0x003007 购买物品
+message ShopGoodsInfo 				
+{
+	required int32 useShopGoodsID=1; //使用的是什么物品购买
+	required int32 shopGoodsID=2;  	 //购买的物品ID
+	required int32 shopGoodsCount=3; //购买的物品数量
+}
+
+//0x003008 合成时候的CD信息
+message CompositingCDInfo 			
+{
+	required int32 goodsID=1; 	//需要合成的物品
+}
+
+//0x003009 查询赠送记录
+message GivenHistory
+{
+	
+}

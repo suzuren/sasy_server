@@ -1,0 +1,4 @@
+package gameServer.heartBeat.c2s;
+
+message HeartBeat {				// 0x010000
+}

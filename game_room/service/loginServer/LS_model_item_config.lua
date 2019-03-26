@@ -2,7 +2,7 @@ require "utility.string"
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
-local mysqlutil = require "mysqlutil"
+--local mysqlutil = require "mysqlutil"
 local arc4 = require "arc4random"
 local readFileUtility = require "utility.readFile"
 
@@ -18,8 +18,85 @@ local _titleInfoHash = {}
 
 local function loadItemInfoConfig()
 	local sql = "SELECT * FROM `kftreasuredb`.`t_item_table_info`"
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn,"lua","query",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn,"lua","query",sql)
+	local rows = {
+		{
+			ItemId		= 1001,
+			ItemName	= "金币",
+			Tips		= "金币",
+			Icon		= 1001,
+			ItemType	= 1,
+			UpMax		= -1,
+			Price		= 0,
+			ItemFunction = 0,
+			IsGive		= 0,
+			IsUse		= 0,
+			IsCompose	= 0,
+			LinkId		= 0,
+			EquipId		= 0,
+		},
+		{
+			ItemId		= 1002,
+			ItemName	= "钻石",
+			Tips		= "钻石",
+			Icon		= 1002,
+			ItemType	= 1,
+			UpMax		= -1,
+			Price		= 0,
+			ItemFunction = 0,
+			IsGive		= 0,
+			IsUse		= 0,
+			IsCompose	= 0,
+			LinkId		= 0,
+			EquipId		= 0,
+		},
+		{
+			ItemId		= 1003,
+			ItemName	= "话费兑换券",
+			Tips		= "话费兑换券",
+			Icon		= 1003,
+			ItemType	= 1,
+			UpMax		= -1,
+			Price		= 0,
+			ItemFunction = 0,
+			IsGive		= 0,
+			IsUse		= 0,
+			IsCompose	= 0,
+			LinkId		= 0,
+			EquipId		= 0,
+		},
+		{
+			ItemId		= 1004,
+			ItemName	= "锁定",
+			Tips		= "可以一段时间内锁定大鱼",
+			Icon		= 1004,
+			ItemType	= 1,
+			UpMax		= 999,
+			Price		= 0,
+			ItemFunction = 0,
+			IsGive		= 0,
+			IsUse		= 0,
+			IsCompose	= 0,
+			LinkId		= 0,
+			EquipId		= 0,
+		},
+		{
+			ItemId		= 1005,
+			ItemName	= "狂暴",
+			Tips		= "可以一段时间内开启狂暴状态",
+			Icon		= 1005,
+			ItemType	= 1,
+			UpMax		= 999,
+			Price		= 0,
+			ItemFunction = 0,
+			IsGive		= 0,
+			IsUse		= 0,
+			IsCompose	= 0,
+			LinkId		= 0,
+			EquipId		= 0,
+		}
+	}
 	if type(rows)=="table" then
 		for _, row in pairs(rows) do
 			local item ={
@@ -41,8 +118,40 @@ end
 
 local function loadItemComposeConfig()
 	local sql = "SELECT * FROM `kftreasuredb`.`t_item_compose`"
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn,"lua","query",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn,"lua","query",sql)
+	local rows = {
+		{
+			ItemId = 1009,
+			SourceItem = "1012:1|1006:1|1002:5",
+			TargetItemCount = 1,
+		},
+		{
+			ItemId = 1010,
+			SourceItem = "1012:1|1013:1|1007:1|1002:5",
+			TargetItemCount = 1,
+		},
+		{
+			ItemId = 1011,
+			SourceItem = "1012:1|1013:1|1008:1|1002:10",
+			TargetItemCount = 1,
+		},
+		{
+			ItemId = 1022,
+			SourceItem = "1020:1|1001:2000000|1002:20",
+			TargetItemCount = 1,
+		},
+		{
+			ItemId = 1023,
+			SourceItem = "1021:1|1001:10000000|1002:100",
+			TargetItemCount = 1,
+		},
+		{
+			ItemId = 1030,
+			SourceItem = "1029:10",
+			TargetItemCount = 1,
+		}
+	}
 	if type(rows) == "table" then
 		for _, row in pairs(rows) do 
 			local itemInfo = {
@@ -68,8 +177,47 @@ end
 
 local function loadItemGiveConfig()
 	local sql = "SELECT * FROM `kftreasuredb`.`t_table_give`"
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn,"lua","query",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn,"lua","query",sql)
+	local rows = {
+		{
+			Id = 1;
+			Name = "银宝箱";
+			Desc = "可以开出20W金币或者获得一个紫色水晶炮台";
+			Type = 3;
+			Item1 = "1001:200000:1:100";
+		},
+		{
+			Id = 2;
+			Name = "金宝箱";
+			Desc = "可以开出50W金币或者获得一个紫色水晶炮台";
+			Type = 3;
+			Item1 = "1001:500000:1:100";
+		}
+		,
+		{
+			Id = 3;
+			Name = "铂金宝箱";
+			Desc = "可以开出100W金币或者获得一个紫色水晶炮台";
+			Type = 3;
+			Item1 = "1001:1000000:1:100";
+		},
+		{
+			Id = 4;
+			Name = "藏宝图上";
+			Desc = "出售可以获得1000金币";
+			Type = 3;
+			Item1 = "1001:1000:1:100";
+		},
+		{
+			Id = 5;
+			Name = "藏宝图下";
+			Desc = "出售可以获得5000金币";
+			Type = 3;
+			Item1 = "1001:5000:1:100";
+		}
+
+	}
 	if type(rows) == "table" then
 		for _, row in pairs(rows) do 
 			local itemInfo = {
@@ -138,8 +286,9 @@ end
 
 local function loadHuoDongTimeConfig()
 	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `kftreasuredb`.`t_huo_dong_time_config`"
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn,"lua","query",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn,"lua","query",sql)
+
 	if type(rows)=="table" then
 		for _, row in pairs(rows) do
 			local info = {
@@ -326,12 +475,12 @@ local conf = {
 		loadItemInfoConfig()
 		loadItemComposeConfig()
 		loadItemGiveConfig()
-		loadVipInfoConfig()
-		loadGunUplevelConfig()
-		loadHuoDongTimeConfig()
-		loadHuoDongRewardConfig()
-		loadChouJiangRewardConfig()
-		loadTitleConfig()
+		--loadVipInfoConfig()
+		--loadGunUplevelConfig()
+		--loadHuoDongTimeConfig()
+		--loadHuoDongRewardConfig()
+		--loadChouJiangRewardConfig()
+		--loadTitleConfig()
 	end,
 }
 

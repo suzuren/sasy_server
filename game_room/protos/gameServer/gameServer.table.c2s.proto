@@ -1,0 +1,52 @@
+package gameServer.table.c2s;
+
+message UserSitDown										// 0x010200
+{
+	required uint32 tableID=1;							//桌子位置
+	required uint32 chairID=2;							//椅子位置
+	optional string password=3;							//桌子密码
+	required uint32 needVipLv=4;						//需要的vip等级
+	required uint32 multipleLv=5;						//需要的炮倍
+	required uint32 roomType=6;							//房间类型，0普通，1vip房间
+}
+
+//游戏配置
+message GameOption										// 0x010202
+{
+	required bool isAllowLookon=1;						//旁观标志
+}
+
+message UserStandUp										// 0x010204
+{
+	required bool isForce=1;						//强行离开
+}
+
+message UserReady									// 0x010206
+{
+}
+
+message UserLookon									// 0x010207
+{
+	required uint32 tableID=1;							//桌子位置
+	required uint32 chairID=2;							//椅子位置
+	optional string password=3;							//桌子密码
+}
+
+//踢出用户
+message KickUser									//0x010208
+{
+	required uint32 chairID=1;						//椅子位置
+}
+
+
+//桌子玩家旁观信息
+message UsersLookonInfo									// 0x01020A
+{
+	required uint32 tableID=1;							//桌子位置
+}
+
+//锁上房间
+message LockRoom									//0x01020C
+{
+	required int32 isLock=1;						// 0解锁,1上锁
+}

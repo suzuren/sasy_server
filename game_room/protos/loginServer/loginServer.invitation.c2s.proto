@@ -1,0 +1,11 @@
+
+package loginServer.invitation.c2s;
+
+// 邀请0x008000
+message Invitation
+{
+	required string invitation = 1;
+}
+
+
+

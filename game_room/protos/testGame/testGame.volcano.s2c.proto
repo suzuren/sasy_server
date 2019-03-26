@@ -1,0 +1,14 @@
+package fish.volcano.s2c;
+
+message PoolStatus							// 0x020200
+{
+	required double rate=1;
+}
+
+message VolcanoOpen							// 0x020201
+{
+	required uint32 chairID=1;
+	required int64 fishScore=2;
+	required uint32 fishMulti=3;
+}
+

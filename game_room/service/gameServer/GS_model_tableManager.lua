@@ -8,6 +8,8 @@ local arc4 = require "arc4random"
 local timerUtility = require "utility.timer"
 local timeUtility = require "utility.time"
 local cluster = require "cluster"
+local inspect = require "inspect"
+
 local _serverConfig
 local _tableHash = {}
 
@@ -531,8 +533,12 @@ local conf = {
 				end
 			end
 			_tableHash[i] = {addr=tbAddr, state={isLocked=false, isStarted=false, sitCount=0, needVipLv=0, multipleLv=0, tablePassword=nil,tableType=tableType}}
-		end		
-	
+		end
+		
+		skynet.error(string.format("%s initFunc func - ",SERVICE_NAME),
+		"_serverConfig-\n",inspect(_serverConfig),
+		"\n_tableHash-\n",inspect(_tableHash))
+
 		local GS_EVENT = require "define.eventGameServer"
 		skynet.send(addressResolver.getAddressByServiceName("eventDispatcher"), "lua", "addEventListener", GS_EVENT.EVT_GS_LOGIN_SUCCESS, skynet.self(), "onEventLoginSuccess")
 	

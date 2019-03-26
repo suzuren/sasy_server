@@ -1,0 +1,36 @@
+package loginServer.bank.s2c;
+
+enum BankRetCode {
+	RC_OK=1;
+	RC_STILL_IN_GAME=2;
+	RC_BANK_PREREQUISITE=3;
+	RC_NO_SCORE_INFO_RECORD=4;
+	RC_NOT_ENOUGH_MONEY=5;
+}
+
+//存入金币
+message Deposit									// 0x000700
+{
+	required BankRetCode code=1;
+	optional string msg=2;
+	optional int64 score=3;
+	optional int64 insure=4;
+}
+
+//提取金币
+message Withdraw								// 0x000701
+{
+	required BankRetCode code=1;
+	optional string msg=2;
+	optional int64 score=3;					//用户金币
+	optional int64 insure=4;				//用户银行
+}
+
+//查询
+message Query									// 0x000702
+{
+	required BankRetCode code=1;
+	optional string msg=2;
+	optional int64 score=3;					//用户金币
+	optional int64 insure=4;				//用户银行
+}

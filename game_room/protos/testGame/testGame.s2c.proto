@@ -1,0 +1,200 @@
+package fish.s2c;
+
+message UserGoodsInfo
+{
+	required int32 goodsID=1;
+	required int32 goodsCount=2;
+}
+
+message UserFire									// 0x020000
+{
+	required int32 bulletKind=1;
+	required int32 bulletID=2;
+	required int32 chairID=3;
+	required float angle=4;
+	required int32 bulletMultiple=5;
+	repeated UserGoodsInfo UserGoodsInfo=6;	
+	required int32 lockFishID=7; 
+}
+
+message SceneEnd									// 0x020002
+{
+}
+
+message SwitchScene									// 0x020003
+{
+	message Item {
+		required int32 fishID=1;
+		required int32 fishKind=2;
+	}
+	required uint32 sceneKind=1;
+	repeated Item fishList=2;
+}
+
+// 美人鱼的衣服
+message Mermaid										// 0x020004
+{
+	required uint32 clothesID=1;
+}
+
+message GameConfig									// 0x020005
+{
+	message FishItem 
+	{
+		required int32 kind=1;
+		required int32 multiple=2;
+		required int32 speed=3;
+		required int32 boundingBoxWidth=4;
+		required int32 boundingBoxHeight=5;
+	}
+
+	message BulletItem 
+	{
+		required int32 kind=1;
+		required int32 speed=2;
+	}
+
+	required int32 bulletMultipleMin=1;
+	required int32 bulletMultipleMax=2;
+	required int32 bombRangeWidth=3;
+	required int32 bombRangeHeight=4;
+	repeated FishItem fishList=5;
+	repeated BulletItem bulletList=6;
+}
+
+message GameScene									// 0x020006
+{
+	message ScoreItem
+	{
+		required int32 chairID=1;
+		required int64 fishScore=2;
+	}
+	required bool isSpecialScene=1;
+	repeated ScoreItem scoreList=2;
+	optional int32 specialSceneLeftTime=3;
+}
+
+message ExchangeFishScore							// 0x020007
+{
+	required uint32 chairID=1;
+	required int64 fishScore=2;
+} 
+
+message CatchSweepFish								// 0x020009
+{
+	message CatchSweepFishGoodsItem
+	{
+		required int32 goodsID=1;
+		required sint64 goodsCount=2;
+	}
+
+	required int32 chairID=1;
+	required int32 fishID=2;
+	required int32 fishScore=3;
+	required int32 fishMulti=4;
+	repeated CatchSweepFishGoodsItem catchSweepFishGoodsItem = 5;//额外获得物品
+}
+
+
+message TreasureBox									// 0x02000A
+{
+	required int32 fishID=1;
+	required int32 chairID=2;
+	optional int32 present=3;						//奖牌
+	optional int32 score=4;
+}
+
+
+
+message CatchFish									// 0x02000B
+{
+	message CatchFishGoodsItem
+	{
+		required int32 goodsID=1;
+		required sint64 goodsCount=2;
+	}
+
+	required int32 chairID=1;
+	required int32 fishID=2;
+	required int32 fishKind=3;
+	required int64 fishScore=5;
+	required int32 fishMulti=6;
+	repeated CatchFishGoodsItem catchFishGoodsItem = 7; //额外获得物品
+	required bool bCirt=8;	//是否暴击
+}
+
+message CatchSweepFishResult						// 0x02000C
+{
+	message CatchSweepFishResultGoodsItem
+	{
+		required int32 goodsID=1;
+		required sint64 goodsCount=2;
+	}
+
+	required int32 chairID=1;
+	required int32 sweepID=2;
+	required int64 fishScore=3;
+	required int32 fishMulti=4;
+	repeated int32 fishIDList=5;
+	repeated CatchSweepFishResultGoodsItem catchSweepFishResultGoodsItem = 6;//额外获得物品
+}
+
+message LockTimeout									// 0x02000D
+{
+}
+
+message BulletCompensate							// 0x02000E
+{
+	required int32 chairID=1;
+	required int64 compensateScore=2;
+}
+
+message FishSpawn									// 0x020010
+{
+	message Item
+	{
+		required int32 fishKind=1;
+		required int32 fishID=2;
+		required int32 pathID=3;
+	}
+	repeated Item list=1;
+}
+
+
+message UserSkillStatus							   // 0x020011 技能状态同步
+{
+	required int32 chairID=1;
+	required int32 skillType=2;		//1 狂暴  2 锁定  3 急速
+	required int32 skillStutus=3;   //0 关闭状态  1开启状态
+	optional int32 skillLeftOverTime=4;   	//技能剩余时间 同步技能状态使用
+}
+
+
+message UserFort									// 0x020012
+{
+	required int32 fortOption=1;
+	required int32 fortLevel=2;
+	required int32 chairID=3;
+}
+
+message YnchronizationDataErr 						// 0x020014 同步数据错误
+{
+	
+}
+
+message CallFish 									// 0x020015 召唤凤凰
+{
+	required int32 code=1;	//0成功，1道具不足，2当前有凤凰,请等下再召唤，3当前有世界boss，请等下再召唤
+}
+
+
+message NotifyFishRate 			// 0x020016 同步鱼概率
+{
+	required int32 fishId = 1;	
+	optional string rate = 2;	
+}
+
+message FrozenFish									// 0x020017 冰冻鱼
+{
+	repeated int32 fishIDList=1;					//冰冻鱼的ID   
+}

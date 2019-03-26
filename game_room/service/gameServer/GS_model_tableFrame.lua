@@ -12,7 +12,7 @@ local queue = require "skynet.queue"
 local currencyUtility = require "utility.currency"
 local LS_CONST = require "define.lsConst"
 
-local tableFrameSink = require(string.format("%s.lualib.tableFrameSink", skynet.getenv("game")))
+local tableFrameSink = require(string.format("%s.lualib.tableFrameSink", skynet.getenv("gameName")))
 local gameMatchSink
 
 local _criticalSection = queue()

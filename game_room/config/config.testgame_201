@@ -15,8 +15,8 @@ pbs_dir = "./pbs"
 lualoader = "../skynet/lualib/loader.lua"
 cpath =  "./cservice/?.so;".."../skynet/cservice/?.so"
 lua_cpath = "./luaclib-src/?.so;".."../skynet/luaclib/?.so"
-luaservice = "./service/?.lua;".."./service/gameServer/?.lua;".."./lualib/?.lua;".."../skynet/service/?.lua;"
-lua_path = "./config/?.lua;".."./service/?.lua;".."./lualib/?.lua;".."../skynet/lualib/?.lua;".."../skynet/lualib/skynet/?.lua;"
+luaservice = "./service/?.lua;".."./service/gameServer/?.lua;".."./lualib/?.lua;".."../skynet/service/?.lua;".."./comprise/?.lua;"
+lua_path = "./config/?.lua;".."./service/?.lua;".."./lualib/?.lua;".."../skynet/lualib/?.lua;".."../skynet/lualib/skynet/?.lua;".."./comprise/?.lua;"
 
 
 resManager_pbParserPoolSize = 3

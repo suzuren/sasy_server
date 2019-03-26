@@ -1,0 +1,16 @@
+package loginServer.rescueCoin.c2s;
+
+message RequestRescueCoin							    // 0x002000	请求救济金
+{
+					
+}
+
+message RescueCoinSynchronizeTime						// 0x002001	时间同步
+{
+					
+}
+
+message ReceiveRescueCoin							    // 0x002002	领取救济金
+{
+					
+}

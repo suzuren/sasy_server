@@ -1,0 +1,30 @@
+package gameServer.task.c2s;
+
+//0x010800	任务列表
+message RequestTask {								
+	required uint32	taskType = 1;
+}
+
+message GoodsItem {
+	required uint32 goodsID=1;				//物品ID
+	required uint32 goodsCount=2;			//物品数量
+}
+
+
+//0x010801	修改任务物品
+message ChangeTaskGoodsCount {
+	required uint32	taskType = 1;					//新手日常任务 = 1 ，普通任务 = 2 
+	required uint32	taskID = 2;						//任务ID
+	repeated GoodsItem taskGoodsInfoList=3;		//需要同步的任务物品
+}
+
+//0x010802	完成任务
+message CompleteTask {								
+	required uint32	taskType = 1;					//新手日常任务 = 1 ，普通任务 = 2 
+	required uint32	taskID = 2;						//任务ID
+}
+
+//0x010805 任务时间同步
+message TaskSynchronizationTime {
+	required uint32	taskType = 1;	//新手日常任务 = 1 ，普通任务 = 2
+}

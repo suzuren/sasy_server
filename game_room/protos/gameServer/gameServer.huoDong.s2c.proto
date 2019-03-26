@@ -1,0 +1,44 @@
+package gameServer.huoDong.s2c;
+
+message goodsInfo
+{
+	required int32 	goodsID		= 1;			//道具id
+	required int32 	goodsCount 	= 2;			//道具数量
+}
+
+message ActivityItemInfo
+{
+	required int32 	index		= 1;			//id
+	required int32 	leftTimes	= 2;			//剩余次数
+	repeated goodsInfo 	conditionList	= 3;	//需要物品信息
+	repeated goodsInfo 	rewardList		= 4;	//奖励物品信息
+	repeated goodsInfo 	completeGoodsList = 5;	//完成物品信息	
+	required int32 	needVipLv	= 6;			//需要的vip
+	required int32 	maxLimitTimes	= 7;		//上限次数
+}
+
+message ActivityInfo
+{
+	required int32	activityType = 1;			//活动类型
+	required int64	startTime = 2;				//开始时间
+	required int64	currentTime = 3;			//当前服务器时间
+	required int64  entTime   = 4;				//结束时间
+	repeated ActivityItemInfo ActivityItemInfoList = 5;	
+}
+
+// 0x013000	请求活动列表信息
+message ActivityInfoList					
+{	
+	repeated ActivityInfo activityInfoList = 1;
+}
+
+///////////////////////////////
+
+// 0x013001	兑换奖励
+message ExchangeActivityReward
+{
+	required int32	activityType = 1;			//活动类型
+	required int32	activityIndex = 2;			//节点id
+	required int32	reCode	= 3;				//错误码：1失败,0成功
+}
+

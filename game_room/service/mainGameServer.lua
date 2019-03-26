@@ -35,9 +35,8 @@ skynet.start(function()
 	skynet.uniqueservice("GS_model_attemperEngine")
 	]]
 	skynet.uniqueservice("GS_model_userManager")
-	--[[
 	skynet.uniqueservice("GS_model_tableManager")
-	
+	--[[
 	local androidManager = skynet.uniqueservice("GS_model_androidManager")
 	skynet.send(androidManager, "lua", "start")
 
@@ -50,7 +49,10 @@ skynet.start(function()
 	skynet.uniqueservice("GS_model_huoDong")
 	skynet.uniqueservice("GS_model_invalidGun")
 	skynet.uniqueservice("GS_model_worldBoss")
+	]]
+
 	-- controllers
+	--[[
 	skynet.uniqueservice("GS_controller_login")
 	skynet.uniqueservice("GS_controller_table")
 	skynet.uniqueservice("GS_controller_property")

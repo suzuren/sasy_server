@@ -1,0 +1,29 @@
+package gameServer.worldBoss.s2c;
+
+
+
+message WorldBossStartKilled{						//0x014001
+	
+}
+
+
+message InvalidCoin{								//0x014003无效金币更新
+	required int64 invalidCoin=1;
+}
+
+
+message SpawnItem
+{
+	required int32 fishKind=1;
+	required int32 fishID=2;
+	required int32 pathID=3;
+	required int32 fishElapsedTime=4;//鱼已经游动的时间
+}
+
+
+message FishSpawn					// 0x014005
+{
+	repeated SpawnItem list=1;
+	required int32 bossType=2;	//boss类型0普通，1定时
+}
+

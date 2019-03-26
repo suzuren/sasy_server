@@ -1,0 +1,13 @@
+package gameServer.bank.c2s;
+
+//提取金币
+message Withdraw							// 0x010701
+{
+	required uint64 amount=1;
+}
+
+
+//查询
+message Query								// 0x010702
+{
+}

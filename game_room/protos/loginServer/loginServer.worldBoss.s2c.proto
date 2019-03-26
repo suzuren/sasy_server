@@ -1,0 +1,72 @@
+package loginServer.worldBoss.s2c;
+
+//世界boss出现的条件
+message BossFishAppearCondition{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+//奖励的基础金币
+message BossFishAwardItem{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+//打boss允许的炮倍范围
+message BossFishAllowPaoMult{
+	required int32 minPaoMult=1;					//最小炮倍
+	required int32 maxPaoMult=2;					//最大炮倍
+}
+
+message BossFishInfo{
+	repeated BossFishAppearCondition bossFishAppearCondition=1;			
+	repeated BossFishAllowPaoMult bossAllowPaoMult=2;					
+	repeated BossFishAwardItem bossFishAwardItem=3;					
+	required int32 bossLeftTime=4;							//boss出现后的剩余时间
+	required int32 fastFire=5;								//狂暴是否可用 0 不可用  1可用
+	required int32 lockFire=6;								//锁定是否可用 0 不可用  1可用
+	required int32 nextBossLeftTime=7;						//boss未被打死，下次出现时间
+	required int32 bossStatus=8;							//boss状态 0:没有boss,1:正在打 即2分钟时间内,2:等待出现
+}
+
+//打死boss获取的物品
+message KillBossGetGoods{
+	required int32 goodsID=1;
+	required int64 goodsCount=2;
+}
+
+message KillBossUserInfo{
+	required int64 killDate=1;						//杀死boss时间
+	repeated KillBossGetGoods killBossGetGoods=2;
+	optional string userNickName = 3;					//昵称
+	required int32 userVip = 4;							//vip等级 
+}
+
+message WorldBossFishInfo							//0x007000
+{
+	repeated BossFishInfo bossFishInfo=1;			//世界boss信息
+	repeated KillBossUserInfo killBossUserInfo=2;	//打死boss用户记录
+	required int32 bossType=3;						//boss类型0普通，1定时
+}
+
+message WorldBossStartKilled{						//0x007001
+	
+}
+
+message WorldBossEndKilled{							//0x007002
+	required int32 killResult=1;					//结束结果 0 未被打死 1 打死了
+	required int32 nextBossLeftTime=2;				//boss未被打死，下次出现时间
+	optional string userID=3;						//击杀boss的用户ID
+	repeated KillBossGetGoods killBossGetGoods=4;
+	optional string userNickName = 5;					//昵称
+	required int32 bossType=6;						//boss类型0普通，1定时
+}
+
+message InvalidCoin{								//0x007003无效金币更新
+	required int64 invalidCoin=1;
+}
+
+message SynchronizationBossSwimTime{				// 0x007004 请求boss的已游动的时间
+	required int32 bossSwimTime=1;
+}
+

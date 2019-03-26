@@ -283,11 +283,12 @@ end
 
 local function doPulling()
 	
-	skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),inspect(_serverSignature))
-
 	local list = cluster.call("loginServer", _LS_GSProxyAddress, "gs_pull", _serverSignature.serverID, _serverSignature.sign)
 
-	skynet.error(string.format("%s doPulling func - list ", SERVICE_NAME),list)
+	skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),
+	"_serverSignature-\n",inspect(_serverSignature),
+	"\nlist-\n",inspect(list))
+
 
 	do
 		local jsonUtil = require "cjson.util"
@@ -295,9 +296,15 @@ local function doPulling()
 	end
 
 	for _, item in ipairs(list) do
-		if (item.msgNo & COMMON_CONST.LSNOTIFY_EVENT_MASK)~=0 then
+		
+		local eventMask = (item.msgNo & COMMON_CONST.LSNOTIFY_EVENT_MASK)
+		local messageMask = (item.msgNo & COMMON_CONST.RELAY_MESSAG_MASK)
+		skynet.error(string.format("%s doPulling func -eventMask:%d,messageMask:%d,msgNo:0x%08X,EVENT_MASK:0x%08X,MESSAG_MASK:0x%08X",
+		 SERVICE_NAME,eventMask,messageMask,item.msgNo,COMMON_CONST.LSNOTIFY_EVENT_MASK,COMMON_CONST.RELAY_MESSAG_MASK))
+
+		if eventMask~=0 then
 			processLSNotify(item.msgNo, item.msgData)
-		elseif (item.msgNo & COMMON_CONST.RELAY_MESSAG_MASK)~=0 then
+		elseif messageMask~=0 then
 			processRelayMessage(item.msgNo, item.msgData)
 		else
 			error(string.format("%s: unknow the message type", SERVICE_NAME))

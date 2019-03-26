@@ -1,0 +1,9 @@
+package fish.android.c2s;
+
+message BigNetCatchFish								// 0x020100
+{
+	required int32 bulletID=1;
+	required int32 bulletType=2;					// 1随机打鱼, 2专打大鱼
+}
+
+
