@@ -288,7 +288,63 @@ local function loadHuoDongTimeConfig()
 	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `kftreasuredb`.`t_huo_dong_time_config`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
-
+	local rows = {
+		{
+			Index			= 1,
+			Tips			= "规则: 喜迎国庆，捕鱼狂欢，集字赢壕礼",
+			ActivityType	= 1,
+			StartTime		= 1476410400,
+			EndTime			= 1476633600,
+			TuPianId		= "Gqj1",
+			BeiJingId		= "Gqj",
+			TextName		= "Qby",
+			ActivityClass	= 1,
+		},
+		{
+			Index			= 2,
+			Tips			= "规则: 单笔充值特定金额，赢取相应丰厚大奖 提示：可重复充值领取",
+			ActivityType	= 2,
+			StartTime		= 1480089600,
+			EndTime			= 1480608000,
+			TuPianId		= "Dbcz",
+			BeiJingId		= "Cz",
+			TextName		= "Qcz",
+			ActivityClass	= 2,
+		},
+		{
+			Index			= 3,
+			Tips			= "版本更新介绍",
+			ActivityType	= 3,
+			StartTime		= 1476410400,
+			EndTime			= 1476633600,
+			TuPianId		= Bz1,
+			BeiJingId		= Bz,
+			TextName		= "Qby",
+			ActivityClass	= 3,
+		},
+		{
+			Index			= 4,
+			Tips			= "日累计充值活动",
+			ActivityType	= 4,
+			StartTime		= 1490803200,
+			EndTime			= 1493568000,
+			TuPianId		= "Rljcz",
+			BeiJingId		= "Cz",
+			TextName		= "Qcz",
+			ActivityClass	= 2,
+		},
+		{
+			Index			= 5,
+			Tips			= "邪恶南瓜来袭，惊魂万圣节，集字迎好礼",
+			ActivityType	= 5,
+			StartTime		= 1477621800,
+			EndTime			= 1478188800,
+			TuPianId		= "Wsj1",
+			BeiJingId		= "Wsj",
+			TextName		= "Qby",
+			ActivityClass	= 1,
+		},
+	}
 	if type(rows)=="table" then
 		for _, row in pairs(rows) do
 			local info = {
@@ -309,8 +365,46 @@ end
 
 local function loadHuoDongRewardConfig()
 	local sql = "SELECT * FROM `kftreasuredb`.`t_huo_dong_reward_config`"
-	local dbConn = addressResolver.getMysqlConnection()
-	local rows = skynet.call(dbConn,"lua","query",sql)
+	--local dbConn = addressResolver.getMysqlConnection()
+	--local rows = skynet.call(dbConn,"lua","query",sql)
+	local rows = {
+		{
+			ActivityType	= 1,
+			ActivityId		= 1,
+			Index			= 1,
+			ActivityName	= "国庆集字",
+			NeedVip			= 0,
+			PerDayMax		= 3,
+			ServerMax		= -1,
+			NeedCondition	= "1201:1|1202:1|1203:1|1204:1",
+			RewardList		= "1206:1",
+			Multiple		= 0,
+		},
+		{
+			ActivityType	= 1,
+			ActivityId		= 1,
+			Index			= 2,
+			ActivityName	= "国庆集字",
+			NeedVip			= 0,
+			PerDayMax		= 3,
+			ServerMax		= -1,
+			NeedCondition	= "1201:1|1202:1|1203:1|1204:1|1205:1",
+			RewardList		= "1207:1",
+			Multiple		= 0,
+		},
+		{
+			ActivityType	= 6,
+			ActivityId		= 4,
+			Index			= 1,
+			ActivityName	= "国庆活动期间累计充值",
+			NeedVip			= 0,
+			PerDayMax		= -1,
+			ServerMax		= -1,
+			NeedCondition	= "1208:50",
+			RewardList		= "1001:80000",
+			Multiple		= 0,
+		},
+	}
 	if type(rows)=="table" then
 		for _, row in pairs(rows) do
 			local info = {
@@ -477,8 +571,8 @@ local conf = {
 		loadItemGiveConfig()
 		--loadVipInfoConfig()
 		--loadGunUplevelConfig()
-		--loadHuoDongTimeConfig()
-		--loadHuoDongRewardConfig()
+		loadHuoDongTimeConfig()
+		loadHuoDongRewardConfig()
 		--loadChouJiangRewardConfig()
 		--loadTitleConfig()
 	end,

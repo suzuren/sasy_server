@@ -702,7 +702,7 @@ local conf = {
 		timerUtility.start(1000)
 		timerUtility.setInterval(CheckActivityStartOrEnd, 1)
 
-		loadData()
+		--loadData()
 	end,
 }
 
