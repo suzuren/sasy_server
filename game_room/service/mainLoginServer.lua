@@ -12,7 +12,8 @@ skynet.start(function()
     end
 
     skynet.uniqueservice("eventDispatcher")
-    --skynet.uniqueservice("mysqlConnectionPool")
+    skynet.uniqueservice("mysqlConnectionPool")
+	skynet.uniqueservice("mysqlConnectionTest")
     local resManager = skynet.uniqueservice("resourceManager")
     skynet.call(resManager, "lua", "initialize", "pbParser", "loginServer", tonumber(skynet.getenv("resManager_pbParserPoolSize")))
     --skynet.call(resManager, "lua", "initialize", "sensitiveWordFilter", tonumber(skynet.getenv("resManager_wordFilterPoolSize")))
@@ -38,8 +39,7 @@ skynet.start(function()
     --[[
 	skynet.uniqueservice("LS_model_gunUplevel")
 	]]
-	cluster.register("LS_model_huoDong", skynet.uniqueservice("LS_model_huoDong"))
-	
+	cluster.register("LS_model_huoDong", skynet.uniqueservice("LS_model_huoDong"))	
 	cluster.register("LS_model_worldBoss", skynet.uniqueservice("LS_model_worldBoss"))
 	--[[
 	skynet.uniqueservice("LS_model_invitation")

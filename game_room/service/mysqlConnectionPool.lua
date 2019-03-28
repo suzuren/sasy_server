@@ -1,5 +1,6 @@
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
+local inspect = require "inspect"
 
 local _pool = {}
 local _poolSize = 0
@@ -16,6 +17,18 @@ local function createConnection()
 	)
 end
 
+--[[
+{ {
+    conn = 13,
+    tick = 46
+  }, {
+    conn = 14,
+    tick = 72
+  }, {
+    conn = 15,
+    tick = 99
+  } }
+]]
 
 local function cmd_getConnection()
 	local realPoolSize = #_pool
@@ -71,9 +84,14 @@ local conf = {
 		end
 		_timeOutTick = _timeOutTick * 100
 		
+		--skynet.error(string.format("%s: mysql connection timeout: %s second * 100", SERVICE_NAME, tostring(_timeOutTick)))
+
 		for i=1, _poolSize do
 			createConnection()
 		end
+
+		--skynet.error(string.format("%s: mysql connection timeout: %s second * 100", SERVICE_NAME, tostring(_timeOutTick)),"\n_pool-\n",inspect(_pool))
+
 	end,
 }
 

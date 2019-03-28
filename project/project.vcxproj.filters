@@ -1407,6 +1407,9 @@
     <None Include="..\game_room\lualib\config\testGame_201.lua">
       <Filter>game_room\lualib\config</Filter>
     </None>
+    <None Include="..\game_room\service\mysqlConnectionTest.lua">
+      <Filter>game_room\service</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">

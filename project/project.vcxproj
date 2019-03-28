@@ -353,6 +353,7 @@
     <None Include="..\game_room\service\mainLoginServer.lua" />
     <None Include="..\game_room\service\mysqlConnection.lua" />
     <None Include="..\game_room\service\mysqlConnectionPool.lua" />
+    <None Include="..\game_room\service\mysqlConnectionTest.lua" />
     <None Include="..\game_room\service\pbParser.lua" />
     <None Include="..\game_room\service\resourceManager.lua" />
     <None Include="..\game_room\service\simpleProtocalBuffer.lua" />

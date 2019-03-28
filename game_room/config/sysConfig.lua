@@ -19,12 +19,20 @@ local defenseList = {
 		{Sign=0,RescueCoin=0,ipAddr=""},
 	},
 }
-
+--[[
 local mysqlInfo = {
 	mysqlHost = "127.0.0.1",
 	mysqlUser = "root",
 	mysqlPassword = "game123456",
 	mysqlDataBase = "ssaccountsdb",
+}
+]]
+
+local mysqlInfo = {
+	mysqlHost = "",
+	mysqlUser = "game66",
+	mysqlPassword = "Game123456",
+	mysqlDataBase = "chess_backsite",
 }
 
 local applePay = {

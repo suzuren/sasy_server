@@ -737,7 +737,7 @@ local function checkTimeFlushBoss()
 	local nowDate = tonumber(os.date("%Y%m%d%H%M%S",nowTime))
 	local nowTimeMin = nowHour*60 + nowMin
 
-	skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin))
+	--skynet.error(string.format("%s checkTimeFlushBoss func - nowTime:%d,nowHour:%d,nowMin:%d,nowDate:%d,nowTimeMin:%d",SERVICE_NAME,nowTime,nowHour,nowMin,nowDate,nowTimeMin))
 
 	if not _data.timeConfig.notTimeFlushFlag or _data.timeConfig.activity2normal then
 		for k, v in pairs(_data.timeConfig.notTimeFlush) do
@@ -840,7 +840,7 @@ local conf = {
 		local timerID_checkTimeFlushBoss = timerUtility.setInterval(checkTimeFlushBoss, 10)
 		local timerID_NotifyInvalidScore = timerUtility.setInterval(NotifyInvalidScore, 10)
 
-		skynet.error(string.format("%s initFunc func - worldBossWriteSocreTimer_%d,timerID_checkTimeFlushBoss_%d,timerID_NotifyInvalidScore_%d", SERVICE_NAME,_data.worldBossWriteSocreTimer,timerID_checkTimeFlushBoss,timerID_NotifyInvalidScore))
+		--skynet.error(string.format("%s initFunc func - worldBossWriteSocreTimer_%d,timerID_checkTimeFlushBoss_%d,timerID_NotifyInvalidScore_%d", SERVICE_NAME,_data.worldBossWriteSocreTimer,timerID_checkTimeFlushBoss,timerID_NotifyInvalidScore))
 
 		--loadData()
 	end,
