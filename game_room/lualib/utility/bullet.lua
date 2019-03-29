@@ -1,4 +1,4 @@
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 
 local _minMultiple, _maxMultiple
 local _upLimit = {}
@@ -57,14 +57,14 @@ local function getBulletMultipleByKind(score, bulletKind)
 	
 	local multiplier
 	if maxMultiplier > _multipleThreshold.big then
-		local r = arc4.random(1, 2)
+		local r = randHandle.random(1, 2)
 		if r==1 then
 			multiplier = 2
 		else
 			multiplier = 5
 		end
 	elseif maxMultiplier > _multipleThreshold.middle then
-		multiplier = arc4.random(1, 2)
+		multiplier = randHandle.random(1, 2)
 	else
 		multiplier = 1
 	end
@@ -82,8 +82,8 @@ local function setChairPerTable(n)
 	_fireAngleArray = angleArray
 	
 	_multipleThreshold = {
-		big = arc4.random(240, 320),
-		middle = arc4.random(80, 120),
+		big = randHandle.random(240, 320),
+		middle = randHandle.random(80, 120),
 	}
 end
 
@@ -97,10 +97,10 @@ local function getAngle(chairID)
 	end
 	
 	local arrayLength = #(_fireAngleArray)
-	idx = idx + arc4.random(-4, 4)
+	idx = idx + randHandle.random(-4, 4)
 	
 	if idx < 1 or idx > arrayLength then
-		idx = arc4.random(1, arrayLength)
+		idx = randHandle.random(1, arrayLength)
 	end
 	
 	local angle = _fireAngleArray[idx]

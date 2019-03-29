@@ -1,4 +1,4 @@
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 require "utility.table"
 
 local _pathConfigItemHash = {}
@@ -41,7 +41,7 @@ end
 local function getPathID(name, nowTick)
 	local pathConfigItem = getPathConfigItem(name)
 	
-	local pathID = arc4.random(pathConfigItem.min, pathConfigItem.max)
+	local pathID = randHandle.random(pathConfigItem.min, pathConfigItem.max)
 	if pathConfigItem.idHash[pathID] then
 		local originalPathID = pathID
 		repeat

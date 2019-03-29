@@ -1,5 +1,5 @@
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local ServerUserItem = require "sui"
 local GS_CONST = require "define.gsConst"
 --local FISH_CONST = require "fish.lualib.const"
@@ -189,7 +189,7 @@ local function getRandomLockFishID()
 		end
 	end
 	if #(fishIDlist) > 0 then
-		local fishK = arc4.random(1, #(fishIDlist))
+		local fishK = randHandle.random(1, #(fishIDlist))
 		fishid = fishIDlist[fishK]
 	end
 	return fishid
@@ -197,7 +197,7 @@ end
 
 local function androidCanLockFish()
 	-- 机器人是否可以锁定大鱼
-	local index = arc4.random(1, 100)
+	local index = randHandle.random(1, 100)
 	if index <= 80 then
 		return true
 	end
@@ -375,7 +375,7 @@ local function buildFishTrace(fishCount, fishKindStart, fishKindEnd)
 	local buildTick = skynet.now()
 	local pbItemList = {}
 	for i=1, fishCount do
-		local fishTraceItem = createFishTraceItem(arc4.random(fishKindStart, fishKindEnd), buildTick)
+		local fishTraceItem = createFishTraceItem(randHandle.random(fishKindStart, fishKindEnd), buildTick)
 		
 		local pbItem = {
 			fishKind=fishTraceItem.fishKind,
@@ -447,20 +447,20 @@ local function startPipeline(pipelineType)
 	
 	local fishKind, fishNum
 	if pipelineType=="pipeline1" then
-		fishKind = arc4.random(0, 1)
-		fishNum = arc4.random(5, 6)
+		fishKind = randHandle.random(0, 1)
+		fishNum = randHandle.random(5, 6)
 	elseif pipelineType=="pipeline2" then
-		fishKind = arc4.random(2, 3)
-		fishNum = arc4.random(3, 4)
+		fishKind = randHandle.random(2, 3)
+		fishNum = randHandle.random(3, 4)
 	elseif pipelineType=="pipeline3" then
-		fishKind = arc4.random(4, 6)
-		fishNum = arc4.random(2, 4)
+		fishKind = randHandle.random(4, 6)
+		fishNum = randHandle.random(2, 4)
 	elseif pipelineType=="pipeline4" then
-		fishKind = arc4.random(7, 8)
-		fishNum = arc4.random(2, 4)
+		fishKind = randHandle.random(7, 8)
+		fishNum = randHandle.random(2, 4)
 	elseif pipelineType=="pipeline5" then
-		fishKind = arc4.random(8, 9)
-		fishNum = arc4.random(2, 4)
+		fishKind = randHandle.random(8, 9)
+		fishNum = randHandle.random(2, 4)
 	end
 	
 	_data.pipelineDataHash[pipelineType]={
@@ -506,13 +506,13 @@ local function _onTimerBuildFishTrace()
 			if fishType=="smallFish" then
 				if _data.bFirstPlayerEnter and not isWanRoom(serverConfig.NodeID) then
 					_data.bFirstPlayerEnter = false
-				 	buildFishTrace(4 + arc4.random(0, 7), 0, 9)
+				 	buildFishTrace(4 + randHandle.random(0, 7), 0, 9)
 				 end
 			elseif fishType=="mediumFish" then
 				if isWanRoom(serverConfig.NodeID) then
-					buildFishTrace(1 + arc4.random(1, 3), 10, 13)
+					buildFishTrace(1 + randHandle.random(1, 3), 10, 13)
 				else
-					buildFishTrace(1 + arc4.random(0, 1), 10, 13)
+					buildFishTrace(1 + randHandle.random(0, 1), 10, 13)
 				end
 			elseif fishType=="goldFish" then
 				buildFishTrace(1, 14, 15)
@@ -785,7 +785,7 @@ local function buildSceneKind109()
 	_data.currentScene = FISH_CONST.SCENE_KIND.SCENE_KIND_109
 
 	local allFishTypes = {}
-	local n = arc4.random(1,7)
+	local n = randHandle.random(1,7)
 	for i = 1, 7 do
 		if i == n then
 			table.insert(allFishTypes,34)
@@ -1057,7 +1057,7 @@ local function checkFlushTaskFish()
 		local nowTick = os.time()
 		if _data.taskFish.taskId == 0 then
 			if nowTick - _data.taskFish.startTime > 60*30 then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				if iRandRate <= 30 and getPlayerCount() >= 2 then
 					_data.taskFish.startTime = nowTick
 					_data.timerIDHash.notifyTaskFishEnd = timerUtility.setTimeout(notifyTaskFishEnd,COMMON_CONST.TASK_FISH_TIME)
@@ -1390,7 +1390,7 @@ end
 
 local function flushFengHuang(bZhaoHuan)
 	if not _data.fengHuang.bFengHuangScene and not bWorldBossScene then --世界boss优先凤凰
-		local iRandRate = arc4.random(1,100)
+		local iRandRate = randHandle.random(1,100)
 		if iRandRate <= 100 or bZhaoHuan then
 
 			stopBuildFishTraceTimer()
@@ -1723,7 +1723,7 @@ local function getfishMultiple(fishKind, fishID)
 	if multipleType=="number" then
 		fishMultiple = fishConfigItem.multiple
 	elseif multipleType=="table" then
-		fishMultiple = arc4.random(fishConfigItem.multiple[1], fishConfigItem.multiple[2])
+		fishMultiple = randHandle.random(fishConfigItem.multiple[1], fishConfigItem.multiple[2])
 	end
 
 	return fishMultiple
@@ -1819,7 +1819,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		end
 
 		if userAttr.memberOrder <= 1 then
-			local rate = arc4.random(1,100)
+			local rate = randHandle.random(1,100)
 			if rate <= 75 then
 				return
 			end
@@ -1933,7 +1933,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		NotifyUserFishRate(userAttr.agent,fishTraceInfo.fishKind,probabilityUpperLimit,userAttr.userID)
 
-		local probability = arc4.random()
+		local probability = randHandle.random()
 		if probability > probabilityUpperLimit then
 			return
 		end
@@ -2011,7 +2011,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		NotifyUserFishRate(userAttr.agent,fishTraceInfo.fishKind,probabilityUpperLimit,userAttr.userID)
 
-		local probability = arc4.random()
+		local probability = randHandle.random()
 		if probability > probabilityUpperLimit then
 			return
 		end
@@ -2156,7 +2156,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		if multipleType=="number" then
 			boxMultiple = fishConfigItem.multiple
 		elseif multipleType=="table" then
-			boxMultiple = arc4.random(fishConfigItem.multiple[1], fishConfigItem.multiple[2])
+			boxMultiple = randHandle.random(fishConfigItem.multiple[1], fishConfigItem.multiple[2])
 		end
 		present = bulletInfo.multiple/100
 
@@ -2258,7 +2258,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 	NotifyUserFishRate(userAttr.agent,fishTraceInfo.fishKind,probabilityUpperLimit,userAttr.userID)
 		
-	local probability = 1 - arc4.random()													-- (0, 1]
+	local probability = 1 - randHandle.random()													-- (0, 1]
 
 	if probability > probabilityUpperLimit then
 		return
@@ -2273,7 +2273,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 				if v.userId == userAttr.userID then
 					if v.crit ~= 0 or v.miss ~= 0 then
 						bFindControl = true
-						local iRandRate = arc4.random(1,100)
+						local iRandRate = randHandle.random(1,100)
 						if iRandRate <= v.crit then 
 							bCrit = true
 						elseif iRandRate <= v.miss then
@@ -2290,7 +2290,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 							if vv.fishKind == fishTraceInfo.fishKind or vv.fishKind == 9999 then
 								if vv.startTime <= nowTime and nowTime <= vv.endTime then
 									bFindControl = true
-									local iRandRate = arc4.random(1,100)
+									local iRandRate = randHandle.random(1,100)
 									if iRandRate <= vv.critRate then
 										bCrit = true
 									elseif iRandRate <= vv.missRate then
@@ -2304,7 +2304,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 
 			if not bFindControl then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				if iRandRate <= _data.config.controlCritRate.normalRate.crit then
 					bCrit = true
 				elseif iRandRate <= _data.config.controlCritRate.normalRate.miss then
@@ -2423,7 +2423,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		--判断是不是红包鱼--start
 		if 34 <= fishTraceInfo.fishKind and fishTraceInfo.fishKind <= 35 then
 			if fishTraceInfo.fishKind == 34 then
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if isBasicRoom(serverConfig.NodeID) then
 					if randRate <= 5 then
 						local item = {
@@ -2507,7 +2507,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 			else
 
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if randRate <= 2 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_CANG_BAO_TU_1,
@@ -2615,7 +2615,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		if isRewardGoldFish(fishTraceInfo.fishKind) then
 			if userAttr.memberOrder >= 2 then
 				local itemId = COMMON_CONST.ITEM_ID.ITEM_ID_COMPOSE_CARD_1
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if gameData.fishScore >= 8000000 then
 					if randRate <= 15 then
 						if randRate%2 == 0 then
@@ -2651,7 +2651,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		if isHuoDongTime() then
 			if isHuoDongFish(fishTraceInfo.fishKind) then
-				local randRate = arc4.random()*100
+				local randRate = randHandle.random()*100
 				if randRate <= 0.5 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_HUAN,
@@ -2663,7 +2663,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 						item.goodsID,item.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_HUO_DONG)
 				end
 
-				local randRate = arc4.random()*100
+				local randRate = randHandle.random()*100
 				if randRate <= 0.5 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_DU,
@@ -2676,7 +2676,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 
 			if isRewardGoldFish(fishTraceInfo.fishKind) then
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if randRate <= 5 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_GUO,
@@ -2708,7 +2708,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		        		local iKillBossCount = skynet.call(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "GetLimitCount",userAttr.userID,limitId_hd)
 						local iRate = 30 + iKillBossCount*10
-						local iRandRate = arc4.random(1,100)
+						local iRandRate = randHandle.random(1,100)
 						if iRandRate <= iRate then
 							local item = {
 								goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_QING,
@@ -2723,7 +2723,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 				else
 					local iNeedScore = skynet.call(addressResolver.getAddressByServiceName("GS_model_hd_dropBox"),"lua","getScore")
 					if iNeedScore >= 2000000 then
-						local randRate = arc4.random(1,100)
+						local randRate = randHandle.random(1,100)
 						if randRate <= 30 then
 							skynet.call(addressResolver.getAddressByServiceName("GS_model_hd_dropBox"),"lua","changeScore",2000000,true)
 							local item = {
@@ -2741,7 +2741,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		if isJieRiTime() then
 			if isHuoDongFish(fishTraceInfo.fishKind) or fishTraceInfo.fishKind == 36 then
-				local randRate = arc4.random()*100
+				local randRate = randHandle.random()*100
 				local iRate = 0.5
 				if fishTraceInfo.fishKind == 36 then
 					iRate = 5
@@ -2757,7 +2757,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 						item.goodsID,item.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_HUO_DONG)
 				end
 
-				local randRate = arc4.random()*100
+				local randRate = randHandle.random()*100
 				if randRate <= iRate then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_MAN,
@@ -2770,7 +2770,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 
 			if isRewardGoldFish(fishTraceInfo.fishKind) then
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if randRate <= 5 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_QING_1,
@@ -2807,7 +2807,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 	        		local iKillBossCount = skynet.call(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "GetLimitCount",userAttr.userID,limitId_hd)
 					local iRate = 20 + iKillBossCount*10
-					local iRandRate = arc4.random(1,100)
+					local iRandRate = randHandle.random(1,100)
 					if iRandRate <= iRate then
 						local item = {
 							goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_REN,
@@ -2823,7 +2823,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 				if isThousandRoom(serverConfig.NodeID) or isWanRoom(serverConfig.NodeID) then
 					local iNeedScore = skynet.call(addressResolver.getAddressByServiceName("GS_model_hd_dropBox"),"lua","getScore")
 					if iNeedScore >= 2000000 then
-						local randRate = arc4.random(1,100)
+						local randRate = randHandle.random(1,100)
 						if randRate <= 30 then
 							skynet.call(addressResolver.getAddressByServiceName("GS_model_hd_dropBox"),"lua","changeScore",2000000,true)
 							local item = {
@@ -2839,7 +2839,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 
 			if fishTraceInfo.fishKind == 37 then
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if randRate <= 40 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_WORD_REN,
@@ -2864,7 +2864,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			if isOpen then
 				local serverConfig = _data.tableFrame.getServerConfig()
 				local mysqlConn = addressResolver.getMysqlConnection()
-				local randRate = arc4.random(1,100)
+				local randRate = randHandle.random(1,100)
 				if isThousandRoom(serverConfig.NodeID) then
 					if randRate <= 50 then
 						local item = {
@@ -2899,7 +2899,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			--宝箱价值:银宝箱=20元 金宝箱=50元 铂金宝箱=100元
 			local limitId = COMMON_CONST.OPERATOR_LIMIT.OP_LIMIT_ID_BOX_DROP_VALUE
         	local iSumBoxValue = skynet.call(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "GetLimitCount",userAttr.userID,limitId)
-			local iRandRate = arc4.random(1,100)
+			local iRandRate = randHandle.random(1,100)
 			if isBasicRoom(serverConfig.NodeID) then
 				local limitId_1 = COMMON_CONST.OPERATOR_LIMIT.OP_LIMTI_ID_KILL_BOSS_1
         		local iKillBossCount = skynet.call(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "GetLimitCount",userAttr.userID,limitId_1)
@@ -2972,7 +2972,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 
 			-- if isWanRoom(serverConfig.NodeID) then
-			-- 	local iRandRate = arc4.random(1,100)
+			-- 	local iRandRate = randHandle.random(1,100)
 			-- 	if iRandRate <= 50 then
 			-- 		local item = {
 			-- 			goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_SHEN_DEGN,
@@ -3066,7 +3066,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 	 end
 
 	if not isSpecialFish(fishTraceInfo.fishKind) then
-		local randRate = arc4.random()*100
+		local randRate = randHandle.random()*100
 		if randRate <= 1 then
 			local goods = {
 				goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_FAST,
@@ -3099,16 +3099,16 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 					baseRate = 10
 				end
 
-				local randRate = arc4.random()*100
+				local randRate = randHandle.random()*100
 				if userAttr.memberOrder ~= 0 then 
 					local configAddress = addressResolver.getAddressByServiceName("GS_model_item_config")
 					local infoConfig = skynet.call(configAddress,"lua","GetvipInfo")
 					if randRate <= baseRate*infoConfig[userAttr.memberOrder].gem then
-						item.goodsCount = arc4.random(5,10)
+						item.goodsCount = randHandle.random(5,10)
 					end
 				else
-					if arc4.random(1,100) <= baseRate then	
-						item.goodsCount = arc4.random(5,10)
+					if randHandle.random(1,100) <= baseRate then	
+						item.goodsCount = randHandle.random(5,10)
 					end
 				end
 			end
@@ -3128,7 +3128,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 	end
 
 	if isBaoTuFish(fishTraceInfo.fishKind) then
-		local rate = arc4.random(1,100)
+		local rate = randHandle.random(1,100)
 		local isLimit = true
 		local limitId = 0
 		local goodsId = COMMON_CONST.ITEM_ID.ITEM_ID_CANG_BAO_TU_1
@@ -3151,7 +3151,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			skynet.send(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "AddLimit",userAttr.userID,limitId,1)
 		end
 
-		local randRate = arc4.random(1,100)
+		local randRate = randHandle.random(1,100)
 		if randRate <= 10 or not isLimit then
 			local goods = {
 				goodsID = goodsId,
@@ -3183,7 +3183,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		if nowFirePieceTotal>0 then
 			if isRewardGoldFish(fishTraceInfo.fishKind) then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				if iRandRate<20 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_FIRE_PIECE,
@@ -3195,7 +3195,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 					skynet.send(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "AddLimit",userAttr.userID,limitFirePiece,-1)
 				end
 			elseif isBossFish(fishTraceInfo.fishKind) then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				local _count = 2+iRandRate%2;
 				if iRandRate<80 then
 					if nowFirePieceTotal < _count then
@@ -3213,7 +3213,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			end
 		elseif iMaxBoxDropValue>=10 then --当火焰微粒池子耗尽 使用宝箱掉落池
 			if isRewardGoldFish(fishTraceInfo.fishKind) then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				if iRandRate<20 then
 					local item = {
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_FIRE_PIECE,
@@ -3227,7 +3227,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 				end
 			elseif isBossFish(fishTraceInfo.fishKind) then
-				local iRandRate = arc4.random(1,100)
+				local iRandRate = randHandle.random(1,100)
 				local _count = 2+iRandRate%2;
 				if iRandRate<80 then
 					if iMaxBoxDropValue/10 < _count then
@@ -3285,7 +3285,7 @@ local function getRandomFishID()
 	
 	local length = #fishIDList
 	if length>0 then
-		return fishIDList[arc4.random(1, length)]
+		return fishIDList[randHandle.random(1, length)]
 	end
 end
 
@@ -3485,7 +3485,7 @@ local function pbBigNetCatchFish(userItem, protocalData)
 	for _, fishID in ipairs(catchIDList) do
 		doCatchFish(userItem, fishID, bulletInfo, #catchIDList)
 		if nowPaotai == COMMON_CONST.SPEC_CANNON.CANNON_ICE then
-			local iRandRate = arc4.random(1,100)			
+			local iRandRate = randHandle.random(1,100)			
 			if iRandRate==1 then
 				table.insert(frozenIDList, fishID)
 			end

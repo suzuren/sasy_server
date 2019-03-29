@@ -1,5 +1,5 @@
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local timerUtility = require "utility.timer"
@@ -88,7 +88,7 @@ local function adjustScore(androidItem, userItem)
 		if androidParameter.minTakeScore == androidParameter.maxTakeScore then
 			newScore = androidParameter.minTakeScore
 		else
-			newScore = arc4.random(androidParameter.minTakeScore, androidParameter.maxTakeScore)
+			newScore = randHandle.random(androidParameter.minTakeScore, androidParameter.maxTakeScore)
 		end
 		
 		ServerUserItem.setAttribute(userItem, {score=newScore})
@@ -96,7 +96,7 @@ local function adjustScore(androidItem, userItem)
 
 	local minScoreLimit = math.max(_serverConfig.MinTableScore, _serverConfig.MinEnterScore)
 	if minScoreLimit~=0 and userAttr.score < minScoreLimit then
-		local newScore = arc4.random(minScoreLimit, 10*minScoreLimit)
+		local newScore = randHandle.random(minScoreLimit, 10*minScoreLimit)
 		ServerUserItem.setAttribute(userItem, {score=newScore})
 	end
 end
@@ -247,9 +247,9 @@ local function _onTimerDistributeAndroid()
 						--随机桌子
 						local tableID
 						if _serverConfig.TableCount > 10 then
-							tableID = arc4.random(1, math.min(_serverConfig.TableCount, 10))
+							tableID = randHandle.random(1, math.min(_serverConfig.TableCount, 10))
 						else
-							tableID = arc4.random(1, _serverConfig.TableCount)
+							tableID = randHandle.random(1, _serverConfig.TableCount)
 						end
 
 
@@ -284,7 +284,7 @@ local function _onTimerDistributeAndroid()
 							if _serverConfig.ChairPerTable > tableUserCount.minUser then
 								local freeUserCount = #(simulateAndroid.free)
 								local offUserCount = math.min(_serverConfig.ChairPerTable, freeUserCount) - tableUserCount.minUser
-								wantAndroidCount = wantAndroidCount + arc4.random(0, offUserCount)
+								wantAndroidCount = wantAndroidCount + randHandle.random(0, offUserCount)
 							end
 							
 							--坐下处理
@@ -367,7 +367,7 @@ local function _onTimerDistributeAndroid()
 								goto continue
 							end
 							
-							if tableUserCount.total > tableUserCount.minUser and arc4.random(0,1)==1 then
+							if tableUserCount.total > tableUserCount.minUser and randHandle.random(0,1)==1 then
 								goto continue
 							end
 
@@ -442,12 +442,12 @@ local function _onTimerDistributeAndroid()
 		end
 		
 		
-		local standUPCount = arc4.random(1, 3)
+		local standUPCount = randHandle.random(1, 3)
 		
 		--起立处理
 		local startIndex
 		if _serverConfig.TableCount>1 then
-			startIndex = arc4.random(0, _serverConfig.TableCount-1)
+			startIndex = randHandle.random(0, _serverConfig.TableCount-1)
 		else
 			startIndex = 0
 		end
@@ -469,7 +469,7 @@ local function _onTimerDistributeAndroid()
 				goto continue
 			end
 			
-			local r = arc4.random(0, 1)==1
+			local r = randHandle.random(0, 1)==1
 			if tableUserCount.user > 0 and allowAndroidAttend and r then
 				goto continue
 			end
@@ -497,7 +497,7 @@ local function _onTimerDistributeAndroid()
 		end
 		
 		if _serverConfig.TableCount>1 then
-			startIndex = arc4.random(0, _serverConfig.TableCount-1)
+			startIndex = randHandle.random(0, _serverConfig.TableCount-1)
 		else
 			startIndex = 0
 		end
@@ -520,7 +520,7 @@ local function _onTimerDistributeAndroid()
 				goto continue
 			end
 			
-			local r = arc4.random(0, 1)==1
+			local r = randHandle.random(0, 1)==1
 			if tableUserCount.user > 0 and allowAndroidAttend and r then
 				goto continue
 			end

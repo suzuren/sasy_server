@@ -1,6 +1,6 @@
 require "utility.string"
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
@@ -85,7 +85,7 @@ local function cmd_RequestTask(taskType,sui)
 		end
 
 		if #(taskList) > 0 then
-			local randValue = arc4.random(1, #(taskList))
+			local randValue = randHandle.random(1, #(taskList))
 			re.taskID = taskList[randValue]
 
 			local goal = ""
@@ -354,7 +354,7 @@ local function cmd_CompleteTask(pbObj,sui)
 		end
 	
 		if #(taskList) > 0 then
-			local randValue = arc4.random(1, #(taskList))
+			local randValue = randHandle.random(1, #(taskList))
 			local taskId = taskList[randValue]
 
 			local goal = ""
@@ -395,7 +395,7 @@ local function cmd_GetTaskIdByType(taskType)
 	end
 
 	if #(taskList) > 0 then
-		local randValue = arc4.random(1, #(taskList))
+		local randValue = randHandle.random(1, #(taskList))
 		return taskList[randValue]
 	end
 

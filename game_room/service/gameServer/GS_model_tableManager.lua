@@ -4,7 +4,7 @@ local commonServiceHelper = require "serviceHelper.common"
 local GS_CONST = require "define.gsConst"
 local addressResolver = require "addressResolver"
 local resourceResolver = require "resourceResolver"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local timerUtility = require "utility.timer"
 local timeUtility = require "utility.time"
 local cluster = require "cluster"
@@ -102,25 +102,25 @@ local function cmd_findAvailableTable(roomType)
 		end
 	end	
 
-	local iRandValue = arc4.random(0,2)
+	local iRandValue = randHandle.random(0,2)
 	if iRandValue <= 1 then
 		if #(validAddrList) > 0 then
-			local index = arc4.random(1, #(validAddrList))
+			local index = randHandle.random(1, #(validAddrList))
 			return validAddrList[index]
 		end
 	else
 		if #(tableAddrList) > 0 then
-			local index = arc4.random(1, #(tableAddrList))
+			local index = randHandle.random(1, #(tableAddrList))
 			return tableAddrList[index]
 		end
 	end
 
 	if #(validAddrList) > 0 then
-		local index = arc4.random(1, #(validAddrList))
+		local index = randHandle.random(1, #(validAddrList))
 		return validAddrList[index]
 	end
 	if #(tableAddrList) > 0 then
-		local index = arc4.random(1, #(tableAddrList))
+		local index = randHandle.random(1, #(tableAddrList))
 		return tableAddrList[index]
 	end
 	return
@@ -149,25 +149,25 @@ local function cmd_findAvailableTableByScore(score)
 		end
 	end
 
-	local iRandValue = arc4.random(0,2)
+	local iRandValue = randHandle.random(0,2)
 	if iRandValue <= 1 then
 		if #(validAddrList) > 0 then
-			local index = arc4.random(1, #(validAddrList))
+			local index = randHandle.random(1, #(validAddrList))
 			return validAddrList[index]
 		end
 	else
 		if #(tableAddrList) > 0 then
-			local index = arc4.random(1, #(tableAddrList))
+			local index = randHandle.random(1, #(tableAddrList))
 			return tableAddrList[index]
 		end
 	end
 
 	if #(validAddrList) > 0 then
-		local index = arc4.random(1, #(validAddrList))
+		local index = randHandle.random(1, #(validAddrList))
 		return validAddrList[index]
 	end
 	if #(tableAddrList) > 0 then
-		local index = arc4.random(1, #(tableAddrList))
+		local index = randHandle.random(1, #(tableAddrList))
 		return tableAddrList[index]
 	end
 	return
@@ -203,7 +203,7 @@ local function cmd_findAvailableTableForNiuniu(score,userID,platformID)
 		if iCount == 0 then
 			iCount = #(validAddrList)
 		end
-		local index = arc4.random(1,iCount)
+		local index = randHandle.random(1,iCount)
 		return validAddrList[index]
 	end
 

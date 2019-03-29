@@ -3,7 +3,7 @@ local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 
 local _gunUpLevelHash = {}
 local _dropGemConfig
@@ -182,7 +182,7 @@ local function cmd_CheckDropGem(userID,gold)
 		return
 	end
 
-	local randnum = arc4.random(15,25)
+	local randnum = randHandle.random(15,25)
 	if userInfo.fireCount >= randnum then
 		userInfo.canDropGem = true
 	end

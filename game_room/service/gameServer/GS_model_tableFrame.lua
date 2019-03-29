@@ -1,6 +1,6 @@
 local skynet = require "skynet"
 local cluster = require "cluster"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local commonServiceHelper = require "serviceHelper.common"
 local GS_CONST = require "define.gsConst"
 local COMMON_CONST = require "define.commonConst"
@@ -900,7 +900,7 @@ onTimerOfflineWait = function(offlineChairID)
 end
 
 local function findRandomEmptyChairID()
-	local startIndex = arc4.random(1, _data.serverConfig.ChairPerTable)
+	local startIndex = randHandle.random(1, _data.serverConfig.ChairPerTable)
 	for i=0, _data.serverConfig.ChairPerTable-1 do
 		local index = startIndex + i
 		if index > _data.serverConfig.ChairPerTable then
@@ -1050,7 +1050,7 @@ local function cmd_sitDown(userItem, chairID, password,needVipLv,multipleLv,tabl
 			chairID = findRandomEmptyChairID()
 			if chairID == nil then
 				--找不到空位那么随便选择一个位置，返回已经被xxx占了
-				chairID = arc4.random(1, _data.serverConfig.ChairPerTable)
+				chairID = randHandle.random(1, _data.serverConfig.ChairPerTable)
 			end
 		end
 		

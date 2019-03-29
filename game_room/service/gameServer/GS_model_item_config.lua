@@ -2,7 +2,7 @@ require "utility.string"
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local readFileUtility = require "utility.readFile"
 
 local _huoDongTimeConfig = {}
@@ -353,7 +353,7 @@ local function cmd_GetvipInfo()
 end
 
 local function cmd_GetFengHuangDrop()
-	local iRandRate = arc4.random(0,100)
+	local iRandRate = randHandle.random(0,100)
 	for k, v in pairs(_fengHuangDropConfig) do
 		if v.minRate <= iRandRate and iRandRate <= v.maxRate then
 			return v.rewardList 

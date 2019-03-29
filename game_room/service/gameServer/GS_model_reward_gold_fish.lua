@@ -5,7 +5,7 @@ local COMMON_CONST = require "define.commonConst"
 local GS_CONST = require "define.gsConst"
 local ServerUserItem = require "sui"
 local mysqlutil = require "mysqlutil"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local timerUtility = require "utility.timer"
 
 local lastDay = 0
@@ -200,7 +200,7 @@ local function cmd_RequestLotteryItem(userID,type)
 
 			local randId = 0
 			if beforeCount < v.beforeCount then
-				local rand = arc4.random(1,#v.beforeReward)
+				local rand = randHandle.random(1,#v.beforeReward)
 				for kk, vv in pairs(v.beforeReward) do 
 					if kk == rand then
 						randId = vv
@@ -208,7 +208,7 @@ local function cmd_RequestLotteryItem(userID,type)
 					end
 				end
 			else
-				local rand = arc4.random(1,100)
+				local rand = randHandle.random(1,100)
 				for kk, vv in pairs(v.itemList) do 
 					if vv.minRate <= rand and rand <= vv.maxRate then
 						randId = vv.index

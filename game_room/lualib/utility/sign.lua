@@ -1,7 +1,7 @@
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 
 local function getSign()
-	local str = arc4.buf( 16 )
+	local str = randHandle.buf( 16 )
 	str = str:gsub( "(.)", function( c )
 		return string.format("%02x", string.byte(c))
 	end )

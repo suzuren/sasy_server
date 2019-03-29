@@ -3,7 +3,7 @@ local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 
 local _invalidGunHash = {}	
 
@@ -94,7 +94,7 @@ local function cmd_CheckInvalidGun(userItem)
 					return gold
 				end
 
-				local iRate = arc4.random(1,100)
+				local iRate = randHandle.random(1,100)
 				if iRate <= 60 then
 					info.iFishCount = 0
 					info.timeCount = 0

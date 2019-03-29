@@ -3,7 +3,7 @@ local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 
 local _gunUpLevelHash = {}
 

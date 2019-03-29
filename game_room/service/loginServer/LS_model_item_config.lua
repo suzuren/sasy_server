@@ -3,7 +3,7 @@ local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 --local mysqlutil = require "mysqlutil"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local readFileUtility = require "utility.readFile"
 
 local _itemInfoHash = {}
@@ -529,7 +529,7 @@ end
 local function cmd_ChouJiang(rmb)
 	for k, v in pairs(_chouJiangRewardConfig) do 
 		if v.MinRmb <= rmb and rmb <= v.MaxRmb then
-			local iRandRate = arc4.random(1,100)
+			local iRandRate = randHandle.random(1,100)
 			for kk, vv in pairs(v.rewardList) do
 				if vv.minRate <= iRandRate and iRandRate <= vv.maxRate then
 					return vv

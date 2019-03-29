@@ -1,5 +1,5 @@
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
@@ -34,7 +34,7 @@ local function cmd_requestRescueCoin(tcpAgent,tcpAgentData)
 		code = 0,
 		remainingCount = 0,
 	}
-	local randId = arc4.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
+	local randId = randHandle.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
 	local nowTime = os.time()
 	local sql = string.format("SELECT * FROM `kffishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
 	local dbConn = addressResolver.getMysqlConnection()
@@ -67,7 +67,7 @@ local function cmd_requestRescueCoin(tcpAgent,tcpAgentData)
 			if flag == 1 then
 				num = num + 1
 				if randNum == 0 then --新老数据处理
-					randNum = arc4.random(num, LS_CONST.RESCUE_COIN_MAX_NUM)
+					randNum = randHandle.random(num, LS_CONST.RESCUE_COIN_MAX_NUM)
 				end
 				
 				if num > LS_CONST.RESCUE_COIN_MAX_NUM then
@@ -171,7 +171,7 @@ local function cmd_ReceiveRescueCoin(tcpAgent,tcpAgentData)
 	local nowDate = tonumber(os.date("%Y%m%d",nowTime))
 	if brokeDate ~= nowDate then
 		re.rescueCoinCount = _itemInfoHash[1].goldCount 
-		randNum = arc4.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
+		randNum = randHandle.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
 		num = 1
 		bDaySwitch = true
 		sql = string.format("update `kffishdb`.`t_rescue_coin` set BrokeTime=%d,CurCounts=%d,ReceiveFlag=%d,RandNum=%d,FishCount=%d where UserID = %d",

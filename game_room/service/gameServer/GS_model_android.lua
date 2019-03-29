@@ -1,5 +1,5 @@
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local commonServiceHelper = require "serviceHelper.common"
 local ServerUserItem = require "sui"
 local AndroidUserItem = require "aui"
@@ -286,7 +286,7 @@ local function cmd_start(androidItem, chairPerTable)
 	--服务时间
 	if androidAttr.androidParameter.minReposeTime > 0 and androidAttr.androidParameter.maxReposeTime > 0 then
 		if androidAttr.androidParameter.minReposeTime < androidAttr.androidParameter.maxReposeTime then
-			setAttr.reposeTime = arc4.random(androidAttr.androidParameter.minReposeTime, androidAttr.androidParameter.maxReposeTime)
+			setAttr.reposeTime = randHandle.random(androidAttr.androidParameter.minReposeTime, androidAttr.androidParameter.maxReposeTime)
 		else
 			setAttr.reposeTime = androidAttr.androidParameter.minReposeTime
 		end
@@ -297,7 +297,7 @@ local function cmd_start(androidItem, chairPerTable)
 	--游戏局数
 	if androidAttr.androidParameter.minPlayDraw > 0 and androidAttr.androidParameter.maxPlayDraw > 0 then
 		if androidAttr.androidParameter.minPlayDraw < androidAttr.androidParameter.maxPlayDraw then
-			setAttr.residualPlayDraw = arc4.random(androidAttr.androidParameter.minPlayDraw, androidAttr.androidParameter.maxPlayDraw)
+			setAttr.residualPlayDraw = randHandle.random(androidAttr.androidParameter.minPlayDraw, androidAttr.androidParameter.maxPlayDraw)
 		else
 			setAttr.residualPlayDraw = androidAttr.androidParameter.minPlayDraw
 		end

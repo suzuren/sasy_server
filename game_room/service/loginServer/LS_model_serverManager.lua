@@ -6,7 +6,7 @@ local signUtility = require "utility.sign"
 local LS_EVENT = require "define.eventLoginServer"
 local COMMON_CONST = require "define.commonConst"
 local ServerUserItem = require "sui"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local sysConfig = require "sysConfig"
 
 

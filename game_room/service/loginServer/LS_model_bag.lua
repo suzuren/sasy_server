@@ -3,7 +3,7 @@ local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local LS_CONST = require "define.lsConst"
 local sysConfig = require "sysConfig"
 
@@ -587,7 +587,7 @@ local function cmd_UseGoodsInfo(userID,goodsID,getGoodsID)
 	local itemlist = {}
 	--1.随机给1个，2玩家选1，3全给
 	if giveConfig.itemType == 1 then
-		local randRate = arc4.random(1,100)
+		local randRate = randHandle.random(1,100)
 		for _, v in pairs(giveConfig.itemList) do
 			if v.minRate <= randRate and randRate <= v.maxRate then
 				local item = {

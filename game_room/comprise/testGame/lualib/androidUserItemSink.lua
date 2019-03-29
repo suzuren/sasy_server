@@ -1,5 +1,5 @@
 local skynet = require "skynet"
-local arc4 = require "arc4random"
+local randHandle = require "utility.randNumber"
 local GS_CONST = require "define.gsConst"
 local FISH_CONST = require "fish.lualib.const"
 local timerUtility = require "utility.timer"
@@ -23,7 +23,7 @@ local _data = {
 local function initialize(android, chairPerTable)
 	_data.android = android
 	bulletUtility.setChairPerTable(chairPerTable)
-	if arc4.random(0, 1)==1 then
+	if randHandle.random(0, 1)==1 then
 		_data.type = FISH_CONST.ANDROID_TYPE.AT_RANDOM
 	else
 		_data.type = FISH_CONST.ANDROID_TYPE.AT_BIGTARGET
@@ -65,7 +65,7 @@ local function onTimerFire()
 			lockFishID = 0,
 			currentScore = _data.fishScore,
 		})
-		_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, arc4.random(1, 2))
+		_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, randHandle.random(1, 2))
 		--skynet.error("设置开炮定时器")
 	end
 end
@@ -75,7 +75,7 @@ local function onResponseGameScene(protocalObj)
 	--skynet.error(string.format( "%s.onResponseGameScene %s gameStatus=%d", SERVICE_NAME, os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())), gameStatus ))
 	if gameStatus==GS_CONST.GAME_STATUS.FREE or gameStatus==GS_CONST.GAME_STATUS.PLAY then
 		_data.bulletID = 0
-		_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, arc4.random(3, 5))
+		_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, randHandle.random(3, 5))
 		_data.isSpecialScene = protocalObj.isSpecialScene
 		--skynet.error(string.format("%s.onResponseGameScene %s 初始化开炮定时器", SERVICE_NAME, os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time()))))
 	end
@@ -128,7 +128,7 @@ local function onResponseSwitchScene(protocalObj)
 	end
 	_data.isSpecialScene = true
 	--skynet.error("设置开炮定时器")
-	_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, FISH_CONST.ANDROID_TIMER.TICKSPAN_SWITCH_SCENE_WAIT + arc4.random(8, 12))
+	_data.timerIDHash.fire = timerUtility.setTimeout(onTimerFire, FISH_CONST.ANDROID_TIMER.TICKSPAN_SWITCH_SCENE_WAIT + randHandle.random(8, 12))
 end
 
 local function onResponseUserFire(protocalObj)
