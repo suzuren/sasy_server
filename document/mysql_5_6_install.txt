@@ -1,0 +1,374 @@
+
+--------------------------------------------------------------------------------------------------------------
+一、检查系统是否安装其他版本的MYSQL数据
+#yum list installed | grep mysql
+#yum -y remove mysql-libs.x86_64
+
+二、安装及配置
+# wget http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+# rpm -ivh mysql-community-release-el6-5.noarch.rpm
+# yum repolist all | grep mysql
+
+安装MYSQL数据库
+# yum install mysql-community-server -y
+设置为开机启动(2、3、4都是on代表开机自动启动)
+# chkconfig --list | grep mysqld
+# chkconfig mysqld on
+
+三、设置远程root
+启动mysql
+# service mysqld start
+设置root密码
+# mysql_secure_installation
+登陆root账号
+# mysql -uroot -p
+建立远程root用户
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'forest' WITH GRANT OPTION;
+mysql> flush privileges;
+
+四、设置utf-8编码
+
+查看mysql原本编码：
+mysql> show variables like 'character%';
+设置编码
+# vi /etc/my.cnf
+如下(少补)：
+复制代码
+[mysqld]
+character-set-server=utf8 
+collation-server=utf8_general_ci 
+performance_schema_max_table_instances=400 
+table_definition_cache=400 
+table_open_cache=256
+# 修改
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+[mysql]
+default-character-set = utf8
+
+[mysql.server]
+default-character-set = utf8
+
+
+[mysqld_safe]
+default-character-set = utf8
+
+
+[client]
+default-character-set = utf8
+
+
+
+重启mysql
+
+# service mysqld restart
+再次查看编码：
+
+
+# mysql -uroot -p
+mysql> show variables like 'character%';
++--------------------------+----------------------------+
+| Variable_name | Value |
++--------------------------+----------------------------+
+| character_set_client | utf8 |
+| character_set_connection | utf8 |
+| character_set_database | utf8 |
+| character_set_filesystem | binary |
+| character_set_results | utf8 |
+| character_set_server | utf8 |
+| character_set_system | utf8 |
+| character_sets_dir | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+忘记了MySQL的root密码
+解决方法如下：
+1、终端中结束当前正在运行的mysql进程。
+# sudo /etc/init.d/mysql stop
+
+
+/etc/rc.d/init.d/mysqld start
+/etc/rc.d/init.d/mysqld status
+/etc/rc.d/init.d/mysqld stop
+
+
+2、用mysql安全模式运行并跳过权限验证。
+# sudo /usr/bin/mysqld_safe --skip-grant-tables
+
+3、ctrl+T重开一个终端以root身份登录mysql。
+# mysql -u root
+
+4、修改root用户口令。
+mysql> use mysql;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update user set Password = PASSWORD('game123456') where User ='root';
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> exit
+注意：括号里的'root'就是新密码。
+5、结束mysql安全模式，用正常模式运行mysql。
+# sudo /etc/init.d/mysql restart
+/etc/rc.d/init.d/mysqld start
+
+6、试试你新修改的口令登陆MySQL
+# mysql -u root -p
+输入密码 game123456
+mysql> show grants for 'root'@'127.0.0.1';
+mysql> flush privileges；
+刷新账户后，退出。
+mysql> quit;
+
+--------------------------------------------------------------------------------------------------------------
+
+mysql
+show global variables like "%datadir%";
+show variables like '%dir%';
+
+
+grant all privileges on SueAccountsDB.* to forest@'127.0.0.1' identified by 'forestpassword';
+
+-------------------------------------------------------------------------------------------------------------
+
+
+mysql isntall: 
+
+看该操作系统上是否已经安装了mysql数据库
+rpm -qa | grep mysql
+
+普通删除模式
+rpm -e mysql
+
+强力删除模式，如果使用上面命令删除时，提示有依赖的其它文件，则用该命令可以对其进行强力删除
+rpm -e --nodeps mysql
+
+查看yum上提供的mysql数据库可下载的版本
+yum list | grep mysql
+
+将mysql mysql-server mysql-devel都安装好
+yum install -y mysql-server mysql mysql-devel
+
+查看刚安装好的mysql-server的版本
+rpm -qi mysql-server
+
+启动mysql服务
+service mysqld start
+重启mysql服务
+service mysqld restart
+
+
+查看mysql服务是不是开机自动启动
+chkconfig --list | grep mysqld
+
+置成开机启动
+chkconfig mysqld on
+
+查看mysql服务是不是开机自动启动
+chkconfig --list | grep mysqld
+
+给root账号设置密码为 game123456
+mysqladmin -u root password 'forest'
+
+登陆mysql
+mysql -u root -p
+game123456
+
+
+下面可以启动mysql和查看mysql的状态
+/etc/rc.d/init.d/mysqld start
+/etc/rc.d/init.d/mysqld status
+/etc/rc.d/init.d/mysqld stop
+
+
+-------------------------------------------------------------------------------------------------------------
+
+给root账户制定ip进行登陆
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'113.118.226.27' IDENTIFIED BY 'forest' WITH GRANT OPTION;
+FLUSH   PRIVILEGES;
+
+允许任何ip通过root账户进行登陆
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'game123456' WITH GRANT OPTION;
+FLUSH   PRIVILEGES;
+
+
+ update user set Password = PASSWORD('forest') where User ='root';
+
+/usr/bin/mysqldump --add-drop-table --skip-lock-tables -u robot -h 192.168.0.130 -P 3306 -pgame123456 mysql | /bin/gzip -9 > mysql.gz
+
+-------------------------------------------------------------------------------------------------------------
+
+
+show processlist;
+show variables like 'max_connections';
+
+
+show status;
+
+show status like '%Aborted_clients%';
+show status like '%Uptime%';
+show status like '%Aborted_connects%';
+
+
+临时修改最大连接数
+set global max_connections = 3600;
+
+永久修改最大连接数
+vi /etc/my.cnf
+添加
+max_connections=3601
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-- 修改表
+delimiter //
+DROP PROCEDURE IF EXISTS alter_table_usergame_table;
+CREATE procedure alter_table_usergame_table()
+BEGIN
+	DECLARE `@i` int(11);
+	DECLARE `@sqlstr` varchar(128);
+	SET `@i`= 0;
+	WHILE `@i` <= 1 DO
+		SET @sqlstr = CONCAT("alter table chess_gamelog.usergame",`@i`," add column totalwinc bigint(20) DEFAULT 0 COMMENT '累计输赢筹码';");
+		prepare stmt from @sqlstr;
+		execute stmt;
+		SET `@i` = `@i` + 1;
+	END WHILE;
+END;
+call alter_table_usergame_table();
+drop procedure alter_table_usergame_table;
+//
+
+-- 恢复结束符;
+delimiter ;
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+-- 修改表
+delimiter //
+DROP PROCEDURE IF EXISTS alter_table_usergame_table;
+CREATE procedure alter_table_usergame_table()
+BEGIN
+	DECLARE `@i` int(11);
+	DECLARE `@sqlstr` varchar(128);
+	SET `@i`= 0;
+	WHILE `@i` <= 1 DO
+		SET @sqlstr = CONCAT("alter table chess_gamelog.usergame",`@i`," drop column totalwinc;");
+		prepare stmt from @sqlstr;
+		execute stmt;
+		SET `@i` = `@i` + 1;
+	END WHILE;
+END;
+call alter_table_usergame_table();
+drop procedure alter_table_usergame_table;
+//
+
+-- 恢复结束符;
+delimiter ;
+
+-------------------------------------------------------------------------------------------------------------
+
+1 error
+
+rpm -qi mysql-server
+package mysql-server is not installed
+rpm -q mysql
+package mysql is not installed
+
+cd /etc/rc.d/init.d
+chmod 755 mysqld
+
+
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
+主要是修该了：my.cnf文件[mysql socket文件的位置是在/etc/my.cnf中设置的]
+
+ cd /var/lib/mysql
+rm
+
+
+--------------------------------------------------------------------------------------------------------------
+
+https://www.cnblogs.com/nicknailo/articles/8563456.html
+
+一、使用以下命令查看当前安装mysql情况，查找以前是否装有mysql
+
+1
+rpm -qa|grep -i mysql
+
+
+[root@iZj6c0li5h2rrd9sklptodZ data]# rpm -qa|grep -i mysql
+MySQL-embedded-5.6.21-1.el6.x86_64
+perl-DBD-MySQL-4.013-3.el6.x86_64
+MySQL-devel-5.6.21-1.el6.x86_64
+MySQL-shared-compat-5.6.21-1.el6.x86_64
+
+2、停止mysql服务、删除之前安装的mysql
+
+删除命令：rpm -e –nodeps 包名
+
+rpm -e –nodeps MySQL-embedded-5.6.21-1.el6.x86_64
+rpm -e –nodeps perl-DBD-MySQL-4.013-3.el6.x86_64
+rpm -e –nodeps MySQL-devel-5.6.21-1.el6.x86_64
+rpm -e –nodeps MySQL-shared-compat-5.6.21-1.el6.x86_64
+
+如果提示依赖包错误，则使用以下命令尝试
+
+rpm -ev MySQL-client-5.5.25a-1.rhel5 --nodeps
+
+rpm -ev --nodeps MySQL-embedded-5.6.21-1.el6.x86_64
+rpm -ev --nodeps perl-DBD-MySQL-4.013-3.el6.x86_64
+rpm -ev --nodeps MySQL-devel-5.6.21-1.el6.x86_64
+rpm -ev --nodeps MySQL-shared-compat-5.6.21-1.el6.x86_64
+
+
+如果提示错误：error: %preun(xxxxxx) scriptlet failed, exit status 1
+则用以下命令尝试：
+
+rpm -e --noscripts MySQL-embedded-5.6.21-1.el6.x86_64
+rpm -e --noscripts perl-DBD-MySQL-4.013-3.el6.x86_64
+rpm -e --noscripts MySQL-devel-5.6.21-1.el6.x86_64
+rpm -e --noscripts MySQL-shared-compat-5.6.21-1.el6.x86_64
+
+
+3、查找之前老版本mysql的目录、并且删除老版本mysql的文件和库
+
+find / -name mysql
+查找结果如下：
+
+find / -name mysql 
+ 
+/var/lib/mysql
+/var/lib/mysql/mysql
+/usr/lib64/mysql
+删除对应的mysql目录
+
+rm -rf /var/lib/mysql
+rm -rf /var/lib/mysql
+rm -rf /usr/lib64/mysql
+
+rm -rf /usr/share/mysql
+rm -rf /home/software/php-5.6.30/travis/ext/mysql
+rm -rf /home/software/php-5.6.30/ext/mysql
+rm -rf /var/lib/mysql
+rm -rf /var/lib/mysql/mysql
+
+注意：卸载后/etc/my.cnf不会删除，需要进行手工删除
+
+rm -rf /etc/my.cnf
+
+4、再次查找机器是否安装mysql
+
+rpm -qa|grep -i mysql
+
+--------------------------------------------------------------------------------------------------------------

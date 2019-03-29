@@ -29,10 +29,10 @@ local mysqlInfo = {
 ]]
 
 local mysqlInfo = {
-	mysqlHost = "",
-	mysqlUser = "game66",
-	mysqlPassword = "Game123456",
-	mysqlDataBase = "chess_backsite",
+	mysqlHost = "127.0.0.1",
+	mysqlUser = "root",
+	mysqlPassword = "game123456",
+	mysqlDataBase = "ssaccountsdb",
 }
 
 local applePay = {

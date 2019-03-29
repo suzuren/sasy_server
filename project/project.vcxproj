@@ -206,6 +206,15 @@
     <None Include="..\game_room\lualib\xLog.lua" />
     <None Include="..\game_room\Makefile" />
     <None Include="..\game_room\mysql\all_databases.sql" />
+    <None Include="..\game_room\mysql\ssaccountsdb.sql" />
+    <None Include="..\game_room\mysql\ssaccountsdb_data.sql" />
+    <None Include="..\game_room\mysql\ssfishdb.sql" />
+    <None Include="..\game_room\mysql\ssplatformdb.sql" />
+    <None Include="..\game_room\mysql\ssrecorddb.sql" />
+    <None Include="..\game_room\mysql\sstreasuredb.sql" />
+    <None Include="..\game_room\mysql\sstreasuredb_data.sql" />
+    <None Include="..\game_room\mysql\sswebdb.sql" />
+    <None Include="..\game_room\mysql\sswebdb_data.sql" />
     <None Include="..\game_room\pbs\makefile" />
     <None Include="..\game_room\program_log\service_log_dir" />
     <None Include="..\game_room\protos\common\common.misc.s2c.proto" />
@@ -1017,6 +1026,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\document\introduce.txt" />
+    <Text Include="..\document\mysql_5_6_install.txt" />
     <Text Include="..\skynet\3rd\jemalloc\msvc\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -71,16 +71,12 @@ skynet.start(function()
     skynet.uniqueservice("LS_webController_interface")
     
     skynet.uniqueservice("LS_telnetServer", tonumber(skynet.getenv("telnetPort")))
-
-
+	
     local tcpGateway = skynet.uniqueservice("tcpGateway")
 	skynet.call(tcpGateway, "lua", "initialize", "loginServer", sysConfig.isTest)
-	skynet.call(tcpGateway, "lua", "open" , {
-		address = skynet.getenv("address"),
-		port = tonumber(skynet.getenv("port")),
-		nodelay = true,
-	})
-	--print("--cluster")
+
+	local opts ={address = skynet.getenv("address"),port = tonumber(skynet.getenv("port")),nodelay = true,}
+	skynet.call(tcpGateway, "lua", "open" , opts)	
     cluster.open "loginServer"
     
 	skynet.exit()

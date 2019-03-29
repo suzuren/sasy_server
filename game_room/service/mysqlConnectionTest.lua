@@ -2,6 +2,8 @@
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
+local mysqlutil = require "mysqlutil"
+
 local inspect = require "inspect"
 
 local _huoDongTimeConfig = {}
@@ -42,6 +44,14 @@ local function loadTimeInfo()
 	--skynet.error(string.format("%s loadTimeInfo - rows\n",SERVICE_NAME),inspect(rows))
 end
 
+local function insertEscapeStringHuoDongTimeConfig()
+	local dbConn = addressResolver.getMysqlConnection()
+	local sql = "INSERT INTO `t_huo_dong_time_config` (Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES ('规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取', '2', '2016-11-26 00:00:00', '2016-12-02 00:00:00', 'Dbcz', 'Cz', 'Qcz', '2');"
+	local sql = string.format("INSERT INTO `t_huo_dong_time_config`	(Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES 	('%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d');",	mysqlutil.escapestring("规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取"), 2, mysqlutil.escapestring("2016-11-26 00:00:00"), mysqlutil.escapestring("2016-12-02 00:00:00"), mysqlutil.escapestring("Dbcz"), mysqlutil.escapestring("Cz"), mysqlutil.escapestring("Qcz"), 2)
+	skynet.error(string.format("%s insertEscapeStringHuoDongTimeConfig - sql:%s",SERVICE_NAME,sql))
+	skynet.call(dbConn, "lua", "execute", sql)
+end
+
 local function cmd_GetHuoDongTimeInfo()
 	return _huoDongTimeConfig
 end
@@ -54,6 +64,7 @@ local conf = {
 		loadHuoDongTimeConfig()
 		insertHuoDongTimeConfig()
 		loadTimeInfo()
+		insertEscapeStringHuoDongTimeConfig()
 	end,
 }
 

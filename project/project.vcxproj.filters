@@ -1413,6 +1413,33 @@
     <None Include="..\game_room\lualib\utility\randNumber.lua">
       <Filter>game_room\lualib\utility</Filter>
     </None>
+    <None Include="..\game_room\mysql\ssaccountsdb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\ssaccountsdb_data.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\ssfishdb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\ssplatformdb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\ssrecorddb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\sstreasuredb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\sstreasuredb_data.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\sswebdb.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
+    <None Include="..\game_room\mysql\sswebdb_data.sql">
+      <Filter>game_room\mysql</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -2860,6 +2887,9 @@
     </Text>
     <Text Include="..\skynet\3rd\jemalloc\msvc\ReadMe.txt">
       <Filter>skynet\3rd\jemalloc\msvc</Filter>
+    </Text>
+    <Text Include="..\document\mysql_5_6_install.txt">
+      <Filter>document</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

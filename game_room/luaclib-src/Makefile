@@ -10,7 +10,7 @@ MYSQL_INC = /usr/include/mysql/
 
 .PHONY : all clean
 
-all : depend protobuf.so pbcc.so skynetHelper.so sui.so memory.so # mysqlutil.so 
+all : depend protobuf.so pbcc.so skynetHelper.so sui.so memory.so mysqlutil.so 
 
 depend :
 	cd lua-arc4random && make
@@ -26,7 +26,7 @@ pbcc.so : lua-pbcc.c
 	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_INC) -fPIC --shared $^ -o $@
 
 skynetHelper.so : lua-skynetHelper.c
-	gcc -g -O2 -Wall -I$(LUA_INC)  -fPIC --shared $^ -o $@
+	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_INC)  -fPIC --shared $^ -o $@
 
 sui.so : lua-sui.c
 	gcc -g -O2 -Wall -I$(LUA_INC)  -fPIC --shared $^ -o $@
@@ -34,12 +34,8 @@ sui.so : lua-sui.c
 memory.so : $(SKYNET_LIB)/lua-memory.c
 	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_LIB) -I$(SKYNET_INC) -fPIC --shared $^ -o $@
 
-#mysqlutil.so : lua-mysqlutil.c
-#	gcc -g -O2 -Wall -I$(LUA_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@
-
-#socketdriver.so : $(SKYNET_DIR)lualib-src/lua-socket.c | $(SKYNET_LUA_CLIB_PATH)
-	#gcc -g -O2 -Wall -fPIC --shared $^ -o $@ -I$(SKYNET_INC) -I$(SKYNET_SIC) -I$(LUA_INC)
-	#mkdir skynet && mv socketdriver.so skynet/socketdriver.so
+mysqlutil.so : lua-mysqlutil.c
+	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@
 
 clean :
 	cd lua-cjson && make clean
