@@ -192,6 +192,7 @@
     <None Include="..\game_room\lualib\utility\ip.lua" />
     <None Include="..\game_room\lualib\utility\jsonHttpResponse.lua" />
     <None Include="..\game_room\lualib\utility\mcClient.lua" />
+    <None Include="..\game_room\lualib\utility\mysqlHandle.lua" />
     <None Include="..\game_room\lualib\utility\path.lua" />
     <None Include="..\game_room\lualib\utility\randNumber.lua" />
     <None Include="..\game_room\lualib\utility\readFile.lua" />

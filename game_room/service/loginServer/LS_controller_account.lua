@@ -3,7 +3,7 @@ local pbServiceHelper = require "serviceHelper.pb"
 local addressResolver = require "addressResolver"
 local resourceResolver = require "resourceResolver"
 local wordFilterUtility = require "wordfilter"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
 

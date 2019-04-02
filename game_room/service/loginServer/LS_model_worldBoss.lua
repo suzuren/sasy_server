@@ -793,8 +793,8 @@ local function checkTimeFlushBoss()
 		end
 
 		--skynet.error(string.format("%s checkTimeFlushBoss func - nowTimeMin:%d,configTime:%d,HourFlushBossFlag:%s,status:%d,flushTime:%d,nowTimeMin:%d",SERVICE_NAME,nowTimeMin,configTime,_data.HourFlushBossFlag,_data.status,_data.timeConfig.flushTime,nowTimeMin))
-		--if nowTimeMin == configTime then
-		if nowTimeMin ~= configTime then
+		if nowTimeMin == configTime then
+		--if nowTimeMin ~= configTime then
 			if not _data.HourFlushBossFlag and _data.status == 0 and _data.timeConfig.flushTime ~= nowTimeMin then
 				_data.HourFlushBossFlag = true
 				_data.timeConfig.poolScore = v.poolScore

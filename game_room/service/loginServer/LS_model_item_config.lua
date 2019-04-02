@@ -2,7 +2,7 @@ require "utility.string"
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
---local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local randHandle = require "utility.randNumber"
 local readFileUtility = require "utility.readFile"
 

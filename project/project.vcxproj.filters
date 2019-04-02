@@ -1440,6 +1440,9 @@
     <None Include="..\game_room\mysql\sswebdb_data.sql">
       <Filter>game_room\mysql</Filter>
     </None>
+    <None Include="..\game_room\lualib\utility\mysqlHandle.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">

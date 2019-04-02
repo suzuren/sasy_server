@@ -285,10 +285,7 @@ local function doPulling()
 	
 	local list = cluster.call("loginServer", _LS_GSProxyAddress, "gs_pull", _serverSignature.serverID, _serverSignature.sign)
 
-	skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),
-	"_serverSignature-\n",inspect(_serverSignature),
-	"\nlist-\n",inspect(list))
-
+	--skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),"_serverSignature-\n",inspect(_serverSignature),"\nlist-\n",inspect(list))
 
 	do
 		local jsonUtil = require "cjson.util"
@@ -299,15 +296,16 @@ local function doPulling()
 		
 		local eventMask = (item.msgNo & COMMON_CONST.LSNOTIFY_EVENT_MASK)
 		local messageMask = (item.msgNo & COMMON_CONST.RELAY_MESSAG_MASK)
-		skynet.error(string.format("%s doPulling func -eventMask:%d,messageMask:%d,msgNo:0x%08X,EVENT_MASK:0x%08X,MESSAG_MASK:0x%08X",
-		 SERVICE_NAME,eventMask,messageMask,item.msgNo,COMMON_CONST.LSNOTIFY_EVENT_MASK,COMMON_CONST.RELAY_MESSAG_MASK))
+		skynet.error(string.format("%s doPulling func -eventMask:%d,messageMask:%d,msgNo:0x%08X,EVENT_MASK:0x%08X,MESSAG_MASK:0x%08X",SERVICE_NAME,eventMask,messageMask,item.msgNo,COMMON_CONST.LSNOTIFY_EVENT_MASK,COMMON_CONST.RELAY_MESSAG_MASK))
 
 		if eventMask~=0 then
 			processLSNotify(item.msgNo, item.msgData)
 		elseif messageMask~=0 then
 			processRelayMessage(item.msgNo, item.msgData)
+		elseif item.msgNo == 0 then
+			skynet.error(string.format("%s: login test send data to game server.", SERVICE_NAME))
 		else
-			error(string.format("%s: unknow the message type", SERVICE_NAME))
+			skynet.error(string.format("%s: unknow the message type", SERVICE_NAME))
 		end
 	end
 end
@@ -322,7 +320,7 @@ local function cmd_onEventServerRegisterSuccess(data)
 	if not isPullingStarted then
 		skynet.fork(function()
 			while true do
-				skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - whiledo", SERVICE_NAME))
+				--skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - whiledo", SERVICE_NAME))
 				local isSuccess, errMsg = pcall(doPulling)
 				skynet.error(string.format("%s cmd_onEventServerRegisterSuccess func - isSuccess:%s,errMsg", SERVICE_NAME,isSuccess),errMsg)
 				if not isSuccess then

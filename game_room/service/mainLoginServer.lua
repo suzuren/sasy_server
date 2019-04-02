@@ -13,7 +13,11 @@ skynet.start(function()
 
     skynet.uniqueservice("eventDispatcher")
     skynet.uniqueservice("mysqlConnectionPool")
-	skynet.uniqueservice("mysqlConnectionTest")
+	local mysqlConnectionTestAddress = skynet.uniqueservice("mysqlConnectionTest")
+	local timeConfig = skynet.call(mysqlConnectionTestAddress,"lua","GetHuoDongTimeInfo")
+	--skynet.error(string.format("%s skynet.start func - timeConfig\n",SERVICE_NAME),inspect(timeConfig))
+
+
     local resManager = skynet.uniqueservice("resourceManager")
     skynet.call(resManager, "lua", "initialize", "pbParser", "loginServer", tonumber(skynet.getenv("resManager_pbParserPoolSize")))
     --skynet.call(resManager, "lua", "initialize", "sensitiveWordFilter", tonumber(skynet.getenv("resManager_wordFilterPoolSize")))

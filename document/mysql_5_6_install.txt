@@ -372,3 +372,71 @@ rm -rf /etc/my.cnf
 rpm -qa|grep -i mysql
 
 --------------------------------------------------------------------------------------------------------------
+
+Linux下查看mysql、apache是否安装,并卸载。
+
+指令 ps -ef|grep mysql 得出结果
+
+root     17659     1  0  2011 ?        00:00:00 
+/bin/sh
+ /usr/bin/mysqld_safe
+  --datadir=/var/lib/mysql
+   --socket=/var/lib/mysql/mysql.sock
+    --log-error=/var/log/mysqld.log
+	 --pid-file=/var/run/mysqld/mysqld.pid   
+mysql    17719 17659  0  2011 ?        03:14:57
+ /usr/libexec/mysqld
+  --basedir=/usr
+   --datadir=/var/lib/mysql
+    --user=mysql
+	 --pid-file=/var/run/mysqld/mysqld.pid
+	  --skip-external-locking
+	   --socket=/var/lib/mysql/mysql.sock  
+usr/bin/mysql 是指：mysql的运行路径 
+var/lib/mysql 是指：mysql数据库文件的存放路径 
+usr/lib/mysql 是指：mysql的安装路径
+
+
+[root@forest usr]# ps aux | grep mysql
+root       2245  0.0  0.0 108332  1508 ?        S    10:03   0:00 
+
+
+/bin/sh /usr/bin/mysqld_safe
+ --datadir=/var/lib/mysql
+  --socket=/var/lib/mysql/mysql.sock
+   --pid-file=/var/run/mysqld/mysqld.pid
+    --basedir=/usr --user=mysql
+mysql      2449  0.3 24.1 1406792 460568 ?      Sl   10:03   0:04 
+/usr/sbin/mysqld
+ --basedir=/usr
+  --datadir=/var/lib/mysql
+   --plugin-dir=/usr/lib64/mysql/plugin
+    --user=mysql
+	 --log-error=/var/log/mysqld.log
+	  --pid-file=/var/run/mysqld/mysqld.pid
+	   --socket=/var/lib/mysql/mysql.sock
+
+root       4935  0.0  0.0 103256   844 pts/1    S+   10:25   0:00 grep mysql
+[root@forest usr]# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+

@@ -3,7 +3,7 @@ local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 
 --新手保护的鱼
 local _hashForFishId = {}	

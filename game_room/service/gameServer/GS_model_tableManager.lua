@@ -535,9 +535,7 @@ local conf = {
 			_tableHash[i] = {addr=tbAddr, state={isLocked=false, isStarted=false, sitCount=0, needVipLv=0, multipleLv=0, tablePassword=nil,tableType=tableType}}
 		end
 		
-		skynet.error(string.format("%s initFunc func - ",SERVICE_NAME),
-		"_serverConfig-\n",inspect(_serverConfig),
-		"\n_tableHash-\n",inspect(_tableHash))
+		--skynet.error(string.format("%s initFunc func - ",SERVICE_NAME),	"_serverConfig-\n",inspect(_serverConfig),"\n_tableHash-\n",inspect(_tableHash))
 
 		local GS_EVENT = require "define.eventGameServer"
 		skynet.send(addressResolver.getAddressByServiceName("eventDispatcher"), "lua", "addEventListener", GS_EVENT.EVT_GS_LOGIN_SUCCESS, skynet.self(), "onEventLoginSuccess")

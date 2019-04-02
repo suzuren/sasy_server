@@ -2,14 +2,14 @@
 local skynet = require "skynet"
 local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 
 local inspect = require "inspect"
 
 local _huoDongTimeConfig = {}
 
 local function loadHuoDongTimeConfig()
-	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `t_huo_dong_time_config`;"
+	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `sstreasuredb`.`t_huo_dong_time_config`;"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -32,7 +32,7 @@ end
 
 local function insertHuoDongTimeConfig()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = "INSERT INTO `t_huo_dong_time_config` (Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES ('规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取', '2', '2016-11-26 00:00:00', '2016-12-02 00:00:00', 'Dbcz', 'Cz', 'Qcz', '2');"
+	local sql = "INSERT INTO `sstreasuredb`.`t_huo_dong_time_config` (Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES ('规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取', '2', '2016-11-26 00:00:00', '2016-12-02 00:00:00', 'Dbcz', 'Cz', 'Qcz', '2');"
 	local lastautoid = skynet.call(dbConn, "lua", "insert", sql)
 	--skynet.error(string.format("%s insertHuoDongTimeConfig - lastautoid:%d",SERVICE_NAME,lastautoid))
 end
@@ -46,8 +46,8 @@ end
 
 local function insertEscapeStringHuoDongTimeConfig()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = "INSERT INTO `t_huo_dong_time_config` (Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES ('规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取', '2', '2016-11-26 00:00:00', '2016-12-02 00:00:00', 'Dbcz', 'Cz', 'Qcz', '2');"
-	local sql = string.format("INSERT INTO `t_huo_dong_time_config`	(Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES 	('%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d');",	mysqlutil.escapestring("规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取"), 2, mysqlutil.escapestring("2016-11-26 00:00:00"), mysqlutil.escapestring("2016-12-02 00:00:00"), mysqlutil.escapestring("Dbcz"), mysqlutil.escapestring("Cz"), mysqlutil.escapestring("Qcz"), 2)
+	local sql = "INSERT INTO `sstreasuredb`.`t_huo_dong_time_config` (Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES ('规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取', '2', '2016-11-26 00:00:00', '2016-12-02 00:00:00', 'Dbcz', 'Cz', 'Qcz', '2');"
+	local sql = string.format("INSERT INTO `sstreasuredb`.`t_huo_dong_time_config`	(Tips,ActivityType,StartTime,EndTime,TuPianId,BeiJingId,TextName,ActivityClass) VALUES 	('%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d');",	mysqlutil.escapestring("规则: 单笔充值特定金额，赢取相应丰厚大奖\n提示：可重复充值领取"), 2, mysqlutil.escapestring("2016-11-26 00:00:00"), mysqlutil.escapestring("2016-12-02 00:00:00"), mysqlutil.escapestring("Dbcz"), mysqlutil.escapestring("Cz"), mysqlutil.escapestring("Qcz"), 2)
 	skynet.error(string.format("%s insertEscapeStringHuoDongTimeConfig - sql:%s",SERVICE_NAME,sql))
 	skynet.call(dbConn, "lua", "execute", sql)
 end
@@ -62,9 +62,9 @@ local conf = {
 	},
 	initFunc = function()
 		loadHuoDongTimeConfig()
-		insertHuoDongTimeConfig()
-		loadTimeInfo()
-		insertEscapeStringHuoDongTimeConfig()
+		--insertHuoDongTimeConfig()
+		--loadTimeInfo()
+		--insertEscapeStringHuoDongTimeConfig()
 	end,
 }
 
@@ -96,7 +96,7 @@ THIS_PROCEDURE:BEGIN
 	DECLARE varTextName VARCHAR(250);
 	DECLARE varActivityClass TINYINT(4);
 
-	SELECT `Index`, `Tips`, `ActivityType`, `StartTime`, `EndTime`, `TuPianId`, `BeiJingId`, `TextName`, `ActivityClass` INTO varIndex, varTips, varActivityType, varStartTime, varEndTime, varTuPianId, varBeiJingId, varTextName, varActivityClass FROM `t_huo_dong_time_config` WHERE `Index`=inIndex; 
+	SELECT `Index`, `Tips`, `ActivityType`, `StartTime`, `EndTime`, `TuPianId`, `BeiJingId`, `TextName`, `ActivityClass` INTO varIndex, varTips, varActivityType, varStartTime, varEndTime, varTuPianId, varBeiJingId, varTextName, varActivityClass FROM `sstreasuredb`.`t_huo_dong_time_config` WHERE `Index`=inIndex; 
 	
 	IF ISNULL(varIndex) THEN
 		SET retCode := 1;

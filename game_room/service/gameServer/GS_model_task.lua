@@ -6,7 +6,7 @@ local addressResolver = require "addressResolver"
 local ServerUserItem = require "sui"
 local COMMON_CONST = require "define.commonConst"
 local GS_CONST = require "define.gsConst"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local readFileUtility = require "utility.readFile"
 
 local _taskInfoHash = {}

@@ -1,6 +1,6 @@
 local skynet = require "skynet"
 local cluster = require "cluster"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local pbServiceHelper = require "serviceHelper.pb"
 local ServerUserItem = require "sui"
 local GS_CONST = require "define.gsConst"

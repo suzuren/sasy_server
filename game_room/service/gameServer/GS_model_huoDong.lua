@@ -4,7 +4,7 @@ local commonServiceHelper = require "serviceHelper.common"
 local addressResolver = require "addressResolver"
 local COMMON_CONST = require "define.commonConst"
 local ServerUserItem = require "sui"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local timerUtility = require "utility.timer"
 
 local function checkIsSameDay(dateTime)

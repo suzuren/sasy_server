@@ -1,5 +1,5 @@
 local skynet = require "skynet"
---local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local pbServiceHelper = require "serviceHelper.pb"
 local LS_CONST = require "define.lsConst"
 local LS_EVENT = require "define.eventLoginServer"

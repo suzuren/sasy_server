@@ -13,7 +13,7 @@ skynet.start(function()
 
 	skynet.uniqueservice("resourceManager")
 	skynet.uniqueservice("eventDispatcher")
-	--skynet.uniqueservice("mysqlConnectionPool")
+	skynet.uniqueservice("mysqlConnectionPool")
 	local resManager = skynet.uniqueservice("resourceManager")
 	skynet.call(resManager, "lua", "initialize", "pbParser", gameName, tonumber(skynet.getenv("resManager_pbParserPoolSize")))
 	--skynet.call(resManager, "lua", "initialize", "sensitiveWordFilter", tonumber(skynet.getenv("resManager_wordFilterPoolSize")))

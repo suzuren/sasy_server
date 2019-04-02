@@ -35,7 +35,7 @@ memory.so : $(SKYNET_LIB)/lua-memory.c
 	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_LIB) -I$(SKYNET_INC) -fPIC --shared $^ -o $@
 
 mysqlutil.so : lua-mysqlutil.c
-	gcc -g -O2 -Wall -I$(LUA_INC) -I$(SKYNET_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@
+	#gcc -g -O2 -Wall -lpthread -I$(LUA_INC) -I$(SKYNET_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@ -L/usr/lib64/mysql -lmysqlclient
 
 clean :
 	cd lua-cjson && make clean

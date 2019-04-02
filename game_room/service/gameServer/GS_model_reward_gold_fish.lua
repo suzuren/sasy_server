@@ -4,7 +4,7 @@ local addressResolver = require "addressResolver"
 local COMMON_CONST = require "define.commonConst"
 local GS_CONST = require "define.gsConst"
 local ServerUserItem = require "sui"
-local mysqlutil = require "mysqlutil"
+local mysqlutil = require "utility.mysqlHandle"
 local randHandle = require "utility.randNumber"
 local timerUtility = require "utility.timer"
 

@@ -203,7 +203,7 @@ data={
 }
 --]]
 	if _serverHash[data.serverID] then
-		error(string.format("服务器已经注册 serverID=%d", data.serverID))
+		skynet.error(string.format("服务器已经注册 serverID=%d", data.serverID))
 
 		local serverItem = _serverHash[data.serverID]
 

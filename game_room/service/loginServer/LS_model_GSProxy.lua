@@ -55,14 +55,14 @@ local function cmd_gs_pull(serverID, sign)
 	if responseItem==nil or responseItem.sign~=sign then
 		error(string.format("%s: 服务器还没有注册 serverID=%s sign=%s", SERVICE_NAME, tostring(serverID), tostring(sign)))
 	else
-		skynet.error(string.format("%s doPulling func - ", SERVICE_NAME),inspect(responseItem))
+		--skynet.error(string.format("%s cmd_gs_pull func - responseItem\n", SERVICE_NAME),inspect(responseItem))
 
 		if responseItem.responser~=nil then
 			responseItem.responser(false)
 		end
 
 		responseItem.responser = skynet.response()
-		skynet.error(string.format("%s cmd_gs_pull func - responseItem.responser ", SERVICE_NAME),responseItem.responser)
+		--skynet.error(string.format("%s cmd_gs_pull func - responseItem.responser ", SERVICE_NAME),responseItem.responser)
 
 		checkMsg(responseItem)
 	end
@@ -74,6 +74,11 @@ local function cmd_onEventGameServerConnect(data)
 		msgBuffer = {},
 		sign = data.sign,
 	}
+
+	local responseItem = _serverResponseHash[data.serverID]
+	local msgData={ index = 0, status = "server_connect",	tips = "hello world",}
+	table.insert(responseItem.msgBuffer, {msgNo = 0, msgData = msgData})
+	skynet.error(string.format("%s cmd_onEventGameServerConnect func - _serverResponseHash\n", SERVICE_NAME),inspect(_serverResponseHash))
 end
 
 local function cmd_onEventGameServerDisconnect(data)
