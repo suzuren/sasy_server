@@ -17,6 +17,7 @@ skynet.start(function()
 	local timeConfig = skynet.call(mysqlConnectionTestAddress,"lua","GetHuoDongTimeInfo")
 	--skynet.error(string.format("%s skynet.start func - timeConfig\n",SERVICE_NAME),inspect(timeConfig))
 
+	--local mongoConnectionTestAddress = skynet.uniqueservice("mongoConnectionTest")
 
     local resManager = skynet.uniqueservice("resourceManager")
     skynet.call(resManager, "lua", "initialize", "pbParser", "loginServer", tonumber(skynet.getenv("resManager_pbParserPoolSize")))

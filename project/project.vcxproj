@@ -362,6 +362,7 @@
     <None Include="..\game_room\service\loginServer\LS_webController_uniformPlatform.lua" />
     <None Include="..\game_room\service\mainGameServer.lua" />
     <None Include="..\game_room\service\mainLoginServer.lua" />
+    <None Include="..\game_room\service\mongoConnectionTest.lua" />
     <None Include="..\game_room\service\mysqlConnection.lua" />
     <None Include="..\game_room\service\mysqlConnectionPool.lua" />
     <None Include="..\game_room\service\mysqlConnectionTest.lua" />
@@ -1027,6 +1028,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\document\introduce.txt" />
+    <Text Include="..\document\mongo_install.txt" />
     <Text Include="..\document\mysql_5_6_install.txt" />
     <Text Include="..\skynet\3rd\jemalloc\msvc\ReadMe.txt" />
   </ItemGroup>

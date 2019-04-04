@@ -1,30 +1,30 @@
 local multicast = require "multicast"
 
-local channelHash = {}
-local mcReceiver = nil
+local _channelHash = {}
+local _mcReceiver = nil
 
 local function subscribeChannel(channelID)
-	local channel = channelHash[channelID]
+	local channel = _channelHash[channelID]
 	if not channel then
 		channel = multicast.new({
 			channel = channelID,
-			dispatch = mcReceiver,
-		})			
+			dispatch = _mcReceiver,
+		})
 		channel:subscribe()
-		channelHash[channelID] = channel
+		_channelHash[channelID] = channel
 	end
 end
 
 local function doUnsubscribe(channelID)
-	local channel = channelHash[channelID]
+	local channel = _channelHash[channelID]
 	channel:unsubscribe()
-	channelHash[channelID] = nil
+	_channelHash[channelID] = nil
 end
 
 
 local function unsubscribeChannel(channelIDList)
 	for _, channelID in ipairs(channelIDList) do
-		local channel = channelHash[channelID]
+		local channel = _channelHash[channelID]
 		if channel then
 			doUnsubscribe(channelID)
 		end
@@ -32,13 +32,13 @@ local function unsubscribeChannel(channelIDList)
 end	
 
 local function unsubscribeAll()
-	for channelID, _ in pairs(channelHash) do
+	for channelID, _ in pairs(_channelHash) do
 		doUnsubscribe(channelID)
 	end
 end
 
 local function initialize(recFunc)
-	mcReceiver = recFunc
+	_mcReceiver = recFunc
 end
 
 return {

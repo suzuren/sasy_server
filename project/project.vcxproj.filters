@@ -1443,6 +1443,9 @@
     <None Include="..\game_room\lualib\utility\mysqlHandle.lua">
       <Filter>game_room\lualib\utility</Filter>
     </None>
+    <None Include="..\game_room\service\mongoConnectionTest.lua">
+      <Filter>game_room\service</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -2892,6 +2895,9 @@
       <Filter>skynet\3rd\jemalloc\msvc</Filter>
     </Text>
     <Text Include="..\document\mysql_5_6_install.txt">
+      <Filter>document</Filter>
+    </Text>
+    <Text Include="..\document\mongo_install.txt">
       <Filter>document</Filter>
     </Text>
   </ItemGroup>
