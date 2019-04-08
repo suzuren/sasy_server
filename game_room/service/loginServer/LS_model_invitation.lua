@@ -8,7 +8,7 @@ local function cmd_Invitation(pbObj,userID)
 		err = "",
 	}
 
-	local sql = string.format("call `kffishdb`.`sp_user_invitation`('%s',%d)",pbObj.invitation,userID)
+	local sql = string.format("call `ssfishdb`.`sp_user_invitation`('%s',%d)",pbObj.invitation,userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local ret = skynet.call(dbConn, "lua", "call", sql)[1]
 	re.code = tonumber(ret.retCode)

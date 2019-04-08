@@ -73,7 +73,7 @@ local function cmd_RequestTask(taskType,sui)
 	local count = 0 --今日次数
 	local sumCount = 0 --总次数
 	local attr = ServerUserItem.getAttribute(sui, {"userID", "agent"})
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_task` where UserId = %d and TaskType = %d", attr.userID,taskType)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_task` where UserId = %d and TaskType = %d", attr.userID,taskType)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] == nil then
@@ -99,7 +99,7 @@ local function cmd_RequestTask(taskType,sui)
 				goal = goal..tostring(goalTemp.goodsID)..":"..tostring(goalTemp.allGoodsCount)..":"..tostring(goalTemp.currentGoodsCount).."|" 
 			end
 
-			sql = string.format("insert into `kffishdb`.`t_task` values(%d,%d,%d,'%s',%d,%d,%d)",
+			sql = string.format("insert into `ssfishdb`.`t_task` values(%d,%d,%d,'%s',%d,%d,%d)",
 				attr.userID,re.taskType,re.taskID,mysqlutil.escapestring(goal),0,nowDate,0)
 			skynet.call(dbConn, "lua", "query", sql)
 		else
@@ -132,7 +132,7 @@ local function cmd_RequestTask(taskType,sui)
 				goalInfo = goalInfo..tostring(v.goodsID)..":"..tostring(v.allGoodsCount)..":"..tostring(v.currentGoodsCount).."|" 
 			end
 
-			sql = string.format("update `kffishdb`.`t_task` set SuccessNum = %d,TaskInfo = '%s',Date = %d where UserId = %d and TaskType = %d and TaskId = %d",
+			sql = string.format("update `ssfishdb`.`t_task` set SuccessNum = %d,TaskInfo = '%s',Date = %d where UserId = %d and TaskType = %d and TaskId = %d",
 				count,mysqlutil.escapestring(goalInfo),nowDate,attr.userID,re.taskType,re.taskID)
 			skynet.call(dbConn,"lua","query",sql)
 		end
@@ -189,7 +189,7 @@ local function cmd_ChangeTaskGoodsCount(pbObj,sui)
 	end
 
 	local attr = ServerUserItem.getAttribute(sui, {"userID", "agent"})
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
 		attr.userID,re.TaskType,re.taskID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
@@ -220,7 +220,7 @@ local function cmd_ChangeTaskGoodsCount(pbObj,sui)
 			goal = goal..tostring(v.goodsID)..":"..tostring(v.allGoodsCount)..":"..tostring(v.currentGoodsCount).."|" 
 		end
 
-		sql = string.format("update `kffishdb`.`t_task` set TaskInfo = '%s' where UserId = %d and TaskType = %d and TaskId = %d",
+		sql = string.format("update `ssfishdb`.`t_task` set TaskInfo = '%s' where UserId = %d and TaskType = %d and TaskId = %d",
 			mysqlutil.escapestring(goal),attr.userID,re.TaskType,re.taskID)
 		skynet.call(dbConn,"lua","query",sql)
 	end
@@ -251,7 +251,7 @@ local function cmd_CompleteTask(pbObj,sui)
 	end
 
 	local attr = ServerUserItem.getAttribute(sui, {"userID", "agent","tableID"})
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
 		attr.userID,re.taskType,re.taskID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
@@ -342,7 +342,7 @@ local function cmd_CompleteTask(pbObj,sui)
 	sumCount = sumCount + 1
 
 	if count < GS_CONST.PET_DAY_MAX_TASK_NUM then
-		sql = string.format("delete from `kffishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
+		sql = string.format("delete from `ssfishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
 				attr.userID,re.taskType,re.taskID)
 		skynet.call(dbConn, "lua", "query", sql)
 
@@ -367,19 +367,19 @@ local function cmd_CompleteTask(pbObj,sui)
 				goal = goal..tostring(goalTemp.goodsID)..":"..tostring(goalTemp.allGoodsCount)..":"..tostring(goalTemp.currentGoodsCount).."|" 
 			end
 
-			sql = string.format("insert into `kffishdb`.`t_task` values(%d,%d,%d,'%s',%d,%d,%d)",
+			sql = string.format("insert into `ssfishdb`.`t_task` values(%d,%d,%d,'%s',%d,%d,%d)",
 				attr.userID,re.taskType,taskId,mysqlutil.escapestring(goal),count,nowDate,sumCount)
 			skynet.call(dbConn, "lua", "query", sql)
 		end
 	else
-		sql = string.format("update `kffishdb`.`t_task` set SuccessNum = %d, SumNum = %d where UserId = %d and TaskType = %d and TaskId = %d",
+		sql = string.format("update `ssfishdb`.`t_task` set SuccessNum = %d, SumNum = %d where UserId = %d and TaskType = %d and TaskId = %d",
 		 count,sumCount,attr.userID,re.taskType,re.taskID)
 		skynet.call(dbConn,"lua","query",sql)
 	end
 
 	re.taskRewardGoodsInfoList = _taskInfoHash[re.taskID].rewardList
 
-	sql = string.format("insert into `kfrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
+	sql = string.format("insert into `ssrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
 		attr.userID,re.taskType,re.taskID,os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())),rewardGold)
 	skynet.send(dbConn, "lua", "execute", sql)
 
@@ -428,7 +428,7 @@ local function cmd_CheckKillBossTask(sui)
 
 	local attr = ServerUserItem.getAttribute(sui, {"agent","userID"})
 
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_task` where UserId = %d and TaskType = %d and TaskId = %d",
 		attr.userID,re.taskType,re.taskID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
@@ -471,13 +471,13 @@ local function cmd_CheckKillBossTask(sui)
 
 	sumCount = sumCount + 1
 
-	sql = string.format("update `kffishdb`.`t_task` set SuccessNum = %d, SumNum = %d where UserId = %d and TaskType = %d and TaskId = %d",
+	sql = string.format("update `ssfishdb`.`t_task` set SuccessNum = %d, SumNum = %d where UserId = %d and TaskType = %d and TaskId = %d",
 		1,sumCount,attr.userID,re.taskType,re.taskID)
 	skynet.call(dbConn,"lua","query",sql)
 
 	re.taskRewardGoodsInfoList = _taskInfoHash[re.taskID].rewardList
 
-	sql = string.format("insert into `kfrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
+	sql = string.format("insert into `ssrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
 		attr.userID,re.taskType,re.taskID,os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())),rewardGold)
 	skynet.send(dbConn, "lua", "execute", sql)
 

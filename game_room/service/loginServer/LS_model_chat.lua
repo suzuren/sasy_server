@@ -12,7 +12,7 @@ local timerUtility = require "utility.timer"
 local chatDataHash = {}
 
 local function loadChatData()
-	local sql = "SELECT `Id`,`UserId`,`UserName`,`Gender`,`VipLevel`,`Content`,`GoodsInfo`,UNIX_TIMESTAMP(`WordTime`) as \"WordTime\" FROM `kfrecorddb`.`t_word_record` where TIMESTAMPDIFF(HOUR,WordTime, NOW()) < 24 ORDER BY Id DESC LIMIT 20"
+	local sql = "SELECT `Id`,`UserId`,`UserName`,`Gender`,`VipLevel`,`Content`,`GoodsInfo`,UNIX_TIMESTAMP(`WordTime`) as \"WordTime\" FROM `ssrecorddb`.`t_word_record` where TIMESTAMPDIFF(HOUR,WordTime, NOW()) < 24 ORDER BY Id DESC LIMIT 20"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -118,7 +118,7 @@ local function cmd_SendMessageBoardInfo(pbObj,tcpAgentData)
 
 	local nowtime = os.date('%Y-%m-%d %H:%M:%S', os.time())
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kfrecorddb`.`t_word_record`(UserId,UserName,Gender,VipLevel,Content,GoodsInfo,WordTime) values(%d,'%s',%d,%d,'%s','%s','%s')",
+	local sql = string.format("insert into `ssrecorddb`.`t_word_record`(UserId,UserName,Gender,VipLevel,Content,GoodsInfo,WordTime) values(%d,'%s',%d,%d,'%s','%s','%s')",
 			attr.userID,mysqlutil.escapestring(attr.nickName),attr.gender,attr.memberOrder,mysqlutil.escapestring(pbObj.content),mysqlutil.escapestring(goal),mysqlutil.escapestring(nowtime))
 	skynet.call(dbConn, "lua", "query", sql)
 

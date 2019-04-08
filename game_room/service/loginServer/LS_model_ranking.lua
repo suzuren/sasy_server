@@ -8,17 +8,17 @@ local _boxRankingList
 
 local function reloadWealthRankingList()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("DELETE FROM kffishdb.t_char_title WHERE TitleType = 1")
+	local sql = string.format("DELETE FROM ssfishdb.t_char_title WHERE TitleType = 1")
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 
 	local HideAllFlag = 0
-	local sql = string.format("SELECT HideAllFlag FROM `kfrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
+	local sql = string.format("SELECT HideAllFlag FROM `ssrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] ~= nil then
 		HideAllFlag = tonumber(rows[1].HideAllFlag)
 	end
 
-	local sql = "call kftreasuredb.sp_load_wealth_ranking_list()"
+	local sql = "call sstreasuredb.sp_load_wealth_ranking_list()"
 	local rows = skynet.call(dbConn, "lua", "call", sql)
 	local list = {}
 	local i = 1
@@ -58,7 +58,7 @@ local function reloadWealthRankingList()
 
 			local titleName = skynet.call(addressResolver.getAddressByServiceName("LS_model_item_config"),"lua","GetTitleName",1,i)
 			if titleName ~= nil then
-				local sql = string.format("INSERT INTO kffishdb.t_char_title VALUES(%d,%d,%d,'%s',NOW())",item.userID,1,i,titleName)
+				local sql = string.format("INSERT INTO ssfishdb.t_char_title VALUES(%d,%d,%d,'%s',NOW())",item.userID,1,i,titleName)
 				skynet.send(dbConn, "lua", "execute", sql)
 			end
 			i = i + 1
@@ -68,7 +68,7 @@ local function reloadWealthRankingList()
 end
 
 local function reloadLoveLinesRankingList()
-	local sql = "call kftreasuredb.sp_load_loveLines_ranking_list()"
+	local sql = "call sstreasuredb.sp_load_loveLines_ranking_list()"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "call", sql)
 	local list = {}
@@ -100,17 +100,17 @@ end
 
 local function reloadBoxRankingList()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("DELETE FROM kffishdb.t_char_title WHERE TitleType = 2")
+	local sql = string.format("DELETE FROM ssfishdb.t_char_title WHERE TitleType = 2")
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 
 	local HideAllFlag = 0
-	local sql = string.format("SELECT HideAllFlag FROM `kfrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
+	local sql = string.format("SELECT HideAllFlag FROM `ssrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] ~= nil then
 		HideAllFlag = tonumber(rows[1].HideAllFlag)
 	end
 
-	local sql = "call kftreasuredb.sp_load_box_ranking_list()"	
+	local sql = "call sstreasuredb.sp_load_box_ranking_list()"	
 	local rows = skynet.call(dbConn, "lua", "call", sql)
 	local list = {}
 	local i = 1
@@ -162,7 +162,7 @@ local function reloadBoxRankingList()
 
 		local titleName = skynet.call(addressResolver.getAddressByServiceName("LS_model_item_config"),"lua","GetTitleName",2,i)
 		if titleName ~= nil then
-			local sql = string.format("INSERT INTO kffishdb.t_char_title VALUES(%d,%d,%d,'%s',NOW())",info.userID,2,i,titleName)
+			local sql = string.format("INSERT INTO ssfishdb.t_char_title VALUES(%d,%d,%d,'%s',NOW())",info.userID,2,i,titleName)
 			skynet.send(dbConn, "lua", "execute", sql)
 		end
 		i = i + 1
@@ -188,7 +188,7 @@ local function cmd_sendTitleList(agent,userID)
 		list = {},
 	}
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("SELECT * FROM kffishdb.t_char_title WHERE UserId = %d",userID)
+	local sql = string.format("SELECT * FROM ssfishdb.t_char_title WHERE UserId = %d",userID)
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do

@@ -25,7 +25,7 @@ local function checkRoomConfig(userInfo, isAndroid)
 		local isFishRoom = skynet.call(addressResolver.getAddressByServiceName("GS_model_serverStatus"),"lua","isFishRoom",_serverConfig.ServerID)
 		if isFishRoom then
 			local gunMultiple = 1
-			local sql = string.format("SELECT CurGunLevel FROM `kffishdb`.`t_gun_uplevel` where UserId=%d",userInfo.userID)
+			local sql = string.format("SELECT CurGunLevel FROM `ssfishdb`.`t_gun_uplevel` where UserId=%d",userInfo.userID)
 			local dbConn = addressResolver.getMysqlConnection()
 			local rows = skynet.call(dbConn,"lua","query",sql)
 			if rows[1] ~= nil then
@@ -73,7 +73,7 @@ local function checkRoomConfig(userInfo, isAndroid)
 end
 
 local function getUserInfoFromDb(userID)
-	local sql = string.format("call kfaccountsdb.sp_gameserver_login(%d)", userID)
+	local sql = string.format("call ssaccountsdb.sp_gameserver_login(%d)", userID)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "call", sql)
 	local dboLogin = rows[1]
@@ -104,7 +104,7 @@ local function getUserInfoFromDb(userID)
 	end	
 
 	local HideAllFlag = 0
-	local sql = string.format("SELECT HideAllFlag FROM `kfrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
+	local sql = string.format("SELECT HideAllFlag FROM `ssrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
 	local rows = skynet.call(mysqlConn, "lua", "query", sql)
 	if rows[1] ~= nil then
 		HideAllFlag = tonumber(rows[1].HideAllFlag)

@@ -23,7 +23,7 @@ local function cmd_SaveData(userID)
 		end
 
 		if v.limitId ~= COMMON_CONST.OPERATOR_LIMIT.OP_LIMTI_ID_DOUBLE_GOLD then
-			local sql = string.format("insert into `kfrecorddb`.`t_user_operator_limit` (`UserId`,`LimitId`,`LimitCount`,`LimitDate`) VALUES(%d,%d,%d,%d) ON DUPLICATE KEY UPDATE LimitCount=%d,LimitDate=%d",
+			local sql = string.format("insert into `ssrecorddb`.`t_user_operator_limit` (`UserId`,`LimitId`,`LimitCount`,`LimitDate`) VALUES(%d,%d,%d,%d) ON DUPLICATE KEY UPDATE LimitCount=%d,LimitDate=%d",
 				userID,v.limitId,v.limitCount,v.limitDate,v.limitCount,v.limitDate)
 			skynet.call(dbConn,"lua","query",sql)
 		end
@@ -32,7 +32,7 @@ end
 
 local function cmd_LoadData(userID)
 	local info = {}
-	local sql = string.format("SELECT * FROM `kfrecorddb`.`t_user_operator_limit` where UserId=%d",userID)
+	local sql = string.format("SELECT * FROM `ssrecorddb`.`t_user_operator_limit` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then

@@ -182,14 +182,14 @@ local function cmd_findAvailableTableForNiuniu(score,userID,platformID)
 		table.insert(validAddrList, v.addr)
 	end
 
-	local sql = string.format("SELECT score FROM `kfrecorddb`.`UserPayScore` where platformID = %d",platformID)
+	local sql = string.format("SELECT score FROM `ssrecorddb`.`UserPayScore` where platformID = %d",platformID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] ~= nil then
 		rmbGold = rows[1].score
 	end
 
-	local sql = string.format("SELECT SumGold FROM `kfrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userID)
+	local sql = string.format("SELECT SumGold FROM `ssrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] ~= nil then
@@ -326,7 +326,7 @@ local function LoadControlRateConfig()
 		timeBoss = {},
 	}
 
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_user_control_rate`")
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_control_rate`")
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -377,7 +377,7 @@ local function LoadControlRateConfig()
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_control_fish_rate`")
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_control_fish_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do
@@ -401,7 +401,7 @@ local function LoadControlRateConfig()
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_control_crit_rate`")
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_control_crit_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do
@@ -426,7 +426,7 @@ local function LoadControlRateConfig()
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_control_world_boss_rate`")
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_control_world_boss_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do
@@ -440,7 +440,7 @@ local function LoadControlRateConfig()
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_control_time_boss_rate`")
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_control_time_boss_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do

@@ -15,7 +15,7 @@ local _initializer = {
 		local wordFilter = require "wordfilter"
 		local filter = wordFilter.new()
 		local dbConn = addressResolver.getMysqlConnection()
-		local sql = "SELECT `Word` FROM `kfplatformdb`.`SensitiveWords`"
+		local sql = "SELECT `Word` FROM `ssplatformdb`.`SensitiveWords`"
 		local rows = skynet.call(dbConn, "lua", "query", sql)	
 		for _, row in ipairs(rows) do
 			wordFilter.addWord(filter, row.Word)

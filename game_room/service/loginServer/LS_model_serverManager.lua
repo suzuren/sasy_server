@@ -214,7 +214,7 @@ data={
 	local kindItem = _kindHash[data.kindID]
 	local nodeItem = _nodeHash[data.nodeID]
 	if not kindItem then
-		--local sql = string.format("select * from `kfplatformdb`.`GameKindItem` where KindID=%d", data.kindID)
+		--local sql = string.format("select * from `ssplatformdb`.`GameKindItem` where KindID=%d", data.kindID)
 		--local dbConn = addressResolver.getMysqlConnection()
 		--local rows = skynet.call(dbConn, "lua", "query", sql)
 
@@ -239,7 +239,7 @@ data={
 	end
 	
 	if not nodeItem then
-		--local sql = string.format("select * from `kfplatformdb`.`GameNodeItem` where NodeID=%d", data.nodeID)
+		--local sql = string.format("select * from `ssplatformdb`.`GameNodeItem` where NodeID=%d", data.nodeID)
 		--local dbConn = addressResolver.getMysqlConnection()
 		--local rows = skynet.call(dbConn, "lua", "query", sql)
 
@@ -424,7 +424,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 	local dbConn = addressResolver.getMysqlConnection()
 
 	if defenseList then
-		local sql = string.format("select Ip,UserIp FROM `kffishdb`.`t_user_ip` where UserId = %d", userID)
+		local sql = string.format("select Ip,UserIp FROM `ssfishdb`.`t_user_ip` where UserId = %d", userID)
 		local rowss = skynet.call(dbConn, "lua", "query", sql)
 		if rowss[1] ~= nil then
 			beforeIp = rowss[1].Ip
@@ -436,7 +436,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 			end
 		end
 
-		sql = string.format("select * FROM `kffishdb`.`t_dubious_user` where UserId = %d", userID)
+		sql = string.format("select * FROM `ssfishdb`.`t_dubious_user` where UserId = %d", userID)
 		local rowss = skynet.call(dbConn, "lua", "query", sql)
 		if rowss[1] ~= nil then
 			local ID = tonumber(rowss[1].UserId)
@@ -446,7 +446,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 		end
 
 
-		sql = string.format("select AllSumDay FROM `kffishdb`.`t_signin` where UserId = %d", userID)
+		sql = string.format("select AllSumDay FROM `ssfishdb`.`t_signin` where UserId = %d", userID)
 		local rowss = skynet.call(dbConn, "lua", "query", sql)
 		if rowss[1] ~= nil then
 			curAllSumDay = tonumber(rowss[1].AllSumDay)
@@ -456,7 +456,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 		end
 
 
-		sql = string.format("select SUM(1) AS Count FROM `kfrecorddb`.`rescue_coin` where UserId = %d", userID)
+		sql = string.format("select SUM(1) AS Count FROM `ssrecorddb`.`rescue_coin` where UserId = %d", userID)
 		local rowss = skynet.call(dbConn, "lua", "query", sql)
 		if rowss[1] ~= nil then
 			rescueCoin = tonumber(rowss[1].Count)
@@ -481,7 +481,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 		end
 
 		if not ipAddr then
-			sql = string.format("select ItemCount FROM `kffishdb`.`t_bag` where UserId = %d and ItemId=1001", userID)
+			sql = string.format("select ItemCount FROM `ssfishdb`.`t_bag` where UserId = %d and ItemId=1001", userID)
 			local rowss = skynet.call(dbConn, "lua", "query", sql)
 			if rowss[1] ~= nil then
 				curGold = tonumber(rowss[1].ItemCount)
@@ -527,7 +527,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 	if ipAddr then
 		local MachineID = nil
 		local VipLv = 0;
-		local sql = string.format("select `LastLogonMachine`, `MemberOrder` FROM `kfaccountsdb`.`accountsinfo` where UserID = %d", userID)
+		local sql = string.format("select `LastLogonMachine`, `MemberOrder` FROM `ssaccountsdb`.`accountsinfo` where UserID = %d", userID)
 		local rowss = skynet.call(dbConn, "lua", "query", sql)
 		if rowss[1] ~= nil then
 			MachineID = rowss[1].LastLogonMachine
@@ -535,7 +535,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 		end		
 
 		if MachineID and MachineID ~= "" then
-			local sql = string.format("select `ConnectIpLV`, `BlackListFlag`, `VipLevel` FROM `kffishdb`.`t_logon_ip_lv` where LogonMachine = '%s'", MachineID)
+			local sql = string.format("select `ConnectIpLV`, `BlackListFlag`, `VipLevel` FROM `ssfishdb`.`t_logon_ip_lv` where LogonMachine = '%s'", MachineID)
 			local rowss = skynet.call(dbConn, "lua", "query", sql)
 			if rowss[1] ~= nil then
 				local sqlTopIplv = tonumber(rowss[1].ConnectIpLV)
@@ -589,7 +589,7 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 					end
 				end
 
-				local sql = string.format("UPDATE `kffishdb`.`t_logon_ip_lv` SET ConnectIpLV = %d , `BlackListFlag`= %d, `VipLevel`= %d WHERE LogonMachine = '%s'",sqlTopIplv,blackListFlag,VipLv,MachineID)
+				local sql = string.format("UPDATE `ssfishdb`.`t_logon_ip_lv` SET ConnectIpLV = %d , `BlackListFlag`= %d, `VipLevel`= %d WHERE LogonMachine = '%s'",sqlTopIplv,blackListFlag,VipLv,MachineID)
 				skynet.call(dbConn, "lua", "query", sql)
 
 			else 
@@ -597,8 +597,8 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 				if ip_level == ip_level_dubious then
 					blackListFlag=1
 				end
-				local sql = string.format("insert into `kffishdb`.`t_logon_ip_lv` (`LogonMachine`,`ConnectIpLV`, `BlackListFlag`, `VipLevel`) VALUES('%s',%d,%d,%d) ",MachineID,ip_level,blackListFlag,VipLv)
-				-- local sql = string.format("insert into `kffishdb`.`t_logon_ip_lv` (`LogonMachine`,`ConnectIpLV`, `BlackListFlag`, `VipLevel`) VALUES('%s',%d,%d,%d) ON DUPLICATE KEY UPDATE ConnectIpLV=%d",MachineID,ip_level,blackListFlag,VipLv,ip_level)
+				local sql = string.format("insert into `ssfishdb`.`t_logon_ip_lv` (`LogonMachine`,`ConnectIpLV`, `BlackListFlag`, `VipLevel`) VALUES('%s',%d,%d,%d) ",MachineID,ip_level,blackListFlag,VipLv)
+				-- local sql = string.format("insert into `ssfishdb`.`t_logon_ip_lv` (`LogonMachine`,`ConnectIpLV`, `BlackListFlag`, `VipLevel`) VALUES('%s',%d,%d,%d) ON DUPLICATE KEY UPDATE ConnectIpLV=%d",MachineID,ip_level,blackListFlag,VipLv,ip_level)
 				skynet.call(dbConn, "lua", "query", sql)
 
 			end	
@@ -609,11 +609,11 @@ local function sendUserAddr(userID, platformID, agent, contribution)
 			skynet.send(agent, "lua", "forward", 0x000299, {ip=ipAddr})
 		end
 
-		local sql = string.format("insert into `kffishdb`.`t_user_ip` (`UserId`,`Ip`,`LoginTime`) VALUES(%d,'%s',NOW()) ON DUPLICATE KEY UPDATE ip='%s',LoginTime=NOW()",userID,ip,ip)
+		local sql = string.format("insert into `ssfishdb`.`t_user_ip` (`UserId`,`Ip`,`LoginTime`) VALUES(%d,'%s',NOW()) ON DUPLICATE KEY UPDATE ip='%s',LoginTime=NOW()",userID,ip,ip)
 		skynet.call(dbConn, "lua", "query", sql)
 
 		if inDubiousUser and not isDubiousUser then
-			sql = string.format("DELETE FROM `kffishdb`.`t_dubious_user` WHERE UserId = %d",userID)
+			sql = string.format("DELETE FROM `ssfishdb`.`t_dubious_user` WHERE UserId = %d",userID)
 			skynet.call(dbConn, "lua", "query", sql)
 		end
 	else

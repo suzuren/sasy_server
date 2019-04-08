@@ -46,7 +46,7 @@ local function writeVariation(userItem)
 
 	local variationInfo = tmp.variationInfo
 	local sql = string.format(
-		"call kftreasuredb.sp_write_score(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)",
+		"call sstreasuredb.sp_write_score(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)",
 		userAttr.userID,
 		variationInfo.revenue,
 		variationInfo.score,

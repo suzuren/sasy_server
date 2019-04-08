@@ -13,6 +13,7 @@ local function cmd_get(protocalNo)
 			--protocalObj = { index = 2147483647 }
 			protocalObj = { index = 127 }
 		end
+		--local packetStr = skynet.call(resourceResolver.get("pbParser"), "lua", "encode", protocalNo, {}, true)
 		local packetStr = skynet.call(resourceResolver.get("pbParser"), "lua", "encode", protocalNo, protocalObj, true)
 		if packetStr and not _packetBuf[protocalNo] then
 			_packetBuf[protocalNo] = packetStr

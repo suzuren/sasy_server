@@ -22,7 +22,7 @@ local REQUEST = {
 		-- 	return 0x000701, retObj
 		-- end
 		
-		local sql = string.format("call kftreasuredb.sp_bank_withdraw(%d, %d)", tcpAgentData.userID, pbObj.amount)
+		local sql = string.format("call sstreasuredb.sp_bank_withdraw(%d, %d)", tcpAgentData.userID, pbObj.amount)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "call", sql)
 		local row = rows[1]

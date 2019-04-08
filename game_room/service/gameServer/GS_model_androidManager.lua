@@ -183,7 +183,7 @@ local function _onTimerLoadAndroid()
 		skynet.send(androidMapItem.addr, "lua", "exit")
 	end	
 	
-	local sql = string.format("call kfaccountsdb.sp_load_android(%d)", _serverConfig.ServerID)
+	local sql = string.format("call ssaccountsdb.sp_load_android(%d)", _serverConfig.ServerID)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "call", sql)
 	if type(rows)~="table" or #rows==0 then
@@ -558,7 +558,7 @@ local function cmd_start()
 		return exit()
 	end
 	
-	local sql = string.format("call kfaccountsdb.sp_is_android_config_ok(%d)", _serverConfig.ServerID)
+	local sql = string.format("call ssaccountsdb.sp_is_android_config_ok(%d)", _serverConfig.ServerID)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "call", sql)
 	if type(rows)~="table" or #rows~=1 or tonumber(rows[1].retCode)~=0 then
@@ -656,7 +656,7 @@ local function cmd_androidList()
 end
 
 local function cmd_reloadOneAndroid(serverID,userID,tableID)
-	local sql = string.format("call kfaccountsdb.sp_reload_one_android(%d,%d,%d)",serverID,userID,tableID)
+	local sql = string.format("call ssaccountsdb.sp_reload_one_android(%d,%d,%d)",serverID,userID,tableID)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "call", sql)
 	if type(rows)~="table" or #rows==0 then

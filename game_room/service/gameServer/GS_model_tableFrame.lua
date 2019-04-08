@@ -307,7 +307,7 @@ local function startGame()
 	end
 	
 	local sql = string.format(
-		"INSERT INTO `kfrecorddb`.`DrawInfo` (`KindID`, `ServerID`, `TableID`, `StartTime`) VALUES (%d, %d, %d, '%s')",
+		"INSERT INTO `ssrecorddb`.`DrawInfo` (`KindID`, `ServerID`, `TableID`, `StartTime`) VALUES (%d, %d, %d, '%s')",
 		_data.serverConfig.KindID, _data.serverConfig.ServerID, _data.id, os.date('%Y-%m-%d %H:%M:%S', _data.drawStartTime)
 	)
 	
@@ -332,7 +332,7 @@ end
 
 local function storeGameRecord()	
 	local sql = string.format(
-		"UPDATE `kfrecorddb`.`DrawInfo` SET `ConcludeTime`='%s' WHERE `DrawID`=%d",
+		"UPDATE `ssrecorddb`.`DrawInfo` SET `ConcludeTime`='%s' WHERE `DrawID`=%d",
 		os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())), _data.drawID
 	)
 	
@@ -372,7 +372,7 @@ local function storeGameRecord()
 		
 		
 		sql = string.format(
-			"INSERT INTO `kfrecorddb`.`DrawScore` (`DrawID`, `UserID`, `ChairID`, `isAndroid`, `Score`, `Grade`, `Revenue`, `Medal`, `Gift`, `Present`, `Loveliness`, `PlayTimeCount`, `InoutIndex`, `InsertTime`,`ServerId`) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s',%d)",
+			"INSERT INTO `ssrecorddb`.`DrawScore` (`DrawID`, `UserID`, `ChairID`, `isAndroid`, `Score`, `Grade`, `Revenue`, `Medal`, `Gift`, `Present`, `Loveliness`, `PlayTimeCount`, `InoutIndex`, `InsertTime`,`ServerId`) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s',%d)",
 			_data.drawID, item.userID, item.chairID, item.isAndroid, item.score, item.grade, item.revenue, item.medal, item.gift, item.present, item.loveliness, item.gamePlayTime, item.inoutIndex, os.date('%Y-%m-%d %H:%M:%S', item.insertTime),_data.serverConfig.ServerID
 		)
 		skynet.send(mysqlConn, "lua", "execute", sql)
@@ -1183,7 +1183,7 @@ local function cmd_sitDown(userItem, chairID, password,needVipLv,multipleLv,tabl
 
 			if _data.multipleLv ~= 0 then
 				local gunMultiple = 1
-				local sql = string.format("SELECT CurGunLevel FROM `kffishdb`.`t_gun_uplevel` where UserId=%d",userAttr.userID)
+				local sql = string.format("SELECT CurGunLevel FROM `ssfishdb`.`t_gun_uplevel` where UserId=%d",userAttr.userID)
 				local dbConn = addressResolver.getMysqlConnection()
 				local rows = skynet.call(dbConn,"lua","query",sql)
 				if rows[1] ~= nil then

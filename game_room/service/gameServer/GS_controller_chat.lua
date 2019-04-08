@@ -15,7 +15,7 @@ local _messageCache = {}
 local function logMessage(userID, tableID, msg,payRmb,useridList)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local sql = string.format(
-		"insert into `kfrecorddb`.`Chat`(`ServerID`, `TableID`, `SendUserID`, `Ctime`, `Message`,`PayRmb`,`UserIdList`) values (%d, %d, %d, now(), '%s',%d,'%s')",
+		"insert into `ssrecorddb`.`Chat`(`ServerID`, `TableID`, `SendUserID`, `Ctime`, `Message`,`PayRmb`,`UserIdList`) values (%d, %d, %d, now(), '%s',%d,'%s')",
 		_serverConfig.ServerID,
 		tableID,
 		userID,

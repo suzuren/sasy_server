@@ -168,7 +168,7 @@ local function onResponseLogin(protocalObj)
 		startGameLogic()
 	end
 
-	-- local sql = string.format("UPDATE `kfaccountsdb`.`AccountsInfo` SET `LastLogonDate`=NOW() WHERE `UserID`=%d",userAttr.userID)
+	-- local sql = string.format("UPDATE `ssaccountsdb`.`AccountsInfo` SET `LastLogonDate`=NOW() WHERE `UserID`=%d",userAttr.userID)
 	-- local dbConn = addressResolver.getMysqlConnection()
 	-- skynet.call(dbConn,"lua","query",sql)
 end

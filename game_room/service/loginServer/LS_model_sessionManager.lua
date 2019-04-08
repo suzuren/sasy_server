@@ -53,7 +53,7 @@ end
 local function createBindingItem(platformID, userStatus, Tel)
 	--创建绑定账号信息
 	--[[
-	local sql = string.format("SELECT * FROM `kfaccountsdb`.`AccountBinding` where PlatformID = %d", platformID)
+	local sql = string.format("SELECT * FROM `ssaccountsdb`.`AccountBinding` where PlatformID = %d", platformID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	local _userstatus = userStatus
@@ -72,11 +72,11 @@ end
 
 local function addBindingRecord(userID, platformID, gamestatus)
 	-- 增加用户绑定记录
-	local sql = string.format("SELECT * FROM `kfaccountsdb`.`AccountBinding` where UserID = %d", userID)
+	local sql = string.format("SELECT * FROM `ssaccountsdb`.`AccountBinding` where UserID = %d", userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] == nil then
-		sql = string.format("insert into `kfaccountsdb`.`AccountBinding` values(%d,%d,%d,'%s')",userID, platformID, gamestatus, os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())))
+		sql = string.format("insert into `ssaccountsdb`.`AccountBinding` values(%d,%d,%d,'%s')",userID, platformID, gamestatus, os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())))
 		skynet.call(dbConn, "lua", "query", sql)
 	end
 end
@@ -297,7 +297,7 @@ local function checkOldUserVip(sui,attr)
 	if memberOrder ~= attr.memberOrder then
 		ServerUserItem.setAttribute(sui, {memberOrder=memberOrder})
 		local dbConn = addressResolver.getMysqlConnection()
-		local sql = string.format("UPDATE `kfaccountsdb`.`AccountsInfo` SET `MemberOrder`=%d WHERE `UserID`=%d",memberOrder,attr.userID)
+		local sql = string.format("UPDATE `ssaccountsdb`.`AccountsInfo` SET `MemberOrder`=%d WHERE `UserID`=%d",memberOrder,attr.userID)
 		skynet.call(dbConn, "lua", "query", sql)
 	end
 end
@@ -339,7 +339,7 @@ end
 
 local function resetFreeScoreRecord(userID)
 	local nowDate = tonumber(os.date("%Y%m%d", os.time()))
-	local sql = string.format("update `kftreasuredb`.`s_free_score_info` set num=0, earnDate=%d where id = %d", nowDate, userID)
+	local sql = string.format("update `sstreasuredb`.`s_free_score_info` set num=0, earnDate=%d where id = %d", nowDate, userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	skynet.call(dbConn, "lua", "query", sql)
 end
@@ -347,7 +347,7 @@ end
 local function cmd_bindingAccount(platformID)
 	-- 绑定账号
 	if _hash.platformIDBinding[platformID] and _hash.platformIDBinding[platformID].gameStatus <= 0 then
-		local sql = string.format("update `kfaccountsdb`.`AccountBinding` set GameStatus=1, BindingDate='%s' where PlatformID = %d",os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())), platformID)
+		local sql = string.format("update `ssaccountsdb`.`AccountBinding` set GameStatus=1, BindingDate='%s' where PlatformID = %d",os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())), platformID)
 		local dbConn = addressResolver.getMysqlConnection()
 		skynet.call(dbConn, "lua", "query", sql)
 		_hash.platformIDBinding[platformID].gameStatus = 1

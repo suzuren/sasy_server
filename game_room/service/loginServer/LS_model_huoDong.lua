@@ -73,13 +73,13 @@ local function cmd_ActivityInfoList(agent,userID)
 					ActivityItemInfo.leftTimes = iItemMinCount
 			
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_RECHARGE then
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
 						else
-							local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+							local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 								0,nowDate,0,userID,vv.activityId,vv.index)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
@@ -93,13 +93,13 @@ local function cmd_ActivityInfoList(agent,userID)
 					table.insert(ActivityItemInfo.completeGoodsList,item)
 
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_SUM_RECHARGE then
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
 						else
-							local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+							local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 								0,nowDate,0,userID,vv.activityId,vv.index)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
@@ -110,14 +110,14 @@ local function cmd_ActivityInfoList(agent,userID)
 						goodsCount = 0,
 					}
 
-					local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
+					local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						local iRmb = tonumber(rows[1].Rmb)
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							item.goodsCount = iRmb
 						else
-							sql = string.format("update `kffishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
+							sql = string.format("update `ssfishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
 					end
@@ -126,14 +126,14 @@ local function cmd_ActivityInfoList(agent,userID)
 
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_SUM_RECHARGE_IN_HD_TIME then
 					local startTime = tonumber(os.date("%Y%m%d", v.startTime))
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
 						local lastDate = tonumber(rows[1].Date)
 						if lastDate < startTime then
 							ActivityItemInfo.leftTimes = 0
-							local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+							local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 								0,nowDate,0,userID,vv.activityId,vv.index)
 							skynet.call(dbConn, "lua", "query", sql)
 						end 
@@ -143,14 +143,14 @@ local function cmd_ActivityInfoList(agent,userID)
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_RMB,
 						goodsCount = 0,
 					}
-					local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
+					local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						local iRmb = tonumber(rows[1].Rmb)
 						local lastDate = tonumber(rows[1].Date)
 						if lastDate < startTime then
 							item.goodsCount = 0
-							sql = string.format("update `kffishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
+							sql = string.format("update `ssfishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
 							skynet.call(dbConn, "lua", "query", sql)
 						else
 							item.goodsCount = iRmb
@@ -203,7 +203,7 @@ local function cmd_ActivityInfoList(agent,userID)
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_RMB,
 						goodsCount = 0,
 					}
-					local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
+					local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						local iRmb = tonumber(rows[1].Rmb)
@@ -346,7 +346,7 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 
 					elseif v.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_RED_PACKET then 
 						local dbConn = addressResolver.getMysqlConnection()
-						local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",tcpAgentData.userID,v.activityId)
+						local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",tcpAgentData.userID,v.activityId)
 						local rows = skynet.call(dbConn,"lua","query",sql)
 						if rows[1] ~= nil then
 							local iRmb = tonumber(rows[1].Rmb)
@@ -374,7 +374,7 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 										
 									skynet.send(addressResolver.getAddressByServiceName("LS_model_bag"), "lua", "ChangeItemCount",tcpAgentData.userID,goods.goodsID,goods.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_HUO_DONG_REWARD)
 
-									local sql = string.format("update `kffishdb`.`t_user_pay_rmb` set Rmb=0 where UserId=%d and PayType=%d",tcpAgentData.userID,v.activityId)
+									local sql = string.format("update `ssfishdb`.`t_user_pay_rmb` set Rmb=0 where UserId=%d and PayType=%d",tcpAgentData.userID,v.activityId)
 									skynet.call(dbConn,"lua","query",sql)
 								end
 							end
@@ -383,7 +383,7 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 						end
 
 					else
-						local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",tcpAgentData.userID,v.activityId,v.index)
+						local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",tcpAgentData.userID,v.activityId,v.index)
 						local dbConn = addressResolver.getMysqlConnection()
 						local rows = skynet.call(dbConn,"lua","query",sql)
 						if rows[1] ~= nil then
@@ -395,18 +395,18 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 							skynet.send(addressResolver.getAddressByServiceName("LS_model_bag"), "lua", "AddGoodsList",tcpAgentData.userID,v.rewardList,tcpAgentData.sui,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_HUO_DONG_REWARD)
 
 							if v.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_RECHARGE then
-								local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
 									iCount-1,nowDate,tcpAgentData.userID,v.activityId,v.index)
 								skynet.call(dbConn, "lua", "query", sql)		
 							else
-								local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 									0,nowDate,1,tcpAgentData.userID,v.activityId,v.index)
 								skynet.call(dbConn, "lua", "query", sql)	
 							end				
 						end
 					end
 
-					local sql = string.format("insert into `kfrecorddb`.`t_activity_get_reward_type`(`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
+					local sql = string.format("insert into `ssrecorddb`.`t_activity_get_reward_type`(`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
 						tcpAgentData.userID,2,v.activityId,v.index)
 					local dbConn = addressResolver.getMysqlConnection()
 					skynet.send(dbConn, "lua", "execute", sql)
@@ -445,7 +445,7 @@ local function cmd_CheckActivityReward(sui)
 					if curTime > v.endTime then
 						bRedPacketFlag = true
 						local dbConn = addressResolver.getMysqlConnection()
-						local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",attrr.userID,COMMON_CONST.HUO_DONG_ID.HD_ID_RED_PACKET)
+						local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",attrr.userID,COMMON_CONST.HUO_DONG_ID.HD_ID_RED_PACKET)
 						local rows = skynet.call(dbConn,"lua","query",sql)
 						if rows[1] ~= nil then
 							local iRmb = tonumber(rows[1].Rmb)
@@ -471,12 +471,12 @@ local function cmd_CheckActivityReward(sui)
 									local messageInfo = string.format("这是您未及时领取的充值乐翻天奖励,请注意查收附件!祝您游戏愉快!")
 									skynet.send(addressResolver.getAddressByServiceName("LS_model_message"),"lua","sendEmailToUser",attrr.userID,rewardList,messageTitle,messageInfo)
 
-									local sql = string.format("insert into `kfrecorddb`.`t_activity_get_reward_type` (`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
+									local sql = string.format("insert into `ssrecorddb`.`t_activity_get_reward_type` (`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
 										attrr.userID,1,COMMON_CONST.HUO_DONG_ID.HD_ID_RED_PACKET,1)
 									skynet.call(dbConn, "lua", "query", sql)
 								end
 
-								local sql = string.format("update `kffishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",
 									0,nowDate,attrr.userID,vv.activityId)
 								skynet.call(dbConn, "lua", "query", sql)
 							end
@@ -489,7 +489,7 @@ local function cmd_CheckActivityReward(sui)
 					or vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_SUM_RECHARGE 
 					or vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_SUM_RECHARGE_IN_HD_TIME then
 
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",attrr.userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",attrr.userID,vv.activityId,vv.index)
 					local dbConn = addressResolver.getMysqlConnection()
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
@@ -517,14 +517,14 @@ local function cmd_CheckActivityReward(sui)
 								end
 
 								if bFind then
-									local sql = string.format("insert into `kfrecorddb`.`t_activity_get_reward_type` (`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
+									local sql = string.format("insert into `ssrecorddb`.`t_activity_get_reward_type` (`UserId`,`RewardType`,`ActivityId`,`ActivityIndex`,`date`) values(%d,%d,%d,%d,now())",
 										attrr.userID,1,vv.activityId,vv.index)
 									skynet.call(dbConn, "lua", "query", sql)
 								end
 							end
 
 							if bFind then
-								local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
 									0,nowDate,attrr.userID,vv.activityId,vv.index)
 								skynet.call(dbConn, "lua", "query", sql)
 							end
@@ -646,7 +646,7 @@ end
 
 local function loadData()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("SELECT a.UserId,b.NickName,a.SumGold FROM `kfrecorddb`.`t_red_packet_user_gold_record` a LEFT JOIN kfaccountsdb.accountsinfo b ON a.UserId = b.UserID")
+	local sql = string.format("SELECT a.UserId,b.NickName,a.SumGold FROM `ssrecorddb`.`t_red_packet_user_gold_record` a LEFT JOIN ssaccountsdb.accountsinfo b ON a.UserId = b.UserID")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	for _, row in ipairs(rows) do
 		local info = {
@@ -660,7 +660,7 @@ local function loadData()
 
 	table.sort(_data.m_tRedPacketRank,function(a, b) return a.score > b.score end)
 
-	local sql = string.format("SELECT a.UserId,b.NickName,a.Multiple,a.AddGold,UNIX_TIMESTAMP(a.AddTime) as submitTime FROM kfrecorddb.t_red_packet_kill_record a LEFT JOIN kfaccountsdb.accountsinfo b on a.UserId = b.UserID ORDER BY submitTime DESC LIMIT 3")
+	local sql = string.format("SELECT a.UserId,b.NickName,a.Multiple,a.AddGold,UNIX_TIMESTAMP(a.AddTime) as submitTime FROM ssrecorddb.t_red_packet_kill_record a LEFT JOIN ssaccountsdb.accountsinfo b on a.UserId = b.UserID ORDER BY submitTime DESC LIMIT 3")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	for _, row in ipairs(rows) do
 		local info = {

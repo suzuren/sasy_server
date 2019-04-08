@@ -26,11 +26,11 @@ local function cmd_SaveFishId(userID)
 	end
 
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kffishdb`.`t_protect_fish` (`UserId`,`FishIdInfo`,`ChargeFishInfo`) VALUES(%d,'%s','%s') ON DUPLICATE KEY UPDATE `FishIdInfo`='%s',`ChargeFishInfo`='%s'",
+	local sql = string.format("insert into `ssfishdb`.`t_protect_fish` (`UserId`,`FishIdInfo`,`ChargeFishInfo`) VALUES(%d,'%s','%s') ON DUPLICATE KEY UPDATE `FishIdInfo`='%s',`ChargeFishInfo`='%s'",
 		userID,mysqlutil.escapestring(goalInfo),mysqlutil.escapestring(chargeInfo),mysqlutil.escapestring(goalInfo),mysqlutil.escapestring(chargeInfo))
 	skynet.call(dbConn,"lua","query",sql)
 
-	sql = string.format("update `kffishdb`.`t_rescue_coin` set FishCount=%d,BigFishCount=%d where UserID = %d",fishInfo.fishCount,fishInfo.bigFishCount,userID)		
+	sql = string.format("update `ssfishdb`.`t_rescue_coin` set FishCount=%d,BigFishCount=%d where UserID = %d",fishInfo.fishCount,fishInfo.bigFishCount,userID)		
 	skynet.call(dbConn, "lua", "query", sql)
 end
 
@@ -44,7 +44,7 @@ local function cmd_LoadFishId(userID)
 		bigFishCount = 0,--13-17号鱼
 	}
 
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_protect_fish` where UserId=%d",userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_protect_fish` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
@@ -68,7 +68,7 @@ local function cmd_LoadFishId(userID)
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_rescue_coin` where UserId=%d",userID)
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_rescue_coin` where UserId=%d",userID)
 	local rowss = skynet.call(dbConn,"lua","query",sql)
 	if rowss[1] ~= nil then
 		fishInfo.curId = tonumber(rowss[1].CurCounts)

@@ -336,7 +336,7 @@ local function onActionUserSitDown(chairID, userItem, isLookon)
 	_data.chairID2GameData[chairID] = createGameDataItem(score)
 	--非机器人时，获取玩家累计获得的金币和礼券
 	if not userAttr.isAndroid then
-		local sql = string.format("call kfrecorddb.sp_record_user_fish_score_present(%d, %d, %d)",userAttr.userID, 0, 0)
+		local sql = string.format("call ssrecorddb.sp_record_user_fish_score_present(%d, %d, %d)",userAttr.userID, 0, 0)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "call", sql)
 		local gameData = getGameDataItem(chairID)
@@ -346,7 +346,7 @@ local function onActionUserSitDown(chairID, userItem, isLookon)
 		gameData.recordPresent = tonumber(rows[1].Present)
 
 		--判断是否是付费用户
-		local sql = string.format("SELECT score FROM `kfrecorddb`.`UserPayScore` where platformID = %d", userAttr.platformID)
+		local sql = string.format("SELECT score FROM `ssrecorddb`.`UserPayScore` where platformID = %d", userAttr.platformID)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "query", sql)
 		if rows[1] ~= nil then
@@ -354,7 +354,7 @@ local function onActionUserSitDown(chairID, userItem, isLookon)
 			gameData.rmbGold = rows[1].score
 		end
 
-		local sql = string.format("SELECT SumGold FROM `kfrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userAttr.userID)
+		local sql = string.format("SELECT SumGold FROM `ssrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userAttr.userID)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "query", sql)
 		if rows[1] ~= nil then
@@ -826,7 +826,7 @@ local function calcScore(chairID, ignoreGameRecord)
 		local serverConfig = _data.tableFrame.getServerConfig()
 		if not userAttr.isAndroid and (addscore > 0 or addpresent > 0) and (isBasicRoom(serverConfig.NodeID) or gameData.isPayUser) then
 			local sql = string.format(
-				"call kfrecorddb.sp_record_user_fish_score_present(%d, %d, %d)",userAttr.userID, addscore, addpresent
+				"call ssrecorddb.sp_record_user_fish_score_present(%d, %d, %d)",userAttr.userID, addscore, addpresent
 			)
 			local dbConn = addressResolver.getMysqlConnection()
 			rows = skynet.call(dbConn, "lua", "call", sql)
@@ -1087,7 +1087,7 @@ local function onActionUserGameOption(chairID, userItem, gameStatus)
 		end
 		getGameDataItem(chairID).bulletID = 0 
 
-		local sql = string.format("SELECT * FROM kffishdb.t_char_title WHERE UserId = %d",userAttr.userID)
+		local sql = string.format("SELECT * FROM ssfishdb.t_char_title WHERE UserId = %d",userAttr.userID)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "query", sql)
 		if type(rows)=="table" then
@@ -1363,7 +1363,7 @@ local function onUserGoldRecordChange(chairID, userItem)
 	local gameData = getGameDataItem(chairID)
 	if gameData then
 		local userAttr = ServerUserItem.getAttribute(userItem, {"userID", "platformID"})
-		local sql = string.format("SELECT score FROM `kfrecorddb`.`UserPayScore` where platformID = %d", userAttr.platformID)
+		local sql = string.format("SELECT score FROM `ssrecorddb`.`UserPayScore` where platformID = %d", userAttr.platformID)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "query", sql)
 		if rows[1] ~= nil then
@@ -1371,7 +1371,7 @@ local function onUserGoldRecordChange(chairID, userItem)
 			gameData.rmbGold = rows[1].score
 		end
 
-		sql = string.format("SELECT SumGold FROM `kfrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userAttr.userID)
+		sql = string.format("SELECT SumGold FROM `ssrecorddb`.`t_record_gold_by_use_box` where UserId=%d",userAttr.userID)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "query", sql)
 		if rows[1] ~= nil then
@@ -1963,16 +1963,16 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		local serverConfig = _data.tableFrame.getServerConfig()
 		local insertTime = os.date("%Y-%m-%d %H:%M:%S", os.time())
-		local sql = string.format("INSERT INTO `kfrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,3,%d,%d,%d,%d,%d,'%s')",
+		local sql = string.format("INSERT INTO `ssrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,3,%d,%d,%d,%d,%d,'%s')",
 			userAttr.userID,serverConfig.ServerID,fishTraceInfo.fishKind,bulletInfo.multiple,addScore,gameData.fishScore,insertTime)	
 		local mysqlConn = addressResolver.getMysqlConnection()
 		skynet.send(mysqlConn, "lua", "execute", sql)
 
 		if _data.worldBoss.userID == userAttr.userID then
 			if not _data.bSpecial then
-				sql = string.format("DELETE FROM `kffishdb`.`t_control_world_boss_rate` where `Index`=%d and UserId=%d",_data.worldBoss.index,_data.worldBoss.userID)
+				sql = string.format("DELETE FROM `ssfishdb`.`t_control_world_boss_rate` where `Index`=%d and UserId=%d",_data.worldBoss.index,_data.worldBoss.userID)
 			else
-				sql = string.format("DELETE FROM `kffishdb`.`t_control_time_boss_rate` where `Index`=%d and UserId=%d",_data.worldBoss.index,_data.worldBoss.userID)
+				sql = string.format("DELETE FROM `ssfishdb`.`t_control_time_boss_rate` where `Index`=%d and UserId=%d",_data.worldBoss.index,_data.worldBoss.userID)
 			end
 
 			skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2063,7 +2063,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 
 		local serverConfig = _data.tableFrame.getServerConfig()
 		local insertTime = os.date("%Y-%m-%d %H:%M:%S", os.time())
-		local sql = string.format("INSERT INTO `kfrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,4,%d,%d,%d,%d,%d,'%s')",
+		local sql = string.format("INSERT INTO `ssrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,4,%d,%d,%d,%d,%d,'%s')",
 			userAttr.userID,serverConfig.ServerID,fishTraceInfo.fishKind,bulletInfo.multiple,fishScore,gameData.fishScore,insertTime)	
 		local mysqlConn = addressResolver.getMysqlConnection()
 		skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2395,7 +2395,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		end
 		
 		local curGift = skynet.call(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "GetItemCount",userAttr.userID,COMMON_CONST.ITEM_ID.ITEM_ID_FISH)
-		local sql = string.format("insert into `kfrecorddb`.`CatchBox` (`ServerID`, `UserID`, `BoxType`, `Present`,`Score`,`Ctime`,`SumPresent`,`Multiple`) values (%d,%d,'%s',%d,%d,now(),%d,%d)",
+		local sql = string.format("insert into `ssrecorddb`.`CatchBox` (`ServerID`, `UserID`, `BoxType`, `Present`,`Score`,`Ctime`,`SumPresent`,`Multiple`) values (%d,%d,'%s',%d,%d,now(),%d,%d)",
 			serverConfig.ServerID, userAttr.userID, mysqlutil.escapestring(fishConfigItem.name), present, score, curGift,bulletInfo.multiple)	
 		local mysqlConn = addressResolver.getMysqlConnection()
 		skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2406,7 +2406,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			skynet.send(addressResolver.getAddressByServiceName("GS_model_reward_gold_fish"),"lua","ChangeRewardGfInfo",userAttr.userID,1,rewardGold)
 
 			local insertTime = os.date("%Y-%m-%d %H:%M:%S", os.time())
-		  	local sql = string.format("INSERT INTO `kfrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,1,%d,%d,%d,%d,%d,'%s')",
+		  	local sql = string.format("INSERT INTO `ssrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,1,%d,%d,%d,%d,%d,'%s')",
 				userAttr.userID,serverConfig.ServerID,fishTraceInfo.fishKind,bulletInfo.multiple,fishScore,gameData.fishScore+fishScore,insertTime)	
 			local mysqlConn = addressResolver.getMysqlConnection()
 			skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2489,7 +2489,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 				end
 
 				if fishScore >= 1500000 then
-					local sql = string.format("INSERT INTO `kfrecorddb`.`t_red_packet_kill_record` (`UserId`,`Multiple`,`AddGold`,`AddTime`) VALUES (%d,%d,%d,NOW())",
+					local sql = string.format("INSERT INTO `ssrecorddb`.`t_red_packet_kill_record` (`UserId`,`Multiple`,`AddGold`,`AddTime`) VALUES (%d,%d,%d,NOW())",
 						userAttr.userID,_data.config.cannonMultiple.min,fishScore)
 					local mysqlConn = addressResolver.getMysqlConnection()
 					skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2580,7 +2580,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			 	end
 			end
 
-			local sql = string.format("INSERT INTO `kfrecorddb`.`t_red_packet_user_gold_record` (`UserId`,`SumGold`) VALUES (%d,%d) ON DUPLICATE KEY UPDATE `SumGold`=`SumGold`+%d",
+			local sql = string.format("INSERT INTO `ssrecorddb`.`t_red_packet_user_gold_record` (`UserId`,`SumGold`) VALUES (%d,%d) ON DUPLICATE KEY UPDATE `SumGold`=`SumGold`+%d",
 				userAttr.userID,fishScore,fishScore)	
 			local mysqlConn = addressResolver.getMysqlConnection()
 			skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2855,7 +2855,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 		local haveSend = false
 		if isBossFish(fishTraceInfo.fishKind) then
 			local insertTime = os.date("%Y-%m-%d %H:%M:%S", os.time())
-		  	local sql = string.format("INSERT INTO `kfrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,2,%d,%d,%d,%d,%d,'%s')",
+		  	local sql = string.format("INSERT INTO `ssrecorddb`.`t_reward_gold_fish_or_boss` (`UserId`, `Type`, `ServerId`, `FishiId`, `Multiple`, `AddGold`, `CurGold`, `Date`) values (%d,2,%d,%d,%d,%d,%d,'%s')",
 				userAttr.userID,serverConfig.ServerID,fishTraceInfo.fishKind,bulletInfo.multiple,fishScore,gameData.fishScore,insertTime)	
 			local mysqlConn = addressResolver.getMysqlConnection()
 			skynet.send(mysqlConn, "lua", "execute", sql)
@@ -2874,7 +2874,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 						table.insert(catchFishGoodsItem,item)
 						skynet.send(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "ChangeItemCount",userAttr.userID,
   							item.goodsID,item.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_FISH)
-						local sql = string.format("insert into `kfrecorddb`.`t_record_key` (`UserId`,`ServerId`,`KeyId`,`KeyCount`,`Date`) values (%d,%d,%d,%d,now())",
+						local sql = string.format("insert into `ssrecorddb`.`t_record_key` (`UserId`,`ServerId`,`KeyId`,`KeyCount`,`Date`) values (%d,%d,%d,%d,now())",
 							userAttr.userID,serverConfig.ServerID,item.goodsID,item.goodsCount)	
 						skynet.send(mysqlConn, "lua", "execute", sql)	
 					end
@@ -2887,7 +2887,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 						table.insert(catchFishGoodsItem,item)
 						skynet.send(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "ChangeItemCount",userAttr.userID,
   							item.goodsID,item.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_FISH)
-						local sql = string.format("insert into `kfrecorddb`.`t_record_key` (`UserId`,`ServerId`,`KeyId`,`KeyCount`,`Date`) values (%d,%d,%d,%d,now())",
+						local sql = string.format("insert into `ssrecorddb`.`t_record_key` (`UserId`,`ServerId`,`KeyId`,`KeyCount`,`Date`) values (%d,%d,%d,%d,now())",
 							userAttr.userID,serverConfig.ServerID,item.goodsID,item.goodsCount)	
 						skynet.send(mysqlConn, "lua", "execute", sql)
 					end
@@ -3059,7 +3059,7 @@ local function doCatchFish(userItem, fishID, bulletInfo, catchCount)
 			skynet.send(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "ChangeItemCount",userAttr.userID,
 			  	COMMON_CONST.ITEM_ID.ITEM_ID_GOLD,goods.goodsCount,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_FISH)
 
-			local sql = string.format("insert into `kfrecorddb`.`t_user_invalid_gun_record`(`UserId`,`ItemId`,`ItemCount`,`Date`) values(%d,%d,%d,NOW())",userAttr.userID,goods.goodsID,goods.goodsCount)
+			local sql = string.format("insert into `ssrecorddb`.`t_user_invalid_gun_record`(`UserId`,`ItemId`,`ItemCount`,`Date`) values(%d,%d,%d,NOW())",userAttr.userID,goods.goodsID,goods.goodsCount)
 			local dbConn = addressResolver.getMysqlConnection()
 			skynet.send(dbConn,"lua","execute",sql)
 	 	end
@@ -3925,7 +3925,7 @@ local function CompleteTask(chairID,pbObj)
 					end
 
 					local dbConn = addressResolver.getMysqlConnection()
-					local sql = string.format("insert into `kfrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
+					local sql = string.format("insert into `ssrecorddb`.`task_record` (`UserId`,`TaskType`,`TaskId`,`CommitTime`,`RewardGold`) values(%d,%d,%d,'%s',%d)",
 						attr.userID,pbObj.taskType,pbObj.taskID,os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())),rewardGold)
 					skynet.send(dbConn, "lua", "execute", sql)
 

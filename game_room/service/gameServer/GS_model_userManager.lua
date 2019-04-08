@@ -95,7 +95,7 @@ local function populateUserInfoPbObj(userItem)
 	end	
 
 	local HideAllFlag = 0
-	local sql = string.format("SELECT HideAllFlag FROM `kfrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
+	local sql = string.format("SELECT HideAllFlag FROM `ssrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "query", sql)
 	if rows[1] ~= nil then
@@ -103,7 +103,7 @@ local function populateUserInfoPbObj(userItem)
 	end
 
 	if HideAllFlag == 0 then
-		local sql = string.format("SELECT HideFlag FROM `kfaccountsdb`.`accountssignature` WHERE UserID = %d",attr.userID)
+		local sql = string.format("SELECT HideFlag FROM `ssaccountsdb`.`accountssignature` WHERE UserID = %d",attr.userID)
 		local rows = skynet.call(mysqlConn, "lua", "query", sql)
 		if rows[1] ~= nil then
 			if tonumber(rows[1].HideFlag) == 1 then
@@ -224,7 +224,7 @@ local function doDBUserLogout(userItem)
 	
 	local attr = ServerUserItem.getAttribute(userItem, {"inoutIndex", "userID"})
 	local sql = string.format(
-		"call kfaccountsdb.sp_gameserver_logout(%d, %d)",
+		"call ssaccountsdb.sp_gameserver_logout(%d, %d)",
 		attr.inoutIndex,
 		attr.userID
 	)
@@ -437,7 +437,7 @@ local function cmd_insertUserItem(userInfo, userInfoPlus,itemList)
 
 	do
 		local sql = string.format(
-			"call kfrecorddb.sp_record_user_in(%d, \"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)",
+			"call ssrecorddb.sp_record_user_in(%d, \"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)",
 			userInfo.userID,
 			userInfoPlus.ipAddr,
 			userInfoPlus.machineID,
@@ -464,7 +464,7 @@ local function cmd_insertUserItem(userInfo, userInfoPlus,itemList)
 		--重入检查
 		userItem = _userItemHash[userInfo.userID]
 		if userItem==nil then
-			sql = string.format("DELETE FROM `kfrecorddb`.`UserInOut` WHERE `ID`=%d", inoutIndex)
+			sql = string.format("DELETE FROM `ssrecorddb`.`UserInOut` WHERE `ID`=%d", inoutIndex)
 			skynet.send(mysqlConn, "lua", "execute", sql)
 			return userItem
 		end

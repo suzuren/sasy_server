@@ -15,7 +15,7 @@ local _LS_serverManagerAddress
 
 local function populateMatchOption(serverID)
 
-	--local sql = string.format("call kfplatformdb.sp_load_match_option(%d)", serverID)
+	--local sql = string.format("call ssplatformdb.sp_load_match_option(%d)", serverID)
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn, "lua", "call", sql)
 	
@@ -193,7 +193,7 @@ end
 local function cmd_start(serverID)
 
 
-	--local sql = string.format("call kfplatformdb.sp_load_server_config(%d)", serverID)
+	--local sql = string.format("call ssplatformdb.sp_load_server_config(%d)", serverID)
 	--local mysqlConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(mysqlConn, "lua", "call", sql)
 

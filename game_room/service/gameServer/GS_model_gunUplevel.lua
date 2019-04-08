@@ -15,7 +15,7 @@ local function cmd_SaveData(userID)
 	end
 
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kffishdb`.`t_gun_uplevel` (`UserId`,`CurGunLevel`,`HaveCount`,`Gold`,`FireCount`) VALUES(%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE CurGunLevel=%d,HaveCount=%d,Gold=%d,FireCount=%d",
+	local sql = string.format("insert into `ssfishdb`.`t_gun_uplevel` (`UserId`,`CurGunLevel`,`HaveCount`,`Gold`,`FireCount`) VALUES(%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE CurGunLevel=%d,HaveCount=%d,Gold=%d,FireCount=%d",
 		userID,info.curGunLevel,info.haveCount,info.gold,info.fireCount,info.curGunLevel,info.haveCount,info.gold,info.fireCount)
 	skynet.call(dbConn,"lua","query",sql)
 end
@@ -31,7 +31,7 @@ local function cmd_LoadData(userItem)
 
 	local attr = ServerUserItem.getAttribute(userItem, {"userID","memberOrder"})
 	local userID = tonumber(attr.userID)
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_gun_uplevel` where UserId=%d",userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_gun_uplevel` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
@@ -148,7 +148,7 @@ local function cmd_RequestFortLevel(tcpAgentData,level)
 
 	local curGold = skynet.call(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "GetItemCount",tcpAgentData.userID,COMMON_CONST.ITEM_ID.ITEM_ID_GOLD)
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kfrecorddb`.`t_gun_uplevel` (`UserId`,`GunLevel`,`DelGemCount`,`RemainGemCount`,`GetGold`,`CurSumGold`,`Date`) values(%d,%d,%d,%d,%d,%d,now())",
+	local sql = string.format("insert into `ssrecorddb`.`t_gun_uplevel` (`UserId`,`GunLevel`,`DelGemCount`,`RemainGemCount`,`GetGold`,`CurSumGold`,`Date`) values(%d,%d,%d,%d,%d,%d,now())",
 		tcpAgentData.userID,level,infoConfig[level].needGem,curCount-infoConfig[level].needGem,goods.goodsCount,curGold)
 	skynet.send(dbConn, "lua", "execute", sql)
 

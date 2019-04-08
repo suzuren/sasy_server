@@ -15,7 +15,7 @@ local function loadNetWin()
 	local tableID = _tableFrame.getTableID()
 	
 	local sql = string.format(
-		"call kffishdb.sp_load_table_net_win(%d, %d)",
+		"call ssfishdb.sp_load_table_net_win(%d, %d)",
 		serverID, tableID
 	)
 	local mysqlConn = addressResolver:getMysqlConnection()
@@ -61,7 +61,7 @@ local function storeNetWin()
 	local tableID = _tableFrame.getTableID()
 	
 	local sql = string.format(
-		"INSERT INTO `kffishdb`.`VolcanoTableNetWin` (`ServerID`, `TableID`, `Score`) VALUES (%d, %d, %d) ON DUPLICATE KEY UPDATE `Score`=VALUES(`Score`)",
+		"INSERT INTO `ssfishdb`.`VolcanoTableNetWin` (`ServerID`, `TableID`, `Score`) VALUES (%d, %d, %d) ON DUPLICATE KEY UPDATE `Score`=VALUES(`Score`)",
 		serverID, tableID, _netWin
 	)
 	
@@ -87,7 +87,7 @@ local function checkOpen(userItem, fishMultiple)
 		
 		local serverConfig = _tableFrame.getServerConfig()
 		local sql = string.format(
-			"insert into `kfrecorddb`.`Volcano` (`KindID`, `NodeID`, `ServerID`, `Ctime`, `UserID`) values (%d, %d, %d, NOW(), %d)",
+			"insert into `ssrecorddb`.`Volcano` (`KindID`, `NodeID`, `ServerID`, `Ctime`, `UserID`) values (%d, %d, %d, NOW(), %d)",
 			serverConfig.KindID, serverConfig.NodeID, serverConfig.ServerID, userAttr.userID
 		)	
 		local mysqlConn = addressResolver:getMysqlConnection()

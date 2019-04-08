@@ -11,7 +11,7 @@ local LS_CONST = require "define.lsConst"
 local _signinAwardInfoHash = {}
 
 local function loadSigninAwardInfoConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_signin_award_info`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_signin_award_info`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows) == "table" then
@@ -41,7 +41,7 @@ local function cmd_SigninListInfo(agent,userId)
 	local nowTime = os.time()
 	local nowDate = tonumber(os.date("%Y%m%d", nowTime))
 
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_signin` where UserId = %d", userId)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_signin` where UserId = %d", userId)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 
@@ -74,7 +74,7 @@ local function cmd_SigninListInfo(agent,userId)
 				pbObj.currentDay = 1
 				sumDayFlag = 0
 
-				sql = string.format("update `kffishdb`.`t_signin` set SumDay=%d,SumAwardFlag=%d,LoginDate=%d where UserId=%d",
+				sql = string.format("update `ssfishdb`.`t_signin` set SumDay=%d,SumAwardFlag=%d,LoginDate=%d where UserId=%d",
 								pbObj.currentDay,sumDayFlag,nowDate,userId)
 				skynet.call(dbConn, "lua", "query", sql)
 
@@ -82,9 +82,9 @@ local function cmd_SigninListInfo(agent,userId)
 			else
 				if loginDate + 1 ~= nowDate then
 					perDayFlag = 0
-					sql = string.format("update `kffishdb`.`t_signin` set SumDay=%d,PerAwardFlag=%d,LoginDate=%d where UserId=%d",pbObj.currentDay,perDayFlag,nowDate,userId)
+					sql = string.format("update `ssfishdb`.`t_signin` set SumDay=%d,PerAwardFlag=%d,LoginDate=%d where UserId=%d",pbObj.currentDay,perDayFlag,nowDate,userId)
 				else
-					sql = string.format("update `kffishdb`.`t_signin` set SumDay=%d,LoginDate=%d where UserId=%d",pbObj.currentDay,nowDate,userId)
+					sql = string.format("update `ssfishdb`.`t_signin` set SumDay=%d,LoginDate=%d where UserId=%d",pbObj.currentDay,nowDate,userId)
 				end
 
 				skynet.call(dbConn, "lua", "query", sql)
@@ -94,7 +94,7 @@ local function cmd_SigninListInfo(agent,userId)
 
 				if oldTime+24*60*60 ~= nowTimeTemp then 
 					perDayFlag = 0
-					sql = string.format("update `kffishdb`.`t_signin` set PerAwardFlag=%d where UserId=%d",perDayFlag,userId)
+					sql = string.format("update `ssfishdb`.`t_signin` set PerAwardFlag=%d where UserId=%d",perDayFlag,userId)
 					skynet.call(dbConn, "lua", "query", sql)
 				end
 			end
@@ -102,7 +102,7 @@ local function cmd_SigninListInfo(agent,userId)
 	else
 		pbObj.currentDay = 1
 
-		sql = string.format("insert into `kffishdb`.`t_signin` values(%d,%d,%d,%d,%d,%d,%d)",userId,pbObj.currentDay,perDayFlag,sumDayFlag,nowDate,signinDate,0)
+		sql = string.format("insert into `ssfishdb`.`t_signin` values(%d,%d,%d,%d,%d,%d,%d)",userId,pbObj.currentDay,perDayFlag,sumDayFlag,nowDate,signinDate,0)
 		skynet.call(dbConn, "lua", "query", sql)
 	end
 
@@ -210,7 +210,7 @@ local function cmd_Sign(agent,userID,sui,signType,dayId)
 
 	local nowTime = os.time()
 	local nowDate = tonumber(os.date("%Y%m%d", nowTime))
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_signin` where UserId = %d", userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_signin` where UserId = %d", userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] == nil then
@@ -287,14 +287,14 @@ local function cmd_Sign(agent,userID,sui,signType,dayId)
 	end
 
 	if signType == 1 then
-		sql = string.format("update `kffishdb`.`t_signin` set SigninDate=%d,PerAwardFlag=%d,AllSumDay=%d where UserId=%d",nowDate,PerAwardFlag+1,AllSumDay+1,userID)
+		sql = string.format("update `ssfishdb`.`t_signin` set SigninDate=%d,PerAwardFlag=%d,AllSumDay=%d where UserId=%d",nowDate,PerAwardFlag+1,AllSumDay+1,userID)
 	else
-		sql = string.format("update `kffishdb`.`t_signin` set SumAwardFlag=%d,AllSumDay=%d where UserId=%d",SumAwardFlag+1,AllSumDay+1,userID)
+		sql = string.format("update `ssfishdb`.`t_signin` set SumAwardFlag=%d,AllSumDay=%d where UserId=%d",SumAwardFlag+1,AllSumDay+1,userID)
 	end
 	
 	skynet.call(dbConn, "lua", "query", sql)
 
-	sql = string.format("update `kftreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", valueScore, userID)
+	sql = string.format("update `sstreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", valueScore, userID)
 	skynet.send(dbConn, "lua", "execute", sql)
 
 	ServerUserItem.addAttribute(sui, {score = valueScore})
@@ -304,7 +304,7 @@ local function cmd_Sign(agent,userID,sui,signType,dayId)
 
 	cmd_SigninListInfo(agent,userID)
 
-	sql = string.format("insert into `kfrecorddb`.`sign_in` (`UserId`,`Type`,`DayId`,`GoldNum`,`SigninTime`) values(%d,%d,%d,%d,'%s')",
+	sql = string.format("insert into `ssrecorddb`.`sign_in` (`UserId`,`Type`,`DayId`,`GoldNum`,`SigninTime`) values(%d,%d,%d,%d,'%s')",
 		userID,signType,dayId,valueScore,os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())))
 	skynet.send(dbConn, "lua", "execute", sql)
 	

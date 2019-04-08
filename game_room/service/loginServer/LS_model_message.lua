@@ -10,7 +10,7 @@ local _logonMessageList
 local _exchangeMessageList
 
 local function reloadExchangeMessage()
-	local sql = "SELECT `MessageString` FROM `kfplatformdb`.`SystemMessage` WHERE `Type` & 0x01 = 0x01 ORDER BY ID DESC LIMIT 20"
+	local sql = "SELECT `MessageString` FROM `ssplatformdb`.`SystemMessage` WHERE `Type` & 0x01 = 0x01 ORDER BY ID DESC LIMIT 20"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	local list = {}	
@@ -23,7 +23,7 @@ local function reloadExchangeMessage()
 end
 
 local function reloadLogonMessage()
-	local sql = "SELECT `ID`, `Type`, `ServerRange`, `MessageTitle`,`MessageString`, UNIX_TIMESTAMP(`StartTime`) as \"StartTime\" FROM `kfaccountsdb`.`LogonSystemMessage` WHERE `Type`<>0 AND `StartTime`<NOW() AND NOW()<`EndTime` ORDER BY ID DESC LIMIT 10"
+	local sql = "SELECT `ID`, `Type`, `ServerRange`, `MessageTitle`,`MessageString`, UNIX_TIMESTAMP(`StartTime`) as \"StartTime\" FROM `ssaccountsdb`.`LogonSystemMessage` WHERE `Type`<>0 AND `StartTime`<NOW() AND NOW()<`EndTime` ORDER BY ID DESC LIMIT 10"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	local list = {}
@@ -109,7 +109,7 @@ end
 
 local function sendUserLogonMessage(agent, userID)
 	local sendList = {}
-	local sql = string.format("SELECT `ID`,`MessageTitle`,`MessageString`, UNIX_TIMESTAMP(`StartTime`) as \"StartTime\",`GoodsInfo` FROM `kfaccountsdb`.`LogonUsersMessage` WHERE `UserID`=%d AND `StartTime`<NOW() ORDER BY `ID` ASC",userID)
+	local sql = string.format("SELECT `ID`,`MessageTitle`,`MessageString`, UNIX_TIMESTAMP(`StartTime`) as \"StartTime\",`GoodsInfo` FROM `ssaccountsdb`.`LogonUsersMessage` WHERE `UserID`=%d AND `StartTime`<NOW() ORDER BY `ID` ASC",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if type(rows)=="table" then
@@ -157,7 +157,7 @@ local function cmd_RecvGoods(tcpAgent, pbObj, tcpAgentData)
 		code = 0,
 	}
 
-	local sql = string.format("SELECT * FROM `kfaccountsdb`.`LogonUsersMessage` where UserId=%d and ID=%d",tcpAgentData.userID,pbObj.id)
+	local sql = string.format("SELECT * FROM `ssaccountsdb`.`LogonUsersMessage` where UserId=%d and ID=%d",tcpAgentData.userID,pbObj.id)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn,"lua","query",sql)
 	if rows[1] == nil then
@@ -165,7 +165,7 @@ local function cmd_RecvGoods(tcpAgent, pbObj, tcpAgentData)
 		return sendList
 	end
 
-	sql = string.format("DELETE FROM `kfaccountsdb`.`LogonUsersMessage` where UserId=%d and ID=%d",tcpAgentData.userID,pbObj.id)
+	sql = string.format("DELETE FROM `ssaccountsdb`.`LogonUsersMessage` where UserId=%d and ID=%d",tcpAgentData.userID,pbObj.id)
 	skynet.call(mysqlConn, "lua", "query", sql)
 
 	local fromWhere = COMMON_CONST.ITEM_SYSTEM_TYPE.EMAIL_REWARD
@@ -192,11 +192,11 @@ local function cmd_RecvGoods(tcpAgent, pbObj, tcpAgentData)
 	for itemId, goods in pairs(sendList.goodslist) do
 		if goods.goodsID == COMMON_CONST.ITEM_ID.ITEM_ID_GOLD then
 			ServerUserItem.addAttribute(tcpAgentData.sui, {score = goods.goodsCount})
-			sql = string.format("update `kftreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", goods.goodsCount, tcpAgentData.userID)
+			sql = string.format("update `sstreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", goods.goodsCount, tcpAgentData.userID)
 			skynet.call(mysqlConn, "lua", "query", sql)
 		elseif goods.goodsID == COMMON_CONST.ITEM_ID.ITEM_ID_FISH then
 			ServerUserItem.addAttribute(tcpAgentData.sui, {gift = goods.goodsCount})
-			sql = string.format("update `kfaccountsdb`.`AccountsInfo` set Gift=Gift+%d where UserID = %d", goods.goodsCount, tcpAgentData.userID)		
+			sql = string.format("update `ssaccountsdb`.`AccountsInfo` set Gift=Gift+%d where UserID = %d", goods.goodsCount, tcpAgentData.userID)		
 			skynet.call(mysqlConn, "lua", "query", sql)
 		end
 
@@ -205,7 +205,7 @@ local function cmd_RecvGoods(tcpAgent, pbObj, tcpAgentData)
 			goods.goodsID,goods.goodsCount,fromWhere)
 	end
 
-	sql = string.format("insert into `kfrecorddb`.`message_record` (`UserId`,`EmailID`,`GoodsInfo`,`ReceiveTime`) values(%d,%d,'%s','%s')",
+	sql = string.format("insert into `ssrecorddb`.`message_record` (`UserId`,`EmailID`,`GoodsInfo`,`ReceiveTime`) values(%d,%d,'%s','%s')",
 		tcpAgentData.userID,pbObj.id,mysqlutil.escapestring(rows[1].GoodsInfo),os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())))
 	skynet.call(mysqlConn, "lua", "query", sql)
 
@@ -245,7 +245,7 @@ local function cmd_sendEmailToUser(userID,itemlist,messageTitle,messageInfo,from
 
 	local startTime = os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time()))
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kfaccountsdb`.`LogonUsersMessage`(UserID,MessageTitle,MessageString,StartTime,GoodsInfo,FromId) values(%d,'%s','%s','%s','%s',%d)",
+	local sql = string.format("insert into `ssaccountsdb`.`LogonUsersMessage`(UserID,MessageTitle,MessageString,StartTime,GoodsInfo,FromId) values(%d,'%s','%s','%s','%s',%d)",
 		userID,mysqlutil.escapestring(messageTitle),mysqlutil.escapestring(messageInfo),mysqlutil.escapestring(startTime),mysqlutil.escapestring(goodsInfo),fromId)
 	local emailId = skynet.call(dbConn, "lua", "insert", sql)
 

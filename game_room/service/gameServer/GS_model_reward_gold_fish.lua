@@ -20,7 +20,7 @@ local function cmd_SaveData(userID)
 	end
 
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kffishdb`.`t_reward_gold_fish` VALUES(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE FishCount=%d,SumScore=%d,RewardType=%d,rewardIndex=%d,BeforeFirst=%d,BeforeSec=%d,BeforeThr=%d,BeforeFour=%d,BeforeFive=%d,opTime=%d,BeforeSix=%d",
+	local sql = string.format("insert into `ssfishdb`.`t_reward_gold_fish` VALUES(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE FishCount=%d,SumScore=%d,RewardType=%d,rewardIndex=%d,BeforeFirst=%d,BeforeSec=%d,BeforeThr=%d,BeforeFour=%d,BeforeFive=%d,opTime=%d,BeforeSix=%d",
 		userID,info.fishCount,info.sumScore,info.rewardType,info.rewardIndex,info.beforeFirst,info.beforeSec,info.beforeThr,info.beforeFour,info.beforeFive,info.opTime,info.beforeSix,
 		info.fishCount,info.sumScore,info.rewardType,info.rewardIndex,info.beforeFirst,info.beforeSec,info.beforeThr,info.beforeFour,info.beforeFive,info.opTime,info.beforeSix)
 	skynet.call(dbConn,"lua","query",sql)
@@ -41,7 +41,7 @@ local function cmd_LoadRData(userID)
 		beforeSix = 0,
 	}
 	
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_reward_gold_fish` where UserId=%d",userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_reward_gold_fish` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
@@ -277,7 +277,7 @@ local function cmd_ReceiveLotteryGoodsInfo(pbObj,tcpAgentData)
 					table.insert(re.receiveGoodsItem,goods)
 
 					local dbConn = addressResolver.getMysqlConnection()
-					local sql = string.format("insert into `kfrecorddb`.`t_reward_gold_fish` (`UserId`,`RewardType`,`RewardId`,`RewardCount`,`Date`) values(%d,%d,%d,%d,now())",
+					local sql = string.format("insert into `ssrecorddb`.`t_reward_gold_fish` (`UserId`,`RewardType`,`RewardId`,`RewardCount`,`Date`) values(%d,%d,%d,%d,now())",
 						tcpAgentData.userID,userInfo.rewardType,goods.goodsID,goods.goodsCount)
 					skynet.send(dbConn, "lua", "execute", sql)
 

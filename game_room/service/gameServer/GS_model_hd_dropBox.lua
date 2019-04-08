@@ -9,7 +9,7 @@ local _DelScore = 0
 
 local function loadData()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_hd_drop_box` WHERE ServerID=%d",ServerID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_hd_drop_box` WHERE ServerID=%d",ServerID)
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
 		_AddScore = tonumber(rows[1].AddScore)
@@ -40,7 +40,7 @@ local function cmd_savedata()
 		return
 	end
 	
-	local sql = string.format("INSERT INTO `kffishdb`.`t_hd_drop_box` VALUES (%d,%d,%d) ON DUPLICATE KEY UPDATE `AddScore`=VALUES(`AddScore`),`DelScore`=VALUES(`DelScore`)",
+	local sql = string.format("INSERT INTO `ssfishdb`.`t_hd_drop_box` VALUES (%d,%d,%d) ON DUPLICATE KEY UPDATE `AddScore`=VALUES(`AddScore`),`DelScore`=VALUES(`DelScore`)",
 		ServerID, _AddScore,_DelScore)
 	
 	local mysqlConn = addressResolver:getMysqlConnection()

@@ -17,7 +17,7 @@ local _chouJiangRewardConfig = {}
 local _titleInfoHash = {}
 
 local function loadItemInfoConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_item_table_info`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_item_table_info`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
 	local rows = {
@@ -117,7 +117,7 @@ local function loadItemInfoConfig()
 end
 
 local function loadItemComposeConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_item_compose`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_item_compose`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
 	local rows = {
@@ -176,7 +176,7 @@ local function loadItemComposeConfig()
 end
 
 local function loadItemGiveConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_table_give`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_table_give`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
 	local rows = {
@@ -244,7 +244,7 @@ local function loadItemGiveConfig()
 end
 
 local function loadVipInfoConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_table_vip`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_table_vip`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows) == "table" then
@@ -268,7 +268,7 @@ local function loadVipInfoConfig()
 end
 
 local function loadGunUplevelConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_table_gun_uplevel`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_table_gun_uplevel`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -285,7 +285,7 @@ local function loadGunUplevelConfig()
 end
 
 local function loadHuoDongTimeConfig()
-	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `kftreasuredb`.`t_huo_dong_time_config`"
+	local sql = "SELECT `Index`,Tips,ActivityType,UNIX_TIMESTAMP(StartTime) as StartTime,UNIX_TIMESTAMP(EndTime) as EndTime,`TuPianId`,`BeiJingId`,`TextName`,`ActivityClass` FROM `sstreasuredb`.`t_huo_dong_time_config`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
 	local rows = {
@@ -364,7 +364,7 @@ local function loadHuoDongTimeConfig()
 end
 
 local function loadHuoDongRewardConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_huo_dong_reward_config`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_huo_dong_reward_config`"
 	--local dbConn = addressResolver.getMysqlConnection()
 	--local rows = skynet.call(dbConn,"lua","query",sql)
 	local rows = {
@@ -446,7 +446,7 @@ local function loadHuoDongRewardConfig()
 end
 
 local function loadChouJiangRewardConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_frist_charge_reward`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_frist_charge_reward`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -477,7 +477,7 @@ local function loadChouJiangRewardConfig()
 end
 
 local function loadTitleConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_title_table_info`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_title_table_info`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then

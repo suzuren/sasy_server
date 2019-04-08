@@ -14,7 +14,7 @@ local _propertyHash = {}
 
 local function loadProperty()
 	local list = {}
-	local sql = 'SELECT `ID`, `Gold`, `Discount`, `SendLoveLiness`, `RecvLoveLiness` FROM `kftreasuredb`.`GameProperty` WHERE `Nullity`=0 AND (`IssueArea` & 6)<>0'
+	local sql = 'SELECT `ID`, `Gold`, `Discount`, `SendLoveLiness`, `RecvLoveLiness` FROM `sstreasuredb`.`GameProperty` WHERE `Nullity`=0 AND (`IssueArea` & 6)<>0'
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	
@@ -40,7 +40,7 @@ local function getTrumpetScore(mysqlConn, userID, memberOrder, trumpetID)
 	local trumpetScore = 0
 	do
 		local sql = string.format(
-			"call kftreasuredb.sp_player_trumpet_score(%d, %d, %d)",
+			"call sstreasuredb.sp_player_trumpet_score(%d, %d, %d)",
 			userID,
 			memberOrder,
 			trumpetID
@@ -106,7 +106,7 @@ local function consumeProperty(dbConn, userItem, targetUserID, propertyID, prope
 	end
 	
 	local sql = string.format(
-		"call kftreasuredb.sp_player_use_property(%d, %d, %d, %d, %d)",
+		"call sstreasuredb.sp_player_use_property(%d, %d, %d, %d, %d)",
 		_serverConfig.ServerID,
 		userAttr.userID,
 		targetUserID,
@@ -139,7 +139,7 @@ local function prepareTrumpet(trumpetID, userItem, color, msg)
 	end
 	
 	local sql = string.format(
-		"insert into `kfrecorddb`.`TrumpetLog`(`ServerID`, `UserID`, `TrumpetID`, `Color`, `Ctime`, `Msg`) values (%d, %d, %d, %d, now(), '%s')",
+		"insert into `ssrecorddb`.`TrumpetLog`(`ServerID`, `UserID`, `TrumpetID`, `Color`, `Ctime`, `Msg`) values (%d, %d, %d, %d, now(), '%s')",
 		_serverConfig.ServerID,
 		userAttr.userID,
 		trumpetID,
@@ -286,7 +286,7 @@ local function cmd_buyProperty(userItem, propertyID, propertyCount)
 	end
 	
 	local sql = string.format(
-		"call kftreasuredb.sp_player_buy_property(%d, %d, %d, %d, %d)",
+		"call sstreasuredb.sp_player_buy_property(%d, %d, %d, %d, %d)",
 		_serverConfig.ServerID,
 		userAttr.userID,
 		propertyID,
@@ -335,7 +335,7 @@ local function cmd_onEventLoginSuccess(data)
 		
 		sendTrumpetScore(mysqlConn, data.sui)
 		
-		local sql = string.format("SELECT `PropertyID` AS 'propertyID', `PropertyCount` AS 'propertyCount' FROM `kftreasuredb`.`UserPropertyVendor` WHERE UserID=%d", data.userID)
+		local sql = string.format("SELECT `PropertyID` AS 'propertyID', `PropertyCount` AS 'propertyCount' FROM `sstreasuredb`.`UserPropertyVendor` WHERE UserID=%d", data.userID)
 		local rows = skynet.call(mysqlConn, "lua", "query", sql)
 		if type(rows)=="table" then
 			local list = {}

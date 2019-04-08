@@ -41,7 +41,7 @@ end
 local function doLoginserverLogin(platformID, nickName, ipAddr, machineID)
 --[[
 	local sql = string.format(
-		"call kfaccountsdb.sp_loginserver_login(%d, '%s', '%s', '%s')",
+		"call ssaccountsdb.sp_loginserver_login(%d, '%s', '%s', '%s')",
 		platformID,
 		mysqlutil.escapestring(nickName),
 		ipAddr,
@@ -113,7 +113,7 @@ end
 local function registerUser(userInfo, platformID, agent, ipAddr, machineID)
 
 	-- local HideAllFlag = 0
-	-- local sql = string.format("SELECT HideAllFlag FROM `kfrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
+	-- local sql = string.format("SELECT HideAllFlag FROM `ssrecorddb`.`t_record_hide_all_signature` WHERE ID = 1")
 	-- local dbConn = addressResolver.getMysqlConnection()
 	-- local rows = skynet.call(dbConn, "lua", "query", sql)
 	-- if rows[1] ~= nil then
@@ -183,7 +183,7 @@ local function UploadUserToPlatform(agent,userID,pbObj)
 
 	if pbObj.appID ~= nil and pbObj.appChannel ~= nil and pbObj.appVersion ~= nil then
 		local dbConn = addressResolver.getMysqlConnection()
-		local sql = string.format("call `kffishdb`.`sp_deduct_user` (%d,%d,'%s','%s')",userID,pbObj.appID,pbObj.appChannel,pbObj.appVersion)
+		local sql = string.format("call `ssfishdb`.`sp_deduct_user` (%d,%d,'%s','%s')",userID,pbObj.appID,pbObj.appChannel,pbObj.appVersion)
 		local ret = skynet.call(dbConn, "lua", "call", sql)[1]
 		if tonumber(ret.retCode) == 1 then		
 			bFlag = true
@@ -284,7 +284,7 @@ local REQUEST = {
 
 		local isChangeNickName = false
 		local limitId = COMMON_CONST.OPERATOR_LIMIT.OP_LIMIT_ID_CHANGE_NAME
-		--local sql = string.format("select * from `kfrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
+		--local sql = string.format("select * from `ssrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
        	--local dbConn = addressResolver.getMysqlConnection()
         --local rowss = skynet.call(dbConn, "lua", "call", sql)
         --if rowss[1] ~= nil then
@@ -409,7 +409,7 @@ local REQUEST = {
 
 		local isChangeNickName = false
 		local limitId = COMMON_CONST.OPERATOR_LIMIT.OP_LIMIT_ID_CHANGE_NAME
-		local sql = string.format("select * from `kfrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
+		local sql = string.format("select * from `ssrecorddb`.`t_user_operator_limit` where UserId = %d and LimitId = %d",attr.userID,limitId)
         local dbConn = addressResolver.getMysqlConnection()
         local rowss = skynet.call(dbConn, "lua", "call", sql)
         if rowss[1] ~= nil then

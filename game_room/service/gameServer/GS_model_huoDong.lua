@@ -60,13 +60,13 @@ local function cmd_ActivityInfoList(agent,userID)
 					ActivityItemInfo.leftTimes = iItemMinCount
 				
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_RECHARGE then
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
 						else
-							local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+							local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 								0,nowDate,0,userID,vv.activityId,vv.index)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
@@ -80,13 +80,13 @@ local function cmd_ActivityInfoList(agent,userID)
 					table.insert(ActivityItemInfo.completeGoodsList,item)
 
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_SUM_RECHARGE then
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
 						else
-							local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+							local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 								0,nowDate,0,userID,vv.activityId,vv.index)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
@@ -97,21 +97,21 @@ local function cmd_ActivityInfoList(agent,userID)
 						goodsCount = 0,
 					}
 
-					local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
+					local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						local iRmb = tonumber(rows[1].Rmb)
 						if checkIsSameDay(tonumber(rows[1].Date)) then
 							item.goodsCount = iRmb
 						else
-							sql = string.format("update `kffishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
+							sql = string.format("update `ssfishdb`.`t_user_pay_rmb` set Rmb=%d,Date=%d where UserId=%d and PayType=%d",0,nowDate,userID,vv.activityId)
 							skynet.call(dbConn, "lua", "query", sql)
 						end
 					end
 
 					table.insert(ActivityItemInfo.completeGoodsList,item)
 				elseif vv.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_SUM_RECHARGE_IN_HD_TIME then
-					local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
+					local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",userID,vv.activityId,vv.index)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						ActivityItemInfo.leftTimes = tonumber(rows[1].LeftTimes)
@@ -121,7 +121,7 @@ local function cmd_ActivityInfoList(agent,userID)
 						goodsID = COMMON_CONST.ITEM_ID.ITEM_ID_RMB,
 						goodsCount = 0,
 					}
-					local sql = string.format("SELECT Rmb,Date FROM `kffishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
+					local sql = string.format("SELECT Rmb,Date FROM `ssfishdb`.`t_user_pay_rmb` where UserId=%d and PayType=%d",userID,vv.activityId)
 					local rows = skynet.call(dbConn,"lua","query",sql)
 					if rows[1] ~= nil then
 						local iRmb = tonumber(rows[1].Rmb)
@@ -195,7 +195,7 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 						skynet.send(addressResolver.getAddressByServiceName("GS_model_operatorLimit"), "lua", "AddLimit",tcpAgentData.userID,limitId,1)
 
 					else
-						local sql = string.format("SELECT * FROM `kffishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",tcpAgentData.userID,v.activityId,v.index)
+						local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_pay` where UserId=%d and PayType=%d and `Index` = %d",tcpAgentData.userID,v.activityId,v.index)
 						local dbConn = addressResolver.getMysqlConnection()
 						local rows = skynet.call(dbConn,"lua","query",sql)
 						if rows[1] ~= nil then
@@ -207,11 +207,11 @@ local function cmd_ExchangeActivityReward(agent,tcpAgentData,pbObj)
 							skynet.send(addressResolver.getAddressByServiceName("GS_model_bag"), "lua", "AddGoodsList",tcpAgentData.userID,v.rewardList,tcpAgentData.sui,COMMON_CONST.ITEM_SYSTEM_TYPE.BY_HUO_DONG_REWARD)
 
 							if v.activityId == COMMON_CONST.HUO_DONG_ID.HD_ID_EVERYDAY_RECHARGE then
-								local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d where UserId=%d and PayType=%d and `Index` = %d",
 									iCount-1,nowDate,tcpAgentData.userID,v.activityId,v.index)
 								skynet.call(dbConn, "lua", "query", sql)		
 							else
-								local sql = string.format("update `kffishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
+								local sql = string.format("update `ssfishdb`.`t_user_pay` set LeftTimes=%d,Date=%d,Flag=%d where UserId=%d and PayType=%d and `Index` = %d",
 									0,nowDate,1,tcpAgentData.userID,v.activityId,v.index)
 								skynet.call(dbConn, "lua", "query", sql)		
 							end			

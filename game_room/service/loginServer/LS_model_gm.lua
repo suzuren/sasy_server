@@ -175,7 +175,7 @@ local function http_changeScore(data, offline)
 		
 		local dbConn = addressResolver.getMysqlConnection()
 		local sql = string.format(
-			"call kftreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
+			"call sstreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
 			userId, 14, gold, present, loveliness, vip, vipDays
 		)
 		local rows = skynet.call(dbConn, "lua", "call", sql)
@@ -207,7 +207,7 @@ local function http_changeScore(data, offline)
 		if offline == true then
 			local dbConn = addressResolver.getMysqlConnection()
 			local sql = string.format(
-				"call kftreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
+				"call sstreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
 				userId, 14, gold, present, loveliness, vip, vipDays
 			)
 			local rows = skynet.call(dbConn, "lua", "call", sql)
@@ -315,7 +315,7 @@ local function http_getInfoByPid(data)
 	end
 	local dbConn = addressResolver.getMysqlConnection()
 	local sql = string.format(
-			"select UserID,GameID,NickName,LoveLiness,Status from kfaccountsdb.accountsinfo where PlatformID=%d",
+			"select UserID,GameID,NickName,LoveLiness,Status from ssaccountsdb.accountsinfo where PlatformID=%d",
 			tonumber(data.pid))
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] then
@@ -330,7 +330,7 @@ local function http_getInfoByPid(data)
 		return false, re
 	end
 	sql = string.format(
-			"select Score from kftreasuredb.gamescoreinfo where UserID=%d",
+			"select Score from sstreasuredb.gamescoreinfo where UserID=%d",
 			re.userId)
 	rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] then
@@ -358,7 +358,7 @@ local function http_sendLoveliness(data)
 
 	local dbConn = addressResolver.getMysqlConnection()
 	
-	local sql = string.format("select UserID from `kfaccountsdb`.`AccountsInfo` where GameID=%d", targetGameId)
+	local sql = string.format("select UserID from `ssaccountsdb`.`AccountsInfo` where GameID=%d", targetGameId)
 	--local rows = skynet.call(dbConn, "lua", "query", sql)
 	local rows ={
 		{
@@ -373,7 +373,7 @@ local function http_sendLoveliness(data)
 		return false, re
 	end
 	
-	sql = string.format("select Status from `kfaccountsdb`.`AccountsInfo` where UserID=%d", userId)
+	sql = string.format("select Status from `ssaccountsdb`.`AccountsInfo` where UserID=%d", userId)
 	--rows = skynet.call(dbConn, "lua", "query", sql)
 	rows ={
 		{
@@ -387,7 +387,7 @@ local function http_sendLoveliness(data)
 	end
 	
 	sql = string.format(
-		"call kftreasuredb.p_pay(%d)",
+		"call sstreasuredb.p_pay(%d)",
 		userId
 	)
 	--rows = skynet.call(dbConn, "lua", "call", sql)
@@ -422,7 +422,7 @@ local function http_sendLoveliness(data)
 		ServerUserItem.addAttribute(userItem, {score=-needGold})
 	else
 		sql = string.format(
-				"select Score from kftreasuredb.gamescoreinfo where UserID=%d",
+				"select Score from sstreasuredb.gamescoreinfo where UserID=%d",
 				userId)
 		rows = skynet.call(dbConn, "lua", "query", sql)
 		if tonumber(rows[1].Score) < needGold then
@@ -432,11 +432,11 @@ local function http_sendLoveliness(data)
 		end
 	end
 	
-	sql = string.format("update `kftreasuredb`.`GameScoreInfo` set `Score`=`Score`+%d where UserID=%d", -needGold, userId)
+	sql = string.format("update `sstreasuredb`.`GameScoreInfo` set `Score`=`Score`+%d where UserID=%d", -needGold, userId)
 	--skynet.call(dbConn, "lua", "query", sql)
-	sql = string.format("update `kfaccountsdb`.`AccountsInfo` set `LoveLiness`=`LoveLiness`+%d where UserID=%d", loveliness, targetUserId)
+	sql = string.format("update `ssaccountsdb`.`AccountsInfo` set `LoveLiness`=`LoveLiness`+%d where UserID=%d", loveliness, targetUserId)
 	--skynet.call(dbConn, "lua", "query", sql)
-	sql = string.format("insert into `kfrecorddb`.`r_deal_info` values (%d, %d, 0, 0, %d, 0, 0, %d, NOW())", userId, -needGold, targetUserId, loveliness)
+	sql = string.format("insert into `ssrecorddb`.`r_deal_info` values (%d, %d, 0, 0, %d, 0, 0, %d, NOW())", userId, -needGold, targetUserId, loveliness)
 	--skynet.send(dbConn, "lua", "execute", sql)
 	
 	local targetUserItem = skynet.call(addressResolver.getAddressByServiceName("LS_model_sessionManager"), "lua", 
@@ -498,7 +498,7 @@ local function http_exchangeLoveliness(data)
 		
 		local dbConn = addressResolver.getMysqlConnection()
 		local sql = string.format(
-			"call kftreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
+			"call sstreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
 			userId, 5, gold, 0, -usedLoveliness, 0, 0
 		)
 		local rows = skynet.call(dbConn, "lua", "call", sql)
@@ -512,7 +512,7 @@ local function http_exchangeLoveliness(data)
 	else
 		local dbConn = addressResolver.getMysqlConnection()
 		local sql = string.format(
-			"call kftreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
+			"call sstreasuredb.s_write_money(%d, %d, %d, %d, %d, %d, %d, 0, 0, 0, 0)",
 			userId, 5, commonConst.lovelinessToGold * loveliness, 0, -loveliness, 0, 0
 		)
 		local rows = skynet.call(dbConn, "lua", "call", sql)
@@ -529,7 +529,7 @@ end
 -- 查询信息
 local function http_queryPayOrderItem(data)
 	local re = {}
-	local sql = string.format("call kftreasuredb.sp_query_pay_order_item_info(%d)", data.userId)
+	local sql = string.format("call sstreasuredb.sp_query_pay_order_item_info(%d)", data.userId)
 	local mysqlConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(mysqlConn, "lua", "call", sql)
 	for _, row in ipairs(rows) do

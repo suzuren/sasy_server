@@ -15,7 +15,7 @@ local recordList = {}
 local function cmd_SaveItemRecord()
 	local dbConn = addressResolver.getMysqlConnection()
 	for k, v in pairs(recordList) do
-		local sql = string.format("INSERT INTO `kfrecorddb`.`t_item_record` (`UserId`, `FromId`, `AddOrDel`, `ItemId`, `ItemCount`, `Date`, `InGame`) VALUES(%d,%d,%d,%d,%d,'%s',1)",
+		local sql = string.format("INSERT INTO `ssrecorddb`.`t_item_record` (`UserId`, `FromId`, `AddOrDel`, `ItemId`, `ItemCount`, `Date`, `InGame`) VALUES(%d,%d,%d,%d,%d,'%s',1)",
 			v.userID,v.fromId,v.addOrDel,v.goodsID,v.goodsCount,v.insertTime)
 		skynet.send(dbConn, "lua", "execute", sql)
 	end
@@ -108,7 +108,7 @@ local function AddItemToBag(userID,goodsID,goodsCount)
 
 	table.insert(_hash[userID],item)
 
-	local sql = string.format("insert into `kffishdb`.`t_bag` values(%d,%d,%d,%d)",userID,item.goodsID,item.goodsCount,endTime)
+	local sql = string.format("insert into `ssfishdb`.`t_bag` values(%d,%d,%d,%d)",userID,item.goodsID,item.goodsCount,endTime)
 	local dbConn = addressResolver.getMysqlConnection()
 	skynet.send(dbConn, "lua", "execute", sql)
 end
@@ -122,7 +122,7 @@ local function cmd_GoodsInfoList(tcpAgent,tcpAgentData)
 		-- for k, v in pairs(sendGoods.goodsItem) do
 		-- 	if COMMON_CONST.CheckIsPaoTaiItem(v.goodsID) or COMMON_CONST.CheckIsTimeCardItem(v.goodsID) then
 		-- 		local dbConn = addressResolver.getMysqlConnection()
-		-- 		local sql = string.format("SELECT EndTime FROM `kffishdb`.`t_bag` where UserId=%d and ItemId=%d",tcpAgentData.userID,v.goodsID)
+		-- 		local sql = string.format("SELECT EndTime FROM `ssfishdb`.`t_bag` where UserId=%d and ItemId=%d",tcpAgentData.userID,v.goodsID)
 		-- 		local rows = skynet.call(dbConn,"lua","query",sql)
 		-- 		if rows[1] ~= nil then
 		-- 			local endTime = tonumber(rows[1].EndTime)
@@ -132,7 +132,7 @@ local function cmd_GoodsInfoList(tcpAgent,tcpAgentData)
 		-- 					v.useTime = 0
 		-- 					v.goodsCount = 0
 		-- 					v.oldGoodsCount = 0
-		-- 					sql = string.format("update `kffishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
+		-- 					sql = string.format("update `ssfishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
 		-- 						v.goodsCount,0,tcpAgentData.userID,v.goodsID)
 		-- 					skynet.send(dbConn, "lua", "execute", sql)
 		-- 				else
@@ -166,7 +166,7 @@ local function cmd_GoodsInfo(userID,goodsId)
 		if v.goodsID == goodsId then
 			if COMMON_CONST.CheckIsPaoTaiItem(goodsId) or COMMON_CONST.CheckIsTimeCardItem(goodsId) or COMMON_CONST.CheckIsSpecCannonItem(goodsId) then
 				-- local dbConn = addressResolver.getMysqlConnection()
-				-- local sql = string.format("SELECT EndTime FROM `kffishdb`.`t_bag` where UserId=%d and ItemId=%d",userID,goodsId)
+				-- local sql = string.format("SELECT EndTime FROM `ssfishdb`.`t_bag` where UserId=%d and ItemId=%d",userID,goodsId)
 				-- local rows = skynet.call(dbConn,"lua","query",sql)
 				-- if rows[1] ~= nil then
 				-- 	local endTime = tonumber(rows[1].EndTime)
@@ -176,7 +176,7 @@ local function cmd_GoodsInfo(userID,goodsId)
 				-- 			v.useTime = 0
 				-- 			v.goodsCount = 0
 				-- 			v.oldGoodsCount = 0
-				-- 			local sql = string.format("update `kffishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
+				-- 			local sql = string.format("update `ssfishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
 				-- 				v.goodsCount,0,userID,goodsId)
 				-- 			local dbConn = addressResolver.getMysqlConnection()
 				-- 			skynet.send(dbConn, "lua", "execute", sql)
@@ -193,7 +193,7 @@ local function cmd_GoodsInfo(userID,goodsId)
 						v.goodsCount = 0
 						v.oldGoodsCount = 0
 						v.endTime = 0
-						local sql = string.format("update `kffishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
+						local sql = string.format("update `ssfishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
 							v.goodsCount,0,userID,goodsId)
 						local dbConn = addressResolver.getMysqlConnection()
 						skynet.send(dbConn, "lua", "execute", sql)
@@ -279,9 +279,9 @@ local function cmd_SaveUserItem(userID)
 				v.goodsCount = 0
 			end
 
-			--local sql = string.format("update `kffishdb`.`t_bag` set `itemCount`=%d where `UserId`=%d and `ItemId`=%d",v.goodsCount,userID,v.goodsID)
+			--local sql = string.format("update `ssfishdb`.`t_bag` set `itemCount`=%d where `UserId`=%d and `ItemId`=%d",v.goodsCount,userID,v.goodsID)
 			local addCount = v.goodsCount - v.oldGoodsCount
-			local sql = string.format("call `kffishdb`.`sp_write_bag` (%d,%d,%d)",userID,v.goodsID,addCount)
+			local sql = string.format("call `ssfishdb`.`sp_write_bag` (%d,%d,%d)",userID,v.goodsID,addCount)
 			local ret = skynet.call(dbConn, "lua", "call", sql)[1]
 			if tonumber(ret.retCode) ~= 0 then		
 				skynet.error(string.format("----游戏里写背包数据出错了--userID=%d,goodsID=%d,goodsCount=%d--code=%s,mes=%s----",userID,v.goodsID,addCount,tonumber(ret.retCode),tostring(ret.retMsg)))
@@ -312,7 +312,7 @@ end
 local function cmd_LoadUserItem(userItem)
 	local itemList = {}
 	local attr = ServerUserItem.getAttribute(userItem, {"userID","score","gift"})
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_bag` where UserId = %d", attr.userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_bag` where UserId = %d", attr.userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	local bFindFish = false
@@ -341,7 +341,7 @@ local function cmd_LoadUserItem(userItem)
 					item.goodsCount = 0
 					item.oldGoodsCount = 0
 					item.endTime = 0
-					sql = string.format("update `kffishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
+					sql = string.format("update `ssfishdb`.`t_bag` set ItemCount = %d,EndTime=%d where UserId=%d and ItemId=%d",
 						item.goodsCount,item.useTime,attr.userID,item.goodsID)
 					skynet.send(dbConn, "lua", "execute", sql)
 				else
@@ -478,7 +478,7 @@ local function cmd_ChangeItemCount(userID,goodsID,goodsCount,fromWhere,bNeedNoti
 
 			if COMMON_CONST.CheckIsPaoTaiItem(goodsID) or COMMON_CONST.CheckIsTimeCardItem(goodsID) then	
 				-- local dbConn = addressResolver.getMysqlConnection()
-				-- local sql = string.format("SELECT EndTime FROM `kffishdb`.`t_bag` where UserId=%d and ItemId=%d",userID,goodsID)
+				-- local sql = string.format("SELECT EndTime FROM `ssfishdb`.`t_bag` where UserId=%d and ItemId=%d",userID,goodsID)
 				-- local rows = skynet.call(dbConn,"lua","query",sql)
 				-- if rows[1] ~= nil then
 				-- 	local endTime = tonumber(rows[1].EndTime)
@@ -517,7 +517,7 @@ local function cmd_ChangeItemCount(userID,goodsID,goodsCount,fromWhere,bNeedNoti
 					if COMMON_CONST.CheckIsTimeCardItem(goodsID) and goodsCount<0 then
 						--如果是消耗掉合成卡  不更新时间
 					else
-						sql = string.format("update `kffishdb`.`t_bag` set EndTime = %d where UserId=%d and ItemId=%d",
+						sql = string.format("update `ssfishdb`.`t_bag` set EndTime = %d where UserId=%d and ItemId=%d",
 							v.endTime,userID,goodsID)
 						local dbConn = addressResolver.getMysqlConnection()
 						skynet.send(dbConn, "lua", "execute", sql)
@@ -561,7 +561,7 @@ end
 
 local function UpdateUserRecordGold(userID,addGold)
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("INSERT INTO `kfrecorddb`.`t_record_gold_by_use_box` (UserId,SumGold) VALUES(%d,%d) ON DUPLICATE KEY UPDATE SumGold=SumGold+%d",userID,addGold,addGold)
+	local sql = string.format("INSERT INTO `ssrecorddb`.`t_record_gold_by_use_box` (UserId,SumGold) VALUES(%d,%d) ON DUPLICATE KEY UPDATE SumGold=SumGold+%d",userID,addGold,addGold)
 	skynet.send(dbConn, "lua", "execute", sql)
 end	
 
@@ -825,7 +825,7 @@ end
 
 local function addGiveItemRecord(userID,giveUserId,itemId,itemCount)
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("INSERT INTO `kfrecorddb`.`t_record_give_item` (`UserId`,`GiveUserId`,`ItemId`,`ItemCount`,`Date`) VALUES(%d,%d,%d,%d,now())",userID,giveUserId,itemId,itemCount)
+	local sql = string.format("INSERT INTO `ssrecorddb`.`t_record_give_item` (`UserId`,`GiveUserId`,`ItemId`,`ItemCount`,`Date`) VALUES(%d,%d,%d,%d,now())",userID,giveUserId,itemId,itemCount)
 	skynet.send(dbConn, "lua", "execute", sql)
 end	
 

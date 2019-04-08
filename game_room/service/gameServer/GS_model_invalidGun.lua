@@ -27,7 +27,7 @@ local function cmd_SaveData(userID)
 	end
 
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("insert into `kffishdb`.`t_user_invalid_gun` (`UserId`,`TimeCount`,`GunCount`,`Gold`,`FishCount`) VALUES(%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE `TimeCount`=%d,`GunCount`=%d,`Gold`=%d,`FishCount`=%d",
+	local sql = string.format("insert into `ssfishdb`.`t_user_invalid_gun` (`UserId`,`TimeCount`,`GunCount`,`Gold`,`FishCount`) VALUES(%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE `TimeCount`=%d,`GunCount`=%d,`Gold`=%d,`FishCount`=%d",
 		userID,info.timeCount,info.gunCount,info.gold,info.iFishCount,info.timeCount,info.gunCount,info.gold,info.iFishCount)
 	skynet.send(dbConn,"lua","execute",sql)
 end
@@ -41,7 +41,7 @@ local function cmd_LoadData(userID)
 		lastTime = 0,
 	}
 
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_user_invalid_gun` where UserId=%d",userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_user_invalid_gun` where UserId=%d",userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then

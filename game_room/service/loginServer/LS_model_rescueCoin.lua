@@ -12,7 +12,7 @@ local lastDay = 0
 local lastRankDay = 0
 
 local function loadConfig()
-	local sql = "SELECT * FROM `kftreasuredb`.`t_rescue_coin`"
+	local sql = "SELECT * FROM `sstreasuredb`.`t_rescue_coin`"
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
@@ -36,11 +36,11 @@ local function cmd_requestRescueCoin(tcpAgent,tcpAgentData)
 	}
 	local randId = randHandle.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
 	local nowTime = os.time()
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] == nil then
-		sql = string.format("insert into `kffishdb`.`t_rescue_coin` values(%d,%d,%d,0,%d,0,0)",tcpAgentData.userID,nowTime,1,randId)
+		sql = string.format("insert into `ssfishdb`.`t_rescue_coin` values(%d,%d,%d,0,%d,0,0)",tcpAgentData.userID,nowTime,1,randId)
 		skynet.call(dbConn, "lua", "query", sql)
 
 		re.rescueCoinCount = _itemInfoHash[1].goldCount
@@ -94,7 +94,7 @@ local function cmd_requestRescueCoin(tcpAgent,tcpAgentData)
 		re.remainingCount = LS_CONST.RESCUE_COIN_MAX_NUM - num + 1
 
 		if flag == 1 or bDaySwitch == true then
-			sql = string.format("update `kffishdb`.`t_rescue_coin` set BrokeTime=%d,CurCounts=%d,ReceiveFlag=%d,RandNum=%d,FishCount=%d where UserId=%d",
+			sql = string.format("update `ssfishdb`.`t_rescue_coin` set BrokeTime=%d,CurCounts=%d,ReceiveFlag=%d,RandNum=%d,FishCount=%d where UserId=%d",
 				nowTime,num,0,randNum,fishCount,tcpAgentData.userID)
 			skynet.call(dbConn, "lua", "query", sql)
 		end
@@ -113,7 +113,7 @@ local function cmd_RescueCoinSynchronizeTime(tcpAgent,tcpAgentData)
 
 	local nowTime = os.time()
 	local nowDate = tonumber(os.date("%Y%m%d", nowTime))
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] == nil then
@@ -143,7 +143,7 @@ local function cmd_ReceiveRescueCoin(tcpAgent,tcpAgentData)
 	}
 
 	local nowTime = os.time()
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_rescue_coin` where UserId = %d",tcpAgentData.userID)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn, "lua", "query", sql)
 	if rows[1] == nil then
@@ -174,15 +174,15 @@ local function cmd_ReceiveRescueCoin(tcpAgent,tcpAgentData)
 		randNum = randHandle.random(1, LS_CONST.RESCUE_COIN_MAX_NUM)
 		num = 1
 		bDaySwitch = true
-		sql = string.format("update `kffishdb`.`t_rescue_coin` set BrokeTime=%d,CurCounts=%d,ReceiveFlag=%d,RandNum=%d,FishCount=%d where UserID = %d",
+		sql = string.format("update `ssfishdb`.`t_rescue_coin` set BrokeTime=%d,CurCounts=%d,ReceiveFlag=%d,RandNum=%d,FishCount=%d where UserID = %d",
 			nowTime,1,1,randNum,0,tcpAgentData.userID)
 	else
-		sql = string.format("update `kffishdb`.`t_rescue_coin` set ReceiveFlag=%d where UserID = %d",1,tcpAgentData.userID)		
+		sql = string.format("update `ssfishdb`.`t_rescue_coin` set ReceiveFlag=%d where UserID = %d",1,tcpAgentData.userID)		
 	end
 
 	skynet.call(dbConn, "lua", "query", sql)
 
-	sql = string.format("update `kftreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", re.rescueCoinCount, tcpAgentData.userID)
+	sql = string.format("update `sstreasuredb`.`GameScoreInfo` set Score=Score+%d where UserID = %d", re.rescueCoinCount, tcpAgentData.userID)
 	skynet.call(dbConn, "lua", "query", sql)
 
 	ServerUserItem.addAttribute(tcpAgentData.sui, {score = re.rescueCoinCount})
@@ -206,7 +206,7 @@ local function cmd_ReceiveRescueCoin(tcpAgent,tcpAgentData)
 			COMMON_CONST.ITEM_ID.ITEM_ID_GOLD,re.rescueCoinCount,COMMON_CONST.ITEM_SYSTEM_TYPE.RESCUE_COIN)
 	end
 
-	sql = string.format("insert into `kfrecorddb`.`rescue_coin` (`UserId`,`CurNum`,`GoldNum`,`ReceiveTime`) values(%d,%d,%d,'%s')",
+	sql = string.format("insert into `ssrecorddb`.`rescue_coin` (`UserId`,`CurNum`,`GoldNum`,`ReceiveTime`) values(%d,%d,%d,'%s')",
 		attr.userID,num,re.rescueCoinCount,os.date('%Y-%m-%d %H:%M:%S', math.floor(skynet.time())))
 	skynet.send(dbConn, "lua", "execute", sql)
 
@@ -254,7 +254,7 @@ local function monthCardOprator()
 	}
 	table.insert(itemList,item)
 
-	local sql = string.format("SELECT * from `kffishdb`.`t_month_card` WHERE EndTime > %d",nowTime)
+	local sql = string.format("SELECT * from `ssfishdb`.`t_month_card` WHERE EndTime > %d",nowTime)
 	local dbConn = addressResolver.getMysqlConnection()
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then

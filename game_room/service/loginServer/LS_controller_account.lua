@@ -14,7 +14,7 @@ local REQUEST = {
 		end
 		
 		
-		local sql = string.format("update `kfaccountsdb`.`AccountsInfo` set `FaceID`=%d where `UserID`=%d", pbObj.faceID, tcpAgentData.userID)
+		local sql = string.format("update `ssaccountsdb`.`AccountsInfo` set `FaceID`=%d where `UserID`=%d", pbObj.faceID, tcpAgentData.userID)
 		local dbConn = addressResolver.getMysqlConnection()
 		skynet.call(dbConn, "lua", "query", sql)
 		ServerUserItem.setAttribute(tcpAgentData.sui, {faceID=pbObj.faceID})
@@ -36,10 +36,10 @@ local REQUEST = {
 				
 		local sql
 		if signatureLen==0 then
-			sql = string.format("delete from `kfaccountsdb`.`AccountsSignature` where `UserID`=%d", tcpAgentData.userID)
+			sql = string.format("delete from `ssaccountsdb`.`AccountsSignature` where `UserID`=%d", tcpAgentData.userID)
 		else
 			sql = string.format(
-				"insert `kfaccountsdb`.`AccountsSignature` (`UserID`, `Signature`) values (%d, '%s') on duplicate key update `Signature`=values(`Signature`)", 
+				"insert `ssaccountsdb`.`AccountsSignature` (`UserID`, `Signature`) values (%d, '%s') on duplicate key update `Signature`=values(`Signature`)", 
 				tcpAgentData.userID,
 				mysqlutil.escapestring(pbObj.signature)
 			)
@@ -69,7 +69,7 @@ local REQUEST = {
     		bFree = 1
         end
 
-        local sql = string.format("call kfaccountsdb.sp_change_nickname(%d, '%s', %d)", tcpAgentData.userID, mysqlutil.escapestring(pbObj.nickName), bFree)
+        local sql = string.format("call ssaccountsdb.sp_change_nickname(%d, '%s', %d)", tcpAgentData.userID, mysqlutil.escapestring(pbObj.nickName), bFree)
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "call", sql)
 		local row = rows[1]
@@ -113,7 +113,7 @@ local REQUEST = {
 			return 0x000603, {code="RC_SENSITIVE_WORD_FOUND"}
 		end
 		
-		local sql = string.format("call kfaccountsdb.sp_is_nickname_used('%s')", mysqlutil.escapestring(pbObj.nickName))
+		local sql = string.format("call ssaccountsdb.sp_is_nickname_used('%s')", mysqlutil.escapestring(pbObj.nickName))
 		local dbConn = addressResolver.getMysqlConnection()
 		local rows = skynet.call(dbConn, "lua", "call", sql)
 		local ret = tonumber(rows[1].ret)
@@ -128,7 +128,7 @@ local REQUEST = {
 			error(string.format("%s protocal=0x000604 invalid gender=%d", SERVICE_NAME, pbObj.gender))
 		end
 		
-		local sql = string.format("UPDATE `kfaccountsdb`.`AccountsInfo` SET `Gender`=%d WHERE `UserID`=%d", pbObj.gender, tcpAgentData.userID)
+		local sql = string.format("UPDATE `ssaccountsdb`.`AccountsInfo` SET `Gender`=%d WHERE `UserID`=%d", pbObj.gender, tcpAgentData.userID)
 		local dbConn = addressResolver.getMysqlConnection()
 		skynet.call(dbConn, "lua", "query", sql)
 		ServerUserItem.setAttribute(tcpAgentData.sui, {gender=pbObj.gender})
@@ -140,7 +140,7 @@ local REQUEST = {
 			error(string.format("%s protocal=0x000605 invalid platformFace=%s", SERVICE_NAME, tostring(pbObj.platformFace)))
 		end
 		
-		local sql = string.format("call kfaccountsdb.sp_set_platform_face(%d, '%s')", tcpAgentData.userID, mysqlutil.escapestring(pbObj.platformFace))
+		local sql = string.format("call ssaccountsdb.sp_set_platform_face(%d, '%s')", tcpAgentData.userID, mysqlutil.escapestring(pbObj.platformFace))
 		local dbConn = addressResolver.getMysqlConnection()
 		skynet.call(dbConn, "lua", "call", sql)
 		ServerUserItem.setAttribute(tcpAgentData.sui, {platformFace=pbObj.platformFace})

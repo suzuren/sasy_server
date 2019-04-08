@@ -61,7 +61,7 @@ local function reloadControlConfig()
 	_data.rateConfig.timeBoss = {}
 
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_control_world_boss_rate`")
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_control_world_boss_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do
@@ -75,7 +75,7 @@ local function reloadControlConfig()
 		end
 	end
 
-	sql = string.format("SELECT * FROM `kffishdb`.`t_control_time_boss_rate`")
+	sql = string.format("SELECT * FROM `ssfishdb`.`t_control_time_boss_rate`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if type(rows)=="table" then
 		for _, row in ipairs(rows) do
@@ -272,7 +272,7 @@ end
 
 local function loadData()
 	local dbConn = addressResolver.getMysqlConnection()
-	local sql = string.format("SELECT * FROM `kffishdb`.`t_world_boss_score`")
+	local sql = string.format("SELECT * FROM `ssfishdb`.`t_world_boss_score`")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
 		_data.poolScore = tonumber(rows[1].PoolScore)
@@ -283,7 +283,7 @@ local function loadData()
 		end
 	end
 
-	local sql = string.format("SELECT a.UserId,b.NickName,a.WinScore,b.MemberOrder,UNIX_TIMESTAMP(a.Date) as submitTime FROM kfrecorddb.t_world_boss_record a LEFT JOIN kfaccountsdb.accountsinfo b on a.UserId = b.UserID where bossType = 0 ORDER BY submitTime DESC LIMIT 10")
+	local sql = string.format("SELECT a.UserId,b.NickName,a.WinScore,b.MemberOrder,UNIX_TIMESTAMP(a.Date) as submitTime FROM ssrecorddb.t_world_boss_record a LEFT JOIN ssaccountsdb.accountsinfo b on a.UserId = b.UserID where bossType = 0 ORDER BY submitTime DESC LIMIT 10")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	for _, row in ipairs(rows) do
 		local info = {
@@ -300,7 +300,7 @@ local function loadData()
 		table.insert(_data.killBossUserList,info)
 	end
 
-	local sql = string.format("SELECT a.UserId,b.NickName,a.WinScore,b.MemberOrder,UNIX_TIMESTAMP(a.Date) as submitTime FROM kfrecorddb.t_world_boss_record a LEFT JOIN kfaccountsdb.accountsinfo b on a.UserId = b.UserID where bossType = 1 ORDER BY submitTime DESC LIMIT 10")
+	local sql = string.format("SELECT a.UserId,b.NickName,a.WinScore,b.MemberOrder,UNIX_TIMESTAMP(a.Date) as submitTime FROM ssrecorddb.t_world_boss_record a LEFT JOIN ssaccountsdb.accountsinfo b on a.UserId = b.UserID where bossType = 1 ORDER BY submitTime DESC LIMIT 10")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	for _, row in ipairs(rows) do
 		local info = {
@@ -317,7 +317,7 @@ local function loadData()
 		table.insert(_data.killBossuserList_ex,info)
 	end
 
-	local sql = string.format("SELECT * FROM  kfrecorddb.t_world_boss_record ORDER BY ID DESC LIMIT 1")
+	local sql = string.format("SELECT * FROM  ssrecorddb.t_world_boss_record ORDER BY ID DESC LIMIT 1")
 	local rows = skynet.call(dbConn,"lua","query",sql)
 	if rows[1] ~= nil then
 		_data.lastKillWorldBossUserId = tonumber(rows[1].UserId)
@@ -326,7 +326,7 @@ end
 
 local function WriteWorldBossScore()
 	--local dbConn = addressResolver.getMysqlConnection()
-	--local sql = string.format("INSERT INTO `kffishdb`.`t_world_boss_score` VALUES (1,%d) ON DUPLICATE KEY UPDATE `PoolScore`=VALUES(`PoolScore`)",_data.poolScore)
+	--local sql = string.format("INSERT INTO `ssfishdb`.`t_world_boss_score` VALUES (1,%d) ON DUPLICATE KEY UPDATE `PoolScore`=VALUES(`PoolScore`)",_data.poolScore)
 	--skynet.send(dbConn,"lua","execute",sql)
 end
 
@@ -603,7 +603,7 @@ local function cmd_killWorldBoss(data)
 
 		checkRecordCount()
 
-		local sql = string.format("insert into `kfrecorddb`.`t_world_boss_record`(UserId,WinScore,Date,bossType) VALUES(%d,%d,NOW(),%d)",data.userID,poolScore,bossType)
+		local sql = string.format("insert into `ssrecorddb`.`t_world_boss_record`(UserId,WinScore,Date,bossType) VALUES(%d,%d,NOW(),%d)",data.userID,poolScore,bossType)
 		local dbConn = addressResolver.getMysqlConnection()
 		skynet.send(dbConn, "lua", "execute", sql)
 
