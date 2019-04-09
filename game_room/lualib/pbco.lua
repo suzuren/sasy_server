@@ -81,7 +81,7 @@ end
 --[[
 	prototype 模拟一个对象
 	new 方法类似于实例化一个对象, o 可存放一些初始值作用等同于 o 是 prototype 的子类。
-	解释: prototype 这个 table 有一个属性 balance，通过 new 函数实例化一个类继承于 prototype。
+	解释: prototype 这个 table 有一个属性 protoNoHash，通过 new 函数实例化一个类继承于 prototype。
 	在 lua 中类、父类都是通过 table 数据结构加上元表元方法来实现。
 
 	__index 是 lua 一个元方法，被广泛的使用在模拟实现继承方法。访问一个 table 中不存在的key，lua 将会返回一个 nil。
@@ -94,8 +94,9 @@ end
 
 function prototype:new(dir)
 	local o = { pbFileDir=dir, protoNoHash={ encode={}, decode={} } }
-	setmetatable(o, self)
-	self.__index = self
+	setmetatable(o, self)	-- 把 prototype 表设置为 o 的元表
+	self.__index = self		-- 把 prototype 设置为 prototype 元方法,也就是prototype作为一个基类
+							-- 访问对象 o 不存在的元素的时候，会访问元表 __index 指向的对象
 	return o
 end
 

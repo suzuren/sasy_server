@@ -33,14 +33,15 @@ local function doDecode(protocalNo, pbBufferPtr, pbBufferSize, isDirectionRevers
 	return pbObj
 end
 
-
 local function cmd_start(mode)
 	if not _pb then
-		_pb = PBCO:new(skynet.getenv("pbs_dir"))
-	end
-	
+		_pb = PBCO:new(skynet.getenv("pbs_dir"))	-- 函数返回的是 o = { pbFileDir=dir, protoNoHash={ encode={}, decode={} } } 这个table
+													-- o 这个table 继承于 PBCO，所以 _pb 这个类继承于 PBCO
+	end	
 	local conf = pbConfig.getConfig(mode)
 	_pb:config(conf.c2s, conf.s2c, conf.files)
+
+	-- _pb prototype，因为 _pb 这个表之前没有 config 这个函数，所以他调用的是 prototype:config 这个函数
 end
 
 local function cmd_decode(protocalNo, pbBufferPtr, pbBufferSize)
