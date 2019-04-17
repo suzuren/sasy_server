@@ -205,6 +205,7 @@
     <None Include="..\game_room\lualib\utility\timer.lua" />
     <None Include="..\game_room\lualib\utility\uniformPlatformHttp.lua" />
     <None Include="..\game_room\lualib\utility\xpcall.lua" />
+    <None Include="..\game_room\lualib\utility\zzlib.lua" />
     <None Include="..\game_room\lualib\xLog.lua" />
     <None Include="..\game_room\Makefile" />
     <None Include="..\game_room\mysql\all_databases.sql" />
@@ -634,6 +635,7 @@
     <ClCompile Include="..\chat_room\lualib-src\lua-parsedata.c" />
     <ClCompile Include="..\chat_room\lualib-src\lua-socket.c" />
     <ClCompile Include="..\game_room\client\httpclient.c" />
+    <ClCompile Include="..\game_room\luaclib-src\lua-gzip.c" />
     <ClCompile Include="..\game_room\luaclib-src\lua-mysqlutil.c" />
     <ClCompile Include="..\game_room\luaclib-src\lua-pbcc.c" />
     <ClCompile Include="..\game_room\luaclib-src\lua-skynetHelper.c" />

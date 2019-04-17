@@ -8,7 +8,8 @@ local resourceResolver = require "resourceResolver"
 local controllerResolveConfig = require "define.controllerResolveConfig"
 local commonServiceHelper = require "serviceHelper.common"
 local netpack = require "websocketnetpack"
-
+local zzlib = require "utility.zzlib"
+local gzip = require "gzip"
 local inspect = require "inspect"
 
 local _fd
@@ -18,7 +19,7 @@ local _event = {}					-- {disconnect }
 local _heartBeatData = {}			-- {"hello":"world"}
 local _criticalSection = queue()
 
-local function sendPacket(msg, sz)
+local function sendPacket(msg)
 	if _fd then
 		socket.write(_fd, msg)
 	end
@@ -30,14 +31,15 @@ local function exit()
 		local fd = _fd
 		_fd = nil
 		skynet.call(_gate, "lua", "kick", fd)
-	end		
+	end
 	skynet.exit()
 end
 
 local function sendMessage(strData)
 	_criticalSection(function()	-- 新加，保证消息次序
-		skynet.error(string.format("%s:  sendMessage - strData=%s", SERVICE_NAME, strData))
-		sendPacket(strData, #strData)
+		local compressed = gzip.compress(strData)
+		skynet.error(string.format("%s:  sendMessage - strData=%s", SERVICE_NAME, strData),compressed)
+		sendPacket(compressed)
 	end)
 end
 
@@ -74,8 +76,8 @@ local function cmd_clearCache()
 	_cache.userID = nil	
 end
 
-local function pbPacketDispatch(_, _, strData)	
-	skynet.error(string.format("%s, agent strData:%s", SERVICE_NAME, strData))
+local function webSocketDispatch(session, address, strData)	
+	skynet.error(string.format("%s, webSocketDispatch - ,session:%d,address:%d,strData:%s", SERVICE_NAME,session, address,strData))
 	sendMessage(strData)
 end
 
@@ -95,7 +97,7 @@ local conf = {
 			name = "wireWebSocketStr",
 			id = skynet.PTYPE_CLIENT,
 			unpack = netpack.tostring,
-			dispatch = pbPacketDispatch,
+			dispatch = webSocketDispatch,
 		}
 	end,
 }

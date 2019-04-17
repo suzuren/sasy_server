@@ -185,7 +185,6 @@ function gateserver.start(handler)
 				gateserver.closeclient(fd)
 				return
 			end
-			
 			handler.message(fd, msg, sz)			
 		else
 			skynet.error(string.format("Drop message from fd (%d) : %s", fd, netpack.tostring(msg,sz)))

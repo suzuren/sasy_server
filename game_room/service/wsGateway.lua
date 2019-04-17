@@ -6,7 +6,7 @@ local ipUtility = require "utility.ip"
 
 local _connection = {}	-- fd -> connection : { fd , agent , ip, tick }
 local _forwarding = {}	-- agent -> connection
-local _tcpConnectionType
+local _wsConnectionType
 local _timeoutCheckData = {
 	timerID = 0,
 	threshold = 0,
@@ -72,10 +72,10 @@ function CMD.kickAll()
 end
 
 function CMD.initialize(source, type)
-	if _tcpConnectionType~=nil then
+	if _wsConnectionType~=nil then
 		error(string.format("%s: 已经初始化过了", SERVICE_NAME))
 	end
-	_tcpConnectionType = type
+	_wsConnectionType = type
 	
 	_timeoutCheckData.threshold = 13
 	if not _timeoutCheckData.threshold or _timeoutCheckData.threshold <= 0 then
@@ -101,8 +101,6 @@ function handler.message(fd, msg, sz)
 		c.tick = skynet.now()
 		skynet.redirect(c.agent, 0, "wireWebSocketStr", 0, msg, sz)
 	else
-		skynet.error("找不到数据包接收者")
-		skynetHelper.free(msg)
 		close_fd(fd)
 	end
 end
@@ -117,12 +115,14 @@ function handler.connect(fd, addr)
 	_connection[fd] = c
 
 	local agent = skynet.newservice("wsConnection")
+	--skynet.error(string.format("%s - connect - ", SERVICE_NAME),agent,skynet.self())
+
 	_forwarding[agent] = c
 	skynet.send(agent, "lua", "start", {
 		gateway = skynet.self(),
 		fd = fd,
 		addr = ipUtility.getAddressOfIP(addr),
-		type = _tcpConnectionType
+		type = _wsConnectionType
 	})
 end
 
