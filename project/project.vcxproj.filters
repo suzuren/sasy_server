@@ -1446,6 +1446,15 @@
     <None Include="..\game_room\service\mongoConnectionTest.lua">
       <Filter>game_room\service</Filter>
     </None>
+    <None Include="..\game_room\lualib\utility\gateserver_ws.lua">
+      <Filter>game_room\lualib\utility</Filter>
+    </None>
+    <None Include="..\game_room\service\wsGateway.lua">
+      <Filter>game_room\service</Filter>
+    </None>
+    <None Include="..\game_room\service\wsConnection.lua">
+      <Filter>game_room\service</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -2339,6 +2348,9 @@
       <Filter>game_room\luaclib-src</Filter>
     </ClCompile>
     <ClCompile Include="..\game_room\luaclib-src\pbc-lua53.c">
+      <Filter>game_room\luaclib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_room\luaclib-src\lua-websocketnetpack.c">
       <Filter>game_room\luaclib-src</Filter>
     </ClCompile>
   </ItemGroup>

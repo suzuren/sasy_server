@@ -189,6 +189,7 @@
     <None Include="..\game_room\lualib\utility\bullet.lua" />
     <None Include="..\game_room\lualib\utility\cItemBuffer.lua" />
     <None Include="..\game_room\lualib\utility\currency.lua" />
+    <None Include="..\game_room\lualib\utility\gateserver_ws.lua" />
     <None Include="..\game_room\lualib\utility\ip.lua" />
     <None Include="..\game_room\lualib\utility\jsonHttpResponse.lua" />
     <None Include="..\game_room\lualib\utility\mcClient.lua" />
@@ -372,6 +373,8 @@
     <None Include="..\game_room\service\tcpConnection.lua" />
     <None Include="..\game_room\service\tcpGateway.lua" />
     <None Include="..\game_room\service\telnetServer.lua" />
+    <None Include="..\game_room\service\wsConnection.lua" />
+    <None Include="..\game_room\service\wsGateway.lua" />
     <None Include="..\game_room\service\xLogService.lua" />
     <None Include="..\game_room\service\xLogTcpConnection.lua" />
     <None Include="..\game_room\stopall.sh" />
@@ -635,6 +638,7 @@
     <ClCompile Include="..\game_room\luaclib-src\lua-pbcc.c" />
     <ClCompile Include="..\game_room\luaclib-src\lua-skynetHelper.c" />
     <ClCompile Include="..\game_room\luaclib-src\lua-sui.c" />
+    <ClCompile Include="..\game_room\luaclib-src\lua-websocketnetpack.c" />
     <ClCompile Include="..\game_room\luaclib-src\pbc-lua53.c" />
     <ClCompile Include="..\skynet\3rd\jemalloc\src\arena.c" />
     <ClCompile Include="..\skynet\3rd\jemalloc\src\background_thread.c" />

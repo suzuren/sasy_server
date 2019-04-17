@@ -80,8 +80,17 @@ skynet.start(function()
     local tcpGateway = skynet.uniqueservice("tcpGateway")
 	skynet.call(tcpGateway, "lua", "initialize", "loginServer", sysConfig.isTest)
 
-	local opts ={address = skynet.getenv("address"),port = tonumber(skynet.getenv("port")),nodelay = true,}
-	skynet.call(tcpGateway, "lua", "open" , opts)	
+	local opts ={address = skynet.getenv("address"), port = tonumber(skynet.getenv("port")), nodelay = true,}
+	skynet.call(tcpGateway, "lua", "open" , opts)
+
+
+	local wsGateway = skynet.uniqueservice("wsGateway")
+	skynet.call(wsGateway, "lua", "initialize", "loginServer", sysConfig.isTest)
+
+	local opts ={address = "127.0.0.1", port = 8089, nodelay = true,}
+	skynet.call(wsGateway, "lua", "open" , opts)
+
+
     cluster.open "loginServer"
     
 	skynet.exit()

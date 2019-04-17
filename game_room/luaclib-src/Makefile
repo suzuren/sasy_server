@@ -10,7 +10,7 @@ MYSQL_INC = /usr/include/mysql/
 
 .PHONY : all clean
 
-all : depend protobuf.so pbcc.so skynetHelper.so sui.so memory.so mysqlutil.so 
+all : depend protobuf.so pbcc.so skynetHelper.so sui.so memory.so mysqlutil.so websocketnetpack.so
 
 depend :
 	cd lua-arc4random && make
@@ -36,6 +36,9 @@ memory.so : $(SKYNET_LIB)/lua-memory.c
 
 mysqlutil.so : lua-mysqlutil.c
 	#gcc -g -O2 -Wall -lpthread -I$(LUA_INC) -I$(SKYNET_INC) -I$(MYSQL_INC)  -fPIC --shared $^ -o $@ -L/usr/lib64/mysql -lmysqlclient
+
+websocketnetpack.so : lua-websocketnetpack.c
+	gcc -g -O2 -Wall -I$(LUA_INC) -fPIC --shared -I$(SKYNET_INC) $^ -o $@
 
 clean :
 	cd lua-cjson && make clean
