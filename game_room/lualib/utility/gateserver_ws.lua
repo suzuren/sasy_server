@@ -232,7 +232,19 @@ function gateserver.start(handler)
 		end
 	end
 
+	function MSG.wsclose(fd)
+		skynet.error(string.format("%s, wsclose - fd:%d,socket:%d", SERVICE_NAME,fd,socket))
+		if fd ~= socket then
+			if handler.wsdisconnect then
+				handler.wsdisconnect(fd)
+			end
+		else
+			socket = nil
+		end
+	end
+
 	function MSG.close(fd)
+		skynet.error(string.format("%s, close - fd:%d,socket:%d", SERVICE_NAME,fd,socket))
 		if fd ~= socket then
 			if handler.disconnect then
 				handler.disconnect(fd)

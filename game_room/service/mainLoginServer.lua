@@ -87,7 +87,7 @@ skynet.start(function()
 	local wsGateway = skynet.uniqueservice("wsGateway")
 	skynet.call(wsGateway, "lua", "initialize", "loginServer", sysConfig.isTest)
 
-	local opts ={address = "127.0.0.1", port = 8089, nodelay = true,}
+	local opts ={address = "0.0.0.0", port = 8087, nodelay = true,}
 	skynet.call(wsGateway, "lua", "open" , opts)
 
 

@@ -1,15 +1,8 @@
 local skynet = require "skynet"
 local socket = require "socket"
-local pbcc = require "pbcc"
 local queue = require "skynet.queue"
-local skynetHelper = require "skynetHelper"
-local addressResolver = require "addressResolver"
-local resourceResolver = require "resourceResolver"
-local controllerResolveConfig = require "define.controllerResolveConfig"
 local commonServiceHelper = require "serviceHelper.common"
 local netpack = require "websocketnetpack"
-local zzlib = require "utility.zzlib"
-local gzip = require "gzip"
 local inspect = require "inspect"
 
 local _fd
@@ -19,9 +12,9 @@ local _event = {}					-- {disconnect }
 local _heartBeatData = {}			-- {"hello":"world"}
 local _criticalSection = queue()
 
-local function sendPacket(msg)
+local function sendPacket(msg, size)
 	if _fd then
-		socket.write(_fd, msg)
+		socket.write(_fd, msg, size)
 	end
 end
 
@@ -37,9 +30,7 @@ end
 
 local function sendMessage(strData)
 	_criticalSection(function()	-- 新加，保证消息次序
-		local compressed = gzip.compress(strData)
-		skynet.error(string.format("%s:  sendMessage - strData=%s", SERVICE_NAME, strData),compressed)
-		sendPacket(compressed)
+		sendPacket(netpack.pack(strData))
 	end)
 end
 
@@ -90,9 +81,7 @@ local conf = {
 		["setCache"] = {["func"]=cmd_setCache, ["isRet"]=true},
 		["clearCache"] = {["func"]=cmd_clearCache, ["isRet"]=true},
 	},
-	initFunc = function()
-		resourceResolver.init()
-		
+	initFunc = function()		
 		skynet.register_protocol {
 			name = "wireWebSocketStr",
 			id = skynet.PTYPE_CLIENT,
