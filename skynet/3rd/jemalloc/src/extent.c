@@ -441,30 +441,6 @@ extents_fit_alignment(extents_t *extents, size_t min_size, size_t max_size,
 	return NULL;
 }
 
-/* Do any-best-fit extent selection, i.e. select any extent that best fits. */
-static extent_t *
-extents_best_fit_locked(tsdn_t *tsdn, arena_t *arena, extents_t *extents,
-    size_t size) {
-	pszind_t pind = sz_psz2ind(extent_size_quantize_ceil(size));
-	pszind_t i = (pszind_t)bitmap_ffu(extents->bitmap, &extents_bitmap_info,
-	    (size_t)pind);
-	if (i < SC_NPSIZES + 1) {
-		/*
-		 * In order to reduce fragmentation, avoid reusing and splitting
-		 * large extents for much smaller sizes.
-		 */
-		if ((sz_pind2sz(i) >> opt_lg_extent_max_active_fit) > size) {
-			return NULL;
-		}
-		assert(!extent_heap_empty(&extents->heaps[i]));
-		extent_t *extent = extent_heap_first(&extents->heaps[i]);
-		assert(extent_size_get(extent) >= size);
-		return extent;
-	}
-
-	return NULL;
-}
-
 /*
  * Do first-fit extent selection, i.e. select the oldest/lowest extent that is
  * large enough.
@@ -483,7 +459,19 @@ extents_first_fit_locked(tsdn_t *tsdn, arena_t *arena, extents_t *extents,
 		assert(!extent_heap_empty(&extents->heaps[i]));
 		extent_t *extent = extent_heap_first(&extents->heaps[i]);
 		assert(extent_size_get(extent) >= size);
-		if (ret == NULL || extent_snad_comp(extent, ret) < 0) {
+                bool size_ok = true;
+		/*
+		 * In order to reduce fragmentation, avoid reusing and splitting
+		 * large extents for much smaller sizes.
+		 *
+		 * Only do check for dirty extents (delay_coalesce).
+		 */
+		if (extents->delay_coalesce &&
+		    (sz_pind2sz(i) >> opt_lg_extent_max_active_fit) > size) {
+			size_ok = false;
+		}
+		if (size_ok &&
+		    (ret == NULL || extent_snad_comp(extent, ret) < 0)) {
 			ret = extent;
 		}
 		if (i == SC_NPSIZES) {
@@ -496,10 +484,8 @@ extents_first_fit_locked(tsdn_t *tsdn, arena_t *arena, extents_t *extents,
 }
 
 /*
- * Do {best,first}-fit extent selection, where the selection policy choice is
- * based on extents->delay_coalesce.  Best-fit selection requires less
- * searching, but its layout policy is less stable and may cause higher virtual
- * memory fragmentation as a side effect.
+ * Do first-fit extent selection, where the selection policy choice is
+ * based on extents->delay_coalesce.
  */
 static extent_t *
 extents_fit_locked(tsdn_t *tsdn, arena_t *arena, extents_t *extents,
@@ -512,8 +498,7 @@ extents_fit_locked(tsdn_t *tsdn, arena_t *arena, extents_t *extents,
 		return NULL;
 	}
 
-	extent_t *extent = extents->delay_coalesce ?
-	    extents_best_fit_locked(tsdn, arena, extents, max_size) :
+	extent_t *extent =
 	    extents_first_fit_locked(tsdn, arena, extents, max_size);
 
 	if (alignment > PAGE && extent == NULL) {
@@ -796,6 +781,7 @@ extent_register_impl(tsdn_t *tsdn, extent_t *extent, bool gdump_add) {
 
 	if (extent_rtree_leaf_elms_lookup(tsdn, rtree_ctx, extent, false, true,
 	    &elm_a, &elm_b)) {
+		extent_unlock(tsdn, extent);
 		return true;
 	}
 
@@ -1255,7 +1241,7 @@ extent_alloc_default(extent_hooks_t *extent_hooks, void *new_addr, size_t size,
 	assert(arena != NULL);
 
 	return extent_alloc_default_impl(tsdn, arena, new_addr, size,
-	    alignment, zero, commit);
+	    ALIGNMENT_CEILING(alignment, PAGE), zero, commit);
 }
 
 static void
@@ -1492,14 +1478,15 @@ extent_alloc_wrapper_hard(tsdn_t *tsdn, arena_t *arena,
 		return NULL;
 	}
 	void *addr;
+	size_t palignment = ALIGNMENT_CEILING(alignment, PAGE);
 	if (*r_extent_hooks == &extent_hooks_default) {
 		/* Call directly to propagate tsdn. */
 		addr = extent_alloc_default_impl(tsdn, arena, new_addr, esize,
-		    alignment, zero, commit);
+		    palignment, zero, commit);
 	} else {
 		extent_hook_pre_reentrancy(tsdn, arena);
 		addr = (*r_extent_hooks)->alloc(*r_extent_hooks, new_addr,
-		    esize, alignment, zero, commit, arena_ind_get(arena));
+		    esize, palignment, zero, commit, arena_ind_get(arena));
 		extent_hook_post_reentrancy(tsdn);
 	}
 	if (addr == NULL) {
@@ -2278,4 +2265,73 @@ extent_boot(void) {
 	}
 
 	return false;
+}
+
+void
+extent_util_stats_get(tsdn_t *tsdn, const void *ptr,
+    size_t *nfree, size_t *nregs, size_t *size) {
+	assert(ptr != NULL && nfree != NULL && nregs != NULL && size != NULL);
+
+	const extent_t *extent = iealloc(tsdn, ptr);
+	if (unlikely(extent == NULL)) {
+		*nfree = *nregs = *size = 0;
+		return;
+	}
+
+	*size = extent_size_get(extent);
+	if (!extent_slab_get(extent)) {
+		*nfree = 0;
+		*nregs = 1;
+	} else {
+		*nfree = extent_nfree_get(extent);
+		*nregs = bin_infos[extent_szind_get(extent)].nregs;
+		assert(*nfree <= *nregs);
+		assert(*nfree * extent_usize_get(extent) <= *size);
+	}
+}
+
+void
+extent_util_stats_verbose_get(tsdn_t *tsdn, const void *ptr,
+    size_t *nfree, size_t *nregs, size_t *size,
+    size_t *bin_nfree, size_t *bin_nregs, void **slabcur_addr) {
+	assert(ptr != NULL && nfree != NULL && nregs != NULL && size != NULL
+	    && bin_nfree != NULL && bin_nregs != NULL && slabcur_addr != NULL);
+
+	const extent_t *extent = iealloc(tsdn, ptr);
+	if (unlikely(extent == NULL)) {
+		*nfree = *nregs = *size = *bin_nfree = *bin_nregs = 0;
+		*slabcur_addr = NULL;
+		return;
+	}
+
+	*size = extent_size_get(extent);
+	if (!extent_slab_get(extent)) {
+		*nfree = *bin_nfree = *bin_nregs = 0;
+		*nregs = 1;
+		*slabcur_addr = NULL;
+		return;
+	}
+
+	*nfree = extent_nfree_get(extent);
+	const szind_t szind = extent_szind_get(extent);
+	*nregs = bin_infos[szind].nregs;
+	assert(*nfree <= *nregs);
+	assert(*nfree * extent_usize_get(extent) <= *size);
+
+	const arena_t *arena = extent_arena_get(extent);
+	assert(arena != NULL);
+	const unsigned binshard = extent_binshard_get(extent);
+	bin_t *bin = &arena->bins[szind].bin_shards[binshard];
+
+	malloc_mutex_lock(tsdn, &bin->lock);
+	if (config_stats) {
+		*bin_nregs = *nregs * bin->stats.curslabs;
+		assert(*bin_nregs >= bin->stats.curregs);
+		*bin_nfree = *bin_nregs - bin->stats.curregs;
+	} else {
+		*bin_nfree = *bin_nregs = 0;
+	}
+	*slabcur_addr = extent_addr_get(bin->slabcur);
+	assert(*slabcur_addr != NULL);
+	malloc_mutex_unlock(tsdn, &bin->lock);
 }
