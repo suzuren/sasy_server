@@ -2353,6 +2353,9 @@
     <ClCompile Include="..\game_room\luaclib-src\lua-websocketnetpack.c">
       <Filter>game_room\luaclib-src</Filter>
     </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\ltls.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\chat_room\client\select.h">

@@ -805,6 +805,7 @@
     <ClCompile Include="..\skynet\3rd\lua\lvm.c" />
     <ClCompile Include="..\skynet\3rd\lua\lzio.c" />
     <ClCompile Include="..\skynet\lualib-src\lsha1.c" />
+    <ClCompile Include="..\skynet\lualib-src\ltls.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-bson.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-clientsocket.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-cluster.c" />
