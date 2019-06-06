@@ -16,9 +16,9 @@ local function unforward(c)
 	skynet.error(string.format("%s unforward agent",SERVICE_NAME), c.agent)
 	if c.agent then
 		skynet.error(string.format("%s unforward close fd=%d",SERVICE_NAME, c.fd))
-		print("aaaaaaaaaaaaaaaaaaaaa")
+		skynet.error("aaaaaaaaaaaaaaaaaaaaa")
 		skynet.send(c.agent, "lua", "exit")
-		print("bbbbbbbbbbbbbbbbbbbbb")
+		skynet.error("bbbbbbbbbbbbbbbbbbbbb")
 		_forwarding[c.agent] = nil
 		c.agent = nil
 	end
@@ -27,14 +27,14 @@ end
 local function close_fd(fd)
 	local c = _connection[fd]
 	skynet.error(string.format("%s, close_fd - fd:%d", SERVICE_NAME,fd), c)
-	print("ffffffffffffffffffffffffff")
+	skynet.error("ffffffffffffffffffffffffff")
 	if c then
-	print("cccccccccccccccccccccc")
+	skynet.error("cccccccccccccccccccccc")
 		unforward(c)
-		print("ddddddddddddddddddddddddd")
+		skynet.error("ddddddddddddddddddddddddd")
 		_connection[fd] = nil
 	end
-	print("eeeeeeeeeeeeeeeeeeeee")
+	skynet.error("eeeeeeeeeeeeeeeeeeeee")
 end
 
 local function onTimercheckTimeout()
@@ -71,7 +71,7 @@ function CMD.accept(source, fd)
 end
 
 function CMD.kick(source, fd)
-	skynet.error(string.format("%s, kick -fd:%d", SERVICE_NAME,fd))
+	skynet.error(string.format("%s, kick - fd:%d", SERVICE_NAME,fd))
 	gateserver.closeclient(fd)
 end
 
@@ -109,16 +109,16 @@ function handler.message(fd, msg, sz)
 	local c = _connection[fd]
 	skynet.error(string.format("%s, message - fd:%d", SERVICE_NAME,fd),c)
 	if c then
-		print("gggggggggggggg,",c.agent)
+		skynet.error("gggggggggggggg,",c.agent)
 	end
-	print("hhhhhhhhhhhhhhhhhhhhhhhh")
+	skynet.error("hhhhhhhhhhhhhhhhhhhhhhhh")
 	if c and c.agent then
 		c.tick = skynet.now()
 		skynet.redirect(c.agent, 0, "wireWebSocketStr", 0, msg, sz)
 	else
-		print("iiiiiiiiiiiiiiiiiiiiiiiii")
+		skynet.error("iiiiiiiiiiiiiiiiiiiiiiiii")
 		close_fd(fd)
-		print("jjjjjjjjjjjjjjjjjjjjjjj")
+		skynet.error("jjjjjjjjjjjjjjjjjjjjjjj")
 	end
 end
 
@@ -145,9 +145,9 @@ end
 
 function handler.disconnect(fd)
 	skynet.error(string.format("%s, disconnect - fd:%d", SERVICE_NAME,fd))
-	print("kkkkkkkkkkkkkkkkk")
+	skynet.error("kkkkkkkkkkkkkkkkk")
 	close_fd(fd)
-	print("llllllllllllllllllllll")
+	skynet.error("llllllllllllllllllllll")
 end
 
 function handler.wsdisconnect(fd)

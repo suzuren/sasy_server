@@ -699,6 +699,7 @@ static int skipcomment (LoadF *lf, int *cp) {
   else return 0;  /* no comment */
 }
 
+LUA_API void luaS_expandshr(int n);
 
 static int luaL_loadfilex_ (lua_State *L, const char *filename,
                                              const char *mode) {
@@ -724,7 +725,9 @@ static int luaL_loadfilex_ (lua_State *L, const char *filename,
   }
   if (c != EOF)
     lf.buff[lf.n++] = c;  /* 'c' is the first character of the stream */
+  luaS_expandshr(4096);
   status = lua_load(L, getF, &lf, lua_tostring(L, -1), mode);
+  luaS_expandshr(-4096);
   readstatus = ferror(lf.f);
   if (filename) fclose(lf.f);  /* close file (even in case of errors) */
   if (readstatus) {
@@ -1091,21 +1094,20 @@ save(const char *key, const void * proto) {
   SPIN_LOCK(&CC)
     if (CC.L == NULL) {
       init();
-      L = CC.L;
-    } else {
-      L = CC.L;
-      lua_pushstring(L, key);
-      lua_pushvalue(L, -1);
-      lua_rawget(L, LUA_REGISTRYINDEX);
-      result = lua_touserdata(L, -1); /* stack: key oldvalue */
-      if (result == NULL) {
-        lua_pop(L,1);
-        lua_pushlightuserdata(L, (void *)proto);
-        lua_rawset(L, LUA_REGISTRYINDEX);
-      } else {
-        lua_pop(L,2);
-      }
     }
+    L = CC.L;
+    lua_pushstring(L, key);
+    lua_pushvalue(L, -1);
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    result = lua_touserdata(L, -1); /* stack: key oldvalue */
+    if (result == NULL) {
+      lua_pop(L,1);
+      lua_pushlightuserdata(L, (void *)proto);
+      lua_rawset(L, LUA_REGISTRYINDEX);
+    } else {
+      lua_pop(L,2);
+    }
+    
   SPIN_UNLOCK(&CC)
   return result;
 }
@@ -1152,8 +1154,6 @@ static int cache_mode(lua_State *L) {
 	return 0;
 }
 
-LUA_API void luaS_expandshr(int n);
-
 LUALIB_API int luaL_loadfilex (lua_State *L, const char *filename,
                                              const char *mode) {
   int level = cache_level(L);
@@ -1173,7 +1173,6 @@ LUALIB_API int luaL_loadfilex (lua_State *L, const char *filename,
     lua_pushliteral(L, "New state failed");
     return LUA_ERRMEM;
   }
-  luaS_expandshr(4096);
   int err = luaL_loadfilex_(eL, filename, mode);
   if (err != LUA_OK) {
     size_t sz = 0;

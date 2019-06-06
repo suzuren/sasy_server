@@ -109,15 +109,12 @@ end
 function gateserver.openclient(fd)
 	if connection[fd] ~= nil  and  connection[fd].isconnect then
 		socketdriver.start(fd)
-		return true
 	end
-	return false
 end
 
 function gateserver.closeclient(fd)
 	local c = connection[fd]
 	if c then
-		client_number = client_number - 1
 		connection[fd] = nil
 		socketdriver.close(fd)
 	end
@@ -189,6 +186,7 @@ function gateserver.start(handler)
 		else
 			skynet.error(string.format("Drop message from fd (%d) : %s", fd, netpack.tostring(msg,sz)))
 		end
+		return
 	end
 
 	MSG.data = dispatch_msg

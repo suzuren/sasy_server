@@ -1,6 +1,6 @@
 #include "skynet_malloc.h"
 #include "skynet_socket.h"
-
+#include "skynet.h"
 #include <lua.h>
 #include <lauxlib.h>
 
@@ -223,13 +223,12 @@ static struct uncomplete * save_uncomplete(lua_State *L, int fd) {
 }
 
 static uint64_t ntoh64(uint64_t host) {
-    uint64_t ret = 0;
-    uint32_t high, low;
-    low = host & 0xFFFFFFFF;
-    high = (host >> 32) & 0xFFFFFFFF;
-    low = ntohl(low);
+	uint32_t low = host & 0xFFFFFFFF;
+	uint32_t high = (host >> 32) & 0xFFFFFFFF;
+	// ntohl()是将一个无符号长整形数从网络字节顺序转换为主机字节顺序， ntohl()返回一个以主机字节顺序表达的数。
+	low = ntohl(low);
     high = ntohl(high);
-    ret = low;
+	uint64_t ret = low;
     ret <<= 32;
     ret |= high;
     return ret;
@@ -255,41 +254,46 @@ read_size(uint8_t * buffer, int size, int* pack_head_length, int* mask, int * is
 
     //printf("read_size2 fin=%d rsv1=%d rsv2=%d rsv3=%d opcode=%d is_mask=%d\n", fin, rsv1, rsv2, rsv3, opcode, is_mask);
     if (0x0 != rsv1 || 0x0 != rsv2 || 0x0 != rsv3)
-	{
+	{// 如果非 0，客户端、服务端协商采用WebSocket扩展，且值的含义由扩展进行定义。
         return -2;
     }
     if (fin == 0 || opcode == 0)
 	{
+		// 当 fin 如果是1，表示这是消息的最后一个分片（fragment），如果是0，表示不是是消息的最后一个分片（fragment）。
+		// 当Opcode为0时，表示本次数据传输采用了数据分片，当前收到的数据帧为其中一个数据分片。
     	return -2;
     }
 	if (opcode == 8)
 	{
+		// 表示连接断开。
 		return -3;
 	}
 
 	int offset = 0;
 	int pack_size = 0;
-    //0-125
-    char length = buffer[1] & 0x7f;
+
+	// 数据载荷长度，单位是字节。7 bits, 7+16 bits, or 7+64 bits
+    char payload_length = buffer[1] & 0x7f;
     offset += WEBSOCKET_HEADER_LEN;
-    //126
-    if (length < 0x7E)
+    //0-125 -> 7位 -> 1字节
+    if (payload_length < 0x7E)
 	{
-        pack_size = length;
+        pack_size = payload_length;
     }
-    //Short
-    else if (0x7E == length)
+    //126 Short -> 7+16位 3字节
+    else if (0x7E == payload_length)
 	{
 		if (size < WEBSOCKET_HEADER_LEN + sizeof(short))
 		{
 			return -1;
 		}
-        pack_size = ntohs(*((uint16_t *) (buffer+WEBSOCKET_HEADER_LEN)));
+		// 如果payload length占用了多个字节的话，payload length的二进制表达采用网络序（big endian，重要的位在前）。
+        pack_size = ntohs(*((uint32_t *) (buffer+WEBSOCKET_HEADER_LEN)));
         //printf("read_size3 pack_size=%d sizeof(short)=%d sizeof(uint16_t)=%d\n", pack_size, sizeof(short), sizeof(uint16_t));
         offset += sizeof(short);
     }
     else
-	{
+	{//127 -> 7+64位
 		if (size < WEBSOCKET_HEADER_LEN + sizeof(int64_t))
 		{
 			return -1;
@@ -310,6 +314,7 @@ read_size(uint8_t * buffer, int size, int* pack_head_length, int* mask, int * is
         char *masks = (char*)mask;
         memcpy(masks, (buffer + offset), WEBSOCKET_MASK_LEN);
         offset += WEBSOCKET_MASK_LEN;
+		//*hasunmask_size = WEBSOCKET_MASK_LEN
     }
 
 	*pack_head_length = offset;
@@ -386,21 +391,22 @@ push_more(lua_State *L, int fd, uint8_t *buffer, int size, int wsocket_handeshak
 	if (wsocket_handeshake)
 	{
 		//认为socket初次建立连接读取握手协议
-		pack_size = get_http_header(buffer, size);			
+		pack_size = get_http_header(buffer, size);
 		//printf("push_more wsocket_handeshake=%d buffersize=%d pack_size=%d\n", wsocket_handeshake, size, pack_size);
 	}
 	else
 	{
 		//读取帧大小
-		while ((pack_size = read_size(buffer, size, &pack_head_length, &mask, &ismask, &hasunmask_size)) <= -2)
+		while ((pack_size = read_size(buffer, size, &pack_head_length, &mask, &ismask, &hasunmask_size)) == -2)
 		{
-            mask = 0;
+			mask = 0;
             ismask = 0;
             hasunmask_size = 0;
 			buffer += WEBSOCKET_HEADER_LEN;
 			size -= WEBSOCKET_HEADER_LEN;
 		}
-		if (pack_size > MAX_PACKSIZE) {
+		if (pack_size > MAX_PACKSIZE)
+		{
 			pack_size = MAX_PACKSIZE;
 		}
 		//printf("push_more not wsocket_handeshake buffersize=%d pack_size=%d pack_head_length=%d mask=%d ismask=%d hasunmask_size=%d\n"
@@ -412,11 +418,13 @@ push_more(lua_State *L, int fd, uint8_t *buffer, int size, int wsocket_handeshak
 		struct uncomplete * uc = save_uncomplete(L, fd);
 		uc->read = -1;
 
-		if (wsocket_handeshake && size > HEADERSIZE) {
+		if (wsocket_handeshake && size > HEADERSIZE)
+		{
 			uc->header_size = HEADERSIZE;
 			memcpy(uc->header, buffer, HEADERSIZE);
 		}
-		else {
+		else
+		{
 			uc->header_size += size;
 			memcpy(uc->header, buffer, size);				
 		}
@@ -478,14 +486,14 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size, int wsocket_hande
 
     total_size += size;
     //print_bin("fileter", buffer, size);
-    //printf("totalsize=%d filter_data size=%d wsocket_handeshake=%d\n", total_size, size, wsocket_handeshake);
+    skynet_error(NULL, "totalsize:%d filter_data - size:%d,wsocket_handeshake:%d", total_size, size, wsocket_handeshake);
 
 	if (uc)
 	{
 		// fill uncomplete
 		if (uc->read < 0)
 		{
-			//printf("uc->read < 0: buffersize=%d wsocket_handeshake=%d uc.header_size=%d\n", size, wsocket_handeshake, uc->header_size);
+			skynet_error(NULL, "uc->read < 0: buffersize:%d,wsocket_handeshake:%d,uc.header_size:%d",	size, wsocket_handeshake, uc->header_size);
 			// read size
 			int index = 0;
 			while (size > 0)
@@ -537,7 +545,7 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size, int wsocket_hande
 				int h = hash_fd(fd);
 				uc->next = q->hash[h];
 				q->hash[h] = uc;
-				return 1;			
+				return 1;
 			} else if (pack_size == -3) {
 				close_uncomplete(L, fd);
 				lua_pushvalue(L, lua_upvalueindex(TYPE_WSCLOSE));
@@ -827,6 +835,7 @@ lpack(lua_State *L) {
     }
     else
     {
+		// 7 bits, 7+16 bits, or 7+64 bits
         if (len < 65536)
         {
             frame_header[pos++] = FRAME_SET_MASK(0) | 126;
