@@ -569,6 +569,7 @@
     <None Include="..\skynet\service\clusteragent.lua" />
     <None Include="..\skynet\service\clusterd.lua" />
     <None Include="..\skynet\service\clusterproxy.lua" />
+    <None Include="..\skynet\service\clustersender.lua" />
     <None Include="..\skynet\service\cmaster.lua" />
     <None Include="..\skynet\service\cmemory.lua" />
     <None Include="..\skynet\service\console.lua" />
@@ -577,6 +578,7 @@
     <None Include="..\skynet\service\dbg.lua" />
     <None Include="..\skynet\service\debug_agent.lua" />
     <None Include="..\skynet\service\debug_console.lua" />
+    <None Include="..\skynet\service\garbagecollect.lua" />
     <None Include="..\skynet\service\gate.lua" />
     <None Include="..\skynet\service\launcher.lua" />
     <None Include="..\skynet\service\multicastd.lua" />
@@ -614,6 +616,7 @@
     <None Include="..\skynet\test\testservice\init.lua" />
     <None Include="..\skynet\test\testservice\kvdb.lua" />
     <None Include="..\skynet\test\testsha.lua" />
+    <None Include="..\skynet\test\testsharetable.lua" />
     <None Include="..\skynet\test\testsm.lua" />
     <None Include="..\skynet\test\testsocket.lua" />
     <None Include="..\skynet\test\teststm.lua" />
@@ -819,8 +822,10 @@
     <ClCompile Include="..\skynet\lualib-src\lua-profile.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-seri.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-sharedata.c" />
+    <ClCompile Include="..\skynet\lualib-src\lua-sharetable.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-skynet.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-socket.c" />
+    <ClCompile Include="..\skynet\lualib-src\lua-ssm.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-stm.c" />
     <ClCompile Include="..\skynet\lualib-src\sproto\lsproto.c" />
     <ClCompile Include="..\skynet\lualib-src\sproto\sproto.c" />

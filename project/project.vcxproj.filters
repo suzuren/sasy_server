@@ -1455,6 +1455,15 @@
     <None Include="..\game_room\service\wsConnection.lua">
       <Filter>game_room\service</Filter>
     </None>
+    <None Include="..\skynet\test\testsharetable.lua">
+      <Filter>skynet\test</Filter>
+    </None>
+    <None Include="..\skynet\service\clustersender.lua">
+      <Filter>skynet\service</Filter>
+    </None>
+    <None Include="..\skynet\service\garbagecollect.lua">
+      <Filter>skynet\service</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -2354,6 +2363,12 @@
       <Filter>game_room\luaclib-src</Filter>
     </ClCompile>
     <ClCompile Include="..\skynet\lualib-src\ltls.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-sharetable.c">
+      <Filter>skynet\lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\skynet\lualib-src\lua-ssm.c">
       <Filter>skynet\lualib-src</Filter>
     </ClCompile>
   </ItemGroup>
