@@ -1464,6 +1464,21 @@
     <None Include="..\skynet\service\garbagecollect.lua">
       <Filter>skynet\service</Filter>
     </None>
+    <None Include="..\http_module\http_config">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\http_module\start.sh">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\http_module\http_main.lua">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\skynet\lualib\http\tlshelper.lua">
+      <Filter>skynet\lualib\http</Filter>
+    </None>
+    <None Include="..\http_module\fortesthttp.lua">
+      <Filter>http_module</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
@@ -1711,6 +1726,9 @@
     </Filter>
     <Filter Include="game_room\protos\testGame">
       <UniqueIdentifier>{52d7564f-4bb2-418b-a20f-804ea442b9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="http_module">
+      <UniqueIdentifier>{c1920443-c9a3-4625-a1b8-d8fb0032f51c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -378,6 +378,10 @@
     <None Include="..\game_room\service\xLogService.lua" />
     <None Include="..\game_room\service\xLogTcpConnection.lua" />
     <None Include="..\game_room\stopall.sh" />
+    <None Include="..\http_module\http_config" />
+    <None Include="..\http_module\http_main.lua" />
+    <None Include="..\http_module\start.sh" />
+    <None Include="..\http_module\fortesthttp.lua" />
     <None Include="..\README.md" />
     <None Include="..\skynet\.gitignore" />
     <None Include="..\skynet\.gitmodules" />
@@ -521,6 +525,7 @@
     <None Include="..\skynet\lualib\http\httpd.lua" />
     <None Include="..\skynet\lualib\http\internal.lua" />
     <None Include="..\skynet\lualib\http\sockethelper.lua" />
+    <None Include="..\skynet\lualib\http\tlshelper.lua" />
     <None Include="..\skynet\lualib\http\url.lua" />
     <None Include="..\skynet\lualib\loader.lua" />
     <None Include="..\skynet\lualib\md5.lua" />
