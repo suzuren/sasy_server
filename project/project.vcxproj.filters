@@ -1479,6 +1479,15 @@
     <None Include="..\http_module\fortesthttp.lua">
       <Filter>http_module</Filter>
     </None>
+    <None Include="..\http_module\cert.pem">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\http_module\forsimpleweb.lua">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\http_module\key.pem">
+      <Filter>http_module</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">

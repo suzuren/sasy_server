@@ -378,8 +378,11 @@
     <None Include="..\game_room\service\xLogService.lua" />
     <None Include="..\game_room\service\xLogTcpConnection.lua" />
     <None Include="..\game_room\stopall.sh" />
+    <None Include="..\http_module\cert.pem" />
+    <None Include="..\http_module\forsimpleweb.lua" />
     <None Include="..\http_module\http_config" />
     <None Include="..\http_module\http_main.lua" />
+    <None Include="..\http_module\key.pem" />
     <None Include="..\http_module\start.sh" />
     <None Include="..\http_module\fortesthttp.lua" />
     <None Include="..\README.md" />
