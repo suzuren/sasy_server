@@ -19,9 +19,9 @@ $(LUA_STATICLIB) :
 
 # https : turn on TLS_MODULE to add https support
 
-TLS_MODULE=ltls
-TLS_LIB=/root/code/openssl/
-TLS_INC=/root/code/openssl/include/
+# TLS_MODULE=ltls
+TLS_LIB=
+TLS_INC=
 
 # jemalloc
 
@@ -69,7 +69,6 @@ LUA_CLIB_SKYNET = \
   lua-stm.c \
   lua-debugchannel.c \
   lua-datasheet.c \
-  lua-ssm.c \
   lua-sharetable.c \
   \
 
