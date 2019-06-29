@@ -833,7 +833,6 @@
     <ClCompile Include="..\skynet\lualib-src\lua-sharetable.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-skynet.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-socket.c" />
-    <ClCompile Include="..\skynet\lualib-src\lua-ssm.c" />
     <ClCompile Include="..\skynet\lualib-src\lua-stm.c" />
     <ClCompile Include="..\skynet\lualib-src\sproto\lsproto.c" />
     <ClCompile Include="..\skynet\lualib-src\sproto\sproto.c" />

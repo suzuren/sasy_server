@@ -2395,9 +2395,6 @@
     <ClCompile Include="..\skynet\lualib-src\lua-sharetable.c">
       <Filter>skynet\lualib-src</Filter>
     </ClCompile>
-    <ClCompile Include="..\skynet\lualib-src\lua-ssm.c">
-      <Filter>skynet\lualib-src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\chat_room\client\select.h">

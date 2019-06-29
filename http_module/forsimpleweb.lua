@@ -55,6 +55,7 @@ end
 skynet.start(function()
 	skynet.dispatch("lua", function (_,_,id)
 		socket.start(id)
+		skynet.error("forsimpleweb protocol - ",protocol)
 		local interface = gen_interface(protocol, id)
 		if interface.init then
 			interface.init()
