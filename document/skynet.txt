@@ -1,0 +1,279 @@
+
+https://www.cnblogs.com/watercoldyi/tag/skynet/
+
+--------------------------------------------------------------------------------------------------------------
+
+struct skynet_context {
+	void * instance;
+	struct skynet_module * mod;
+	void * cb_ud;
+	skynet_cb cb;
+	struct message_queue *queue;
+	FILE * logfile;
+	uint64_t cpu_cost;	// in microsec
+	uint64_t cpu_start;	// in microsec
+	char result[32];
+	uint32_t handle;
+	int session_id;
+	int ref;
+	int message_count;
+	bool init;
+	bool endless;
+	bool profile;
+
+	CHECKCALLING_DECL
+};
+
+instance：用契约函数create创建的。
+mod：模块对象.
+cb_ud：回调函数的用户数据。
+cb：处理消息的回调函数，由皮囊逻辑里注册。
+queue：actor的信箱，存放收到的消息。
+handle：标识自己的句柄，用于生命周期的管理。
+logfile：文件句柄，用与录像功能(将所有收到的消息记录与文件).
+result：handle的16进制字符，便于传递。
+session_id：上一次分配的session,用于分配不重复的session。
+ref：引用计数。
+init：是否初始化。
+endless：是否在处理消息时死循环。
+
+之所以到处有一些  CHECKCALLING 宏，主要是为了检测调度是否正确，因为skynet调度时，每个actor只会被一个线程持有调度，
+也就是消息处理是单线程的。
+
+--------------------------------------------------------------------------------------------------------------
+
+工作线程的控制
+
+	static int weight[] = { 
+		-1, -1, -1, -1, 0, 0, 0, 0,
+		1, 1, 1, 1, 1, 1, 1, 1, 
+		2, 2, 2, 2, 2, 2, 2, 2, 
+		3, 3, 3, 3, 3, 3, 3, 3, };
+	struct worker_parm wp[thread];
+	for (i=0;i<thread;i++) {
+		wp[i].m = m;
+		wp[i].id = i;
+		if (i < sizeof(weight)/sizeof(weight[0])) {
+			wp[i].weight= weight[i];
+		} else {
+			wp[i].weight = 0;
+		}
+		create_thread(&pid[i+3], thread_worker, &wp[i]);
+	}
+
+static void *
+thread_worker(void *p) {
+	struct worker_parm *wp = p;
+	int id = wp->id;
+	int weight = wp->weight;
+	struct monitor *m = wp->m;
+	struct skynet_monitor *sm = m->m[id];
+	skynet_initthread(THREAD_WORKER);
+	struct message_queue * q = NULL;
+	while (!m->quit) {
+		q = skynet_context_message_dispatch(sm, q, weight);
+		if (q == NULL) {
+			if (pthread_mutex_lock(&m->mutex) == 0) {
+				++ m->sleep;
+				// "spurious wakeup" is harmless,
+				// because skynet_context_message_dispatch() can be call at any time.
+				if (!m->quit)
+					pthread_cond_wait(&m->cond, &m->mutex);
+				-- m->sleep;
+				if (pthread_mutex_unlock(&m->mutex)) {
+					fprintf(stderr, "unlock mutex error");
+					exit(1);
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+控制这种生命周期与进程一致的工作线程，主要有两个细节：1、均匀不重复的分配任务。2、不空转、最小时延。前者处理
+线程同步就好。来看看skynet是如何处理后者的吧:
+
+它用得是条件变量来处理空转的，用条件变量有两点好处：1、让出cpu时间片.2、由外部决定何时唤醒，这样可以在有任务
+时再唤醒，既能最大化的不空转，又能减小处理任务的时延。
+
+具体实现是条件变量的标准应用了，和《unix高级编程》条件变量的例子几乎一样。这里还有一个sleep的计数，有什么用
+呢？用来判断要不要调用pthread_cond_signal的。
+
+最后还有一个问题，等待的线程是在哪里被唤醒的呢？在socket线程和timer线程里唤醒的，前者有socket消息时会调用一
+次，后者每个刷新时间会唤醒一次。
+
+--------------------------------------------------------------------------------------------------------------
+
+信箱的调度
+
+在 skynet_context 里我们看到过一个message_queue类型的字段，这就是信箱。skynet中用了两种队列来存储消息并完成调度，
+下面称为1级和2级队列，1级队列是一个单链表，每个节点是2级队列，2级队列(message_queue)是一个自动扩展的循环队列，
+用来存储消息。这两个队列实现在/skynet-src/skynet_mq.c中，实现的很简单，并没有用复杂的无锁结构，而是自旋锁保证线
+程安全的链表，循环队列。
+
+信箱的调度就是1级和2级队列的调度，整体结构描述如下：
+
+while(1){
+
+　　1级队列出队；
+
+　　调度2级队列；
+
+  1级队列入队；
+
+}
+
+这部分实现在/skynet-src/skynet_server的275行skynet_context_message_dispatch()中：
+
+struct message_queue * 
+skynet_context_message_dispatch(struct skynet_monitor *sm, struct message_queue *q, int weight) {
+	if (q == NULL) {
+		q = skynet_globalmq_pop();
+		if (q==NULL)
+			return NULL;
+	}
+
+	uint32_t handle = skynet_mq_handle(q);
+
+	struct skynet_context * ctx = skynet_handle_grab(handle);
+	if (ctx == NULL) {
+		struct drop_t d = { handle };
+		skynet_mq_release(q, drop_message, &d);
+		return skynet_globalmq_pop();
+	}
+
+	int i,n=1;
+	struct skynet_message msg;
+
+	for (i=0;i<n;i++) {
+		if (skynet_mq_pop(q,&msg)) {
+			skynet_context_release(ctx);
+			return skynet_globalmq_pop();
+		} else if (i==0 && weight >= 0) {
+			n = skynet_mq_length(q);
+			n >>= weight;
+		}
+		int overload = skynet_mq_overload(q);
+		if (overload) {
+			skynet_error(ctx, "May overload, message queue length = %d", overload);
+		}
+
+		skynet_monitor_trigger(sm, msg.source , handle);
+
+		if (ctx->cb == NULL) {
+			skynet_free(msg.data);
+		} else {
+			dispatch_message(ctx, &msg);
+		}
+
+		skynet_monitor_trigger(sm, 0,0);
+	}
+
+	assert(q == ctx->queue);
+	struct message_queue *nq = skynet_globalmq_pop();
+	if (nq) {
+		// If global mq is not empty , push q back, and return next queue (nq)
+		// Else (global mq is empty or block, don't push q back, and return q again (for next dispatch)
+		skynet_globalmq_push(q);
+		q = nq;
+	} 
+	skynet_context_release(ctx);
+
+	return q;
+}
+
+这个函数的作用是,调度传入的2级队列，并返回下一个可调度的2级队列。在上面的实现中，有四个细节之处：
+
+1、
+	for (i=0;i<n;i++) {
+		if (skynet_mq_pop(q,&msg)) {
+			skynet_context_release(ctx);
+			return skynet_globalmq_pop();
+，当2级队列为空时并没有将其压入1级队列，那它从此就消失了吗？不，这样做是为了减少空转1级队列，
+那这个2级队列是什么时候压回的呢？在message_queue中，有一个in_global标记是否在1级队列中，当2级队列的
+出队(skynet_mq_pop)失败时，这个标记就会被置0,在2级队列入队时(skynet_mq_push)会判断这个标记，如果为0，
+那么就会将自己压入1级队列。(skynet_mq_mark_release也会判断)所以这个2级队列在下次入队时会压回。
+
+2、
+		} else if (i==0 && weight >= 0) {
+			n = skynet_mq_length(q);
+			n >>= weight;
+		}
+,修改了for循环的次数，也就是每次调度处理多少条消息。这个次数与传入的weight有关，我们回过头来看这个weight
+是从哪里来的，源头在工作线程创建时：
+	static int weight[] = { 
+		-1, -1, -1, -1, 0, 0, 0, 0,
+		1, 1, 1, 1, 1, 1, 1, 1, 
+		2, 2, 2, 2, 2, 2, 2, 2, 
+		3, 3, 3, 3, 3, 3, 3, 3, };
+	struct worker_parm wp[thread];
+	for (i=0;i<thread;i++) {
+		wp[i].m = m;
+		wp[i].id = i;
+		if (i < sizeof(weight)/sizeof(weight[0])) {
+			wp[i].weight= weight[i];
+		} else {
+			wp[i].weight = 0;
+		}
+		create_thread(&pid[i+3], thread_worker, &wp[i]);
+	}
+再来看看 n >>= weight,嗯，大致就是：把工作线程分为A B C D E组，前四组每组8个，超过的归入第 E 组，A组和E组每次
+调度处理一条消息,B组每次处理(n/2)条，C组每次处理(n/4)条，D组每次处理(n/8)条。是为了均匀的使用多核。
+
+
+3、		int overload = skynet_mq_overload(q);
+		if (overload) {
+			skynet_error(ctx, "May overload, message queue length = %d", overload);
+		}
+做了一个负载判断，负载的阀值是1024。不过也仅仅是输出一条log提醒一下而以.
+
+4、
+		skynet_monitor_trigger(sm, msg.source , handle);
+		和
+		skynet_monitor_trigger(sm, 0,0);
+		
+触发了一下monitor,这个监控是用来检测消息处理是否发生了死循环，不过也仅仅只是输出一条log提醒一下。
+这个检测是放在一个专门的监控线程里做的，判断死循环的时间是5秒。具体机制这里就不说了，
+其实现在/skynet-src/skynet_monitor.c中
+
+
+--------------------------------------------------------------------------------------------------------------
+
+消息分发
+
+static void
+dispatch_message(struct skynet_context *ctx, struct skynet_message *msg) {
+	assert(ctx->init);
+	CHECKCALLING_BEGIN(ctx)
+	pthread_setspecific(G_NODE.handle_key, (void *)(uintptr_t)(ctx->handle));
+	int type = msg->sz >> MESSAGE_TYPE_SHIFT;
+	size_t sz = msg->sz & MESSAGE_TYPE_MASK;
+	if (ctx->logfile) {
+		skynet_log_output(ctx->logfile, msg->source, type, msg->session, msg->data, sz);
+	}
+	++ctx->message_count;
+	int reserve_msg;
+	if (ctx->profile) {
+		ctx->cpu_start = skynet_thread_time();
+		reserve_msg = ctx->cb(ctx, ctx->cb_ud, type, msg->session, msg->source, msg->data, sz);
+		uint64_t cost_time = skynet_thread_time() - ctx->cpu_start;
+		ctx->cpu_cost += cost_time;
+	} else {
+		reserve_msg = ctx->cb(ctx, ctx->cb_ud, type, msg->session, msg->source, msg->data, sz);
+	}
+	if (!reserve_msg) {
+		skynet_free(msg->data);
+	}
+	CHECKCALLING_END(ctx)
+}
+
+step1:将 skynet_context 句柄保存在线程本地变量中.
+
+step2:如果开启了录像功能，就将data的数据dump到日志文件
+
+step3:调用 skynet_context 的回调函数,根据返回值觉得是否释放data,0释放，1不释放.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+

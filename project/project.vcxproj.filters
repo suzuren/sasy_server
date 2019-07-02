@@ -2954,6 +2954,9 @@
     <Text Include="..\document\mongo_install.txt">
       <Filter>document</Filter>
     </Text>
+    <Text Include="..\document\skynet.txt">
+      <Filter>document</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\skynet\3rd\lpeg\lpeg-128.gif">

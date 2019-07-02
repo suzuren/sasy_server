@@ -1047,6 +1047,7 @@
     <Text Include="..\document\introduce.txt" />
     <Text Include="..\document\mongo_install.txt" />
     <Text Include="..\document\mysql_5_6_install.txt" />
+    <Text Include="..\document\skynet.txt" />
     <Text Include="..\skynet\3rd\jemalloc\msvc\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
