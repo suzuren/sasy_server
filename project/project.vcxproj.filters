@@ -1488,6 +1488,9 @@
     <None Include="..\http_module\key.pem">
       <Filter>http_module</Filter>
     </None>
+    <None Include="..\http_module\emaild.lua">
+      <Filter>http_module</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
