@@ -383,9 +383,11 @@
     <None Include="..\http_module\forsimpleweb.lua" />
     <None Include="..\http_module\http_config" />
     <None Include="..\http_module\http_main.lua" />
+    <None Include="..\http_module\inspect.lua" />
     <None Include="..\http_module\key.pem" />
     <None Include="..\http_module\start.sh" />
     <None Include="..\http_module\fortesthttp.lua" />
+    <None Include="..\http_module\testEtcHosts.lua" />
     <None Include="..\README.md" />
     <None Include="..\skynet\.gitignore" />
     <None Include="..\skynet\.gitmodules" />

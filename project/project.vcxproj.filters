@@ -1491,6 +1491,12 @@
     <None Include="..\http_module\emaild.lua">
       <Filter>http_module</Filter>
     </None>
+    <None Include="..\http_module\testEtcHosts.lua">
+      <Filter>http_module</Filter>
+    </None>
+    <None Include="..\http_module\inspect.lua">
+      <Filter>http_module</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="chat_room">
